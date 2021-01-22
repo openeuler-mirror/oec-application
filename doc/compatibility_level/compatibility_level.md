@@ -8,168 +8,168 @@ openEuler 对软件包的兼容性进行分级管理，其中：
 
 | source package | level | bin package | status |
 |---|---|---|---|
-| texlive-base-20180414-28.oe1.src | leve3 | texlive-context-20180414-28.oe1.noarch  |  |
-| texlive-base-20180414-28.oe1.src | leve3 | texlive-lib-20180414-28.oe1.aarch64  |  |
-| texlive-base-20180414-28.oe1.src | leve3 | texlive-metapost-20180414-28.oe1.aarch64 |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-chemmacros-svn45164-22.oe1.noarch  |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-cmsrb-svn46588-22.oe1.noarch  |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-dsserif-svn47570-22.oe1.noarch  |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-leadsheets-svn45405-22.oe1.noarch  |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-pgf-svn44231-22.oe1.noarch  |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-pgfplots-svn47373-22.oe1.noarch  |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-stickstoo-svn47858-22.oe1.noarch  |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-tikzpeople-svn43978-22.oe1.noarch  |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-xsim-svn46634-22.oe1.noarch  |  |
-| texlive-2018-22.oe1.src | leve3 | texlive-yfonts-t1-svn36013-22.oe1.noarch |  |
-| glibc-2.28-36.oe1.src | leve1 | glibc-2.28-36.oe1.aarch64  |  |
-| glibc-2.28-36.oe1.src | leve1 | libnsl-2.28-36.oe1.aarch64  |  |
-| glibc-2.28-36.oe1.src | leve1 | nss_modules-2.28-36.oe1.aarch64 |  |
-| coreutils-8.31-4.oe1.src | leve2 | coreutils-8.31-4.oe1.aarch64 |  |
-| bash-5.0-12.oe1.src | leve2 |  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | gcc-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | gcc-plugin-devel-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | libasan-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | libatomic-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | libgcc-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | libgfortran-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | libgomp-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | libitm-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | libobjc-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | libstdc++-7.3.0-20190804.h31.oe1.aarch64  |  |
-| gcc-7.3.0-20190804.h31.oe1.src | leve1 | libtsan-7.3.0-20190804.h31.oe1.aarch64 |  |
-| perl-5.28.0-434.oe1.src | leve3 | perl-libs-5.28.0-434.oe1.aarch64 |  |
-| man-db-2.8.7-5.oe1.src | leve3 | man-db-2.8.7-5.oe1.aarch64 |  |
-| texinfo-6.6-2.oe1.src | leve3 |  |  |
-| pkgconf-1.6.3-6.oe1.src | leve3 | pkgconf-1.6.3-6.oe1.aarch64 |  |
-| glib2-2.62.1-1.oe1.src | leve2 | glib2-2.62.1-1.oe1.aarch64  |  |
-| glib2-2.62.1-1.oe1.src | leve2 | glib2-devel-2.62.1-1.oe1.aarch64 |  |
-| python3-3.7.4-8.oe1.src | leve1 | python3-3.7.4-8.oe1.aarch64  |  |
-| python3-3.7.4-8.oe1.src | leve1 | python3-debug-3.7.4-8.oe1.aarch64 |  |
+| texlive-base-20180414-28.oe1.src | level3 | texlive-context-20180414-28.oe1.noarch  |  |
+| texlive-base-20180414-28.oe1.src | level3 | texlive-lib-20180414-28.oe1.aarch64  |  |
+| texlive-base-20180414-28.oe1.src | level3 | texlive-metapost-20180414-28.oe1.aarch64 |  |
+| texlive-2018-22.oe1.src | level3 | texlive-chemmacros-svn45164-22.oe1.noarch  |  |
+| texlive-2018-22.oe1.src | level3 | texlive-cmsrb-svn46588-22.oe1.noarch  |  |
+| texlive-2018-22.oe1.src | level3 | texlive-dsserif-svn47570-22.oe1.noarch  |  |
+| texlive-2018-22.oe1.src | level3 | texlive-leadsheets-svn45405-22.oe1.noarch  |  |
+| texlive-2018-22.oe1.src | level3 | texlive-pgf-svn44231-22.oe1.noarch  |  |
+| texlive-2018-22.oe1.src | level3 | texlive-pgfplots-svn47373-22.oe1.noarch  |  |
+| texlive-2018-22.oe1.src | level3 | texlive-stickstoo-svn47858-22.oe1.noarch  |  |
+| texlive-2018-22.oe1.src | level3 | texlive-tikzpeople-svn43978-22.oe1.noarch  |  |
+| texlive-2018-22.oe1.src | level3 | texlive-xsim-svn46634-22.oe1.noarch  |  |
+| texlive-2018-22.oe1.src | level3 | texlive-yfonts-t1-svn36013-22.oe1.noarch |  |
+| glibc-2.28-36.oe1.src | level1 | glibc-2.28-36.oe1.aarch64  |  |
+| glibc-2.28-36.oe1.src | level1 | libnsl-2.28-36.oe1.aarch64  |  |
+| glibc-2.28-36.oe1.src | level1 | nss_modules-2.28-36.oe1.aarch64 |  |
+| coreutils-8.31-4.oe1.src | level2 | coreutils-8.31-4.oe1.aarch64 |  |
+| bash-5.0-12.oe1.src | level2 |  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | gcc-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | gcc-plugin-devel-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | libasan-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | libatomic-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | libgcc-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | libgfortran-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | libgomp-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | libitm-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | libobjc-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | libstdc++-7.3.0-20190804.h31.oe1.aarch64  |  |
+| gcc-7.3.0-20190804.h31.oe1.src | level1 | libtsan-7.3.0-20190804.h31.oe1.aarch64 |  |
+| perl-5.28.0-434.oe1.src | level3 | perl-libs-5.28.0-434.oe1.aarch64 |  |
+| man-db-2.8.7-5.oe1.src | level3 | man-db-2.8.7-5.oe1.aarch64 |  |
+| texinfo-6.6-2.oe1.src | level3 |  |  |
+| pkgconf-1.6.3-6.oe1.src | level3 | pkgconf-1.6.3-6.oe1.aarch64 |  |
+| glib2-2.62.1-1.oe1.src | level2 | glib2-2.62.1-1.oe1.aarch64  |  |
+| glib2-2.62.1-1.oe1.src | level2 | glib2-devel-2.62.1-1.oe1.aarch64 |  |
+| python3-3.7.4-8.oe1.src | level1 | python3-3.7.4-8.oe1.aarch64  |  |
+| python3-3.7.4-8.oe1.src | level1 | python3-debug-3.7.4-8.oe1.aarch64 |  |
 | zlib-1.2.11-17.oe1.src | level1 | minizip-1.2.11-17.oe1.aarch64  |  |
 | zlib-1.2.11-17.oe1.src | level1 | zlib-1.2.11-17.oe1.aarch64 |  |
 | systemd-243-18.oe1.src | level1 | systemd-243-18.oe1.aarch64  |  |
 | systemd-243-18.oe1.src | level1 | systemd-container-243-18.oe1.aarch64  |  |
 | systemd-243-18.oe1.src | level1 | systemd-libs-243-18.oe1.aarch64 |  |
-| python2-2.7.16-15.oe1.src | leve2 | python2-2.7.16-15.oe1.aarch64  |  |
-| python2-2.7.16-15.oe1.src | leve2 | python2-debug-2.7.16-15.oe1.aarch64 |  |
+| python2-2.7.16-15.oe1.src | level2 | python2-2.7.16-15.oe1.aarch64  |  |
+| python2-2.7.16-15.oe1.src | level2 | python2-debug-2.7.16-15.oe1.aarch64 |  |
 | openssl-1.1.1d-9.oe1.src | level1 | openssl-libs-1.1.1d-9.oe1.aarch64 |  |
 | libX11-1.6.9-2.oe1.src | level1 | libX11-1.6.9-2.oe1.aarch64 |  |
 | libxml2-2.9.8-9.oe1.src | level1 | libxml2-2.9.8-9.oe1.aarch64  |  |
 | libxml2-2.9.8-9.oe1.src | level1 | python2-libxml2-2.9.8-9.oe1.aarch64  |  |
 | libxml2-2.9.8-9.oe1.src | level1 | python3-libxml2-2.9.8-9.oe1.aarch64 |  |
-| perl-Exporter-5.73-420.oe1.src | leve3 |  |  |
-| perl-Carp-1.50-418.oe1.src | leve3 |  |  |
+| perl-Exporter-5.73-420.oe1.src | level3 |  |  |
+| perl-Carp-1.50-418.oe1.src | level3 |  |  |
 | cairo-1.15.14-3.oe1.src |  | cairo-1.15.14-3.oe1.aarch64  | Subject to modification |
 | cairo-1.15.14-3.oe1.src |  | cairo-devel-1.15.14-3.oe1.aarch64 | Subject to modification |
-| util-linux-2.34-8.oe1.src | leve3 | libblkid-2.34-8.oe1.aarch64  |  |
-| util-linux-2.34-8.oe1.src | leve3 | libfdisk-2.34-8.oe1.aarch64  |  |
-| util-linux-2.34-8.oe1.src | leve3 | libmount-2.34-8.oe1.aarch64  |  |
-| util-linux-2.34-8.oe1.src | leve3 | libsmartcols-2.34-8.oe1.aarch64  |  |
-| util-linux-2.34-8.oe1.src | leve3 | libuuid-2.34-8.oe1.aarch64 |  |
+| util-linux-2.34-8.oe1.src | level3 | libblkid-2.34-8.oe1.aarch64  |  |
+| util-linux-2.34-8.oe1.src | level3 | libfdisk-2.34-8.oe1.aarch64  |  |
+| util-linux-2.34-8.oe1.src | level3 | libmount-2.34-8.oe1.aarch64  |  |
+| util-linux-2.34-8.oe1.src | level3 | libsmartcols-2.34-8.oe1.aarch64  |  |
+| util-linux-2.34-8.oe1.src | level3 | libuuid-2.34-8.oe1.aarch64 |  |
 | gdk-pixbuf2-2.38.0-9.oe1.src |  | gdk-pixbuf2-2.38.0-9.oe1.aarch64 | Subject to modification |
 | qt5-qtbase-5.11.1-9.oe1.src |  | qt5-qtbase-5.11.1-9.oe1.aarch64  | Subject to modification |
 | qt5-qtbase-5.11.1-9.oe1.src |  | qt5-qtbase-devel-5.11.1-9.oe1.aarch64  | Subject to modification |
 | qt5-qtbase-5.11.1-9.oe1.src |  | qt5-qtbase-gui-5.11.1-9.oe1.aarch64 | Subject to modification |
-| pcp-4.1.3-3.oe1.src | leve2 | pcp-4.1.3-3.oe1.aarch64 |  |
+| pcp-4.1.3-3.oe1.src | level2 | pcp-4.1.3-3.oe1.aarch64 |  |
 | pango-1.43.0-3.oe1.src |  | pango-1.43.0-3.oe1.aarch64 | Subject to modification |
-| libselinux-2.9-1.oe1.src | leve2 | libselinux-2.9-1.oe1.aarch64 |  |
-| gtk3-3.24.1-3.oe1.src | leve2 | gtk3-3.24.1-3.oe1.aarch64  |  |
-| gtk3-3.24.1-3.oe1.src | leve2 | gtk3-devel-3.24.1-3.oe1.aarch64 |  |
+| libselinux-2.9-1.oe1.src | level2 | libselinux-2.9-1.oe1.aarch64 |  |
+| gtk3-3.24.1-3.oe1.src | level2 | gtk3-3.24.1-3.oe1.aarch64  |  |
+| gtk3-3.24.1-3.oe1.src | level2 | gtk3-devel-3.24.1-3.oe1.aarch64 |  |
 | dbus-1.12.16-13.oe1.src | level1 | dbus-libs-1.12.16-13.oe1.aarch64 |  |
-| atk-2.30.0-3.oe1.src | leve2 | atk-2.30.0-3.oe1.aarch64 |  |
-| libXext-1.3.4-2.oe1.src | leve2 | libXext-1.3.4-2.oe1.aarch64 |  |
-| libxcrypt-4.4.8-4.oe1.src | leve2 | libxcrypt-4.4.8-4.oe1.aarch64 |  |
-| perl-PathTools-3.75-4.oe1.src | leve3 |  |  |
-| ncurses-6.1-14.oe1.src | leve2 | ncurses-6.1-14.oe1.aarch64  |  |
-| ncurses-6.1-14.oe1.src | leve2 | ncurses-libs-6.1-14.oe1.aarch64 |  |
-| freetype-2.9.1-5.oe1.src | leve3 | freetype-2.9.1-5.oe1.aarch64 |  |
-| perl-Getopt-Long-2.50-419.oe1.src | leve3 |  |  |
-| python-six-1.12.0-1.oe1.src | leve3 |  |  |
-| fontconfig-2.13.1-3.oe1.src | leve3 | fontconfig-2.13.1-3.oe1.aarch64 |  |
-| python-setuptools-40.4.3-4.oe1.src | leve3 |  |  |
+| atk-2.30.0-3.oe1.src | level2 | atk-2.30.0-3.oe1.aarch64 |  |
+| libXext-1.3.4-2.oe1.src | level2 | libXext-1.3.4-2.oe1.aarch64 |  |
+| libxcrypt-4.4.8-4.oe1.src | level2 | libxcrypt-4.4.8-4.oe1.aarch64 |  |
+| perl-PathTools-3.75-4.oe1.src | level3 |  |  |
+| ncurses-6.1-14.oe1.src | level2 | ncurses-6.1-14.oe1.aarch64  |  |
+| ncurses-6.1-14.oe1.src | level2 | ncurses-libs-6.1-14.oe1.aarch64 |  |
+| freetype-2.9.1-5.oe1.src | level3 | freetype-2.9.1-5.oe1.aarch64 |  |
+| perl-Getopt-Long-2.50-419.oe1.src | level3 |  |  |
+| python-six-1.12.0-1.oe1.src | level3 |  |  |
+| fontconfig-2.13.1-3.oe1.src | level3 | fontconfig-2.13.1-3.oe1.aarch64 |  |
+| python-setuptools-40.4.3-4.oe1.src | level3 |  |  |
 | libglvnd-1.2.0-3.oe1.src |  | libglvnd-1.2.0-3.oe1.aarch64 | Subject to modification |
-| libvirt-5.5.0-6.oe1.src | leve2 | libvirt-wireshark-5.5.0-6.oe1.aarch64 |  |
-| e2fsprogs-1.45.3-4.oe1.src | leve2 | e2fsprogs-1.45.3-4.oe1.aarch64 |  |
+| libvirt-5.5.0-6.oe1.src | level2 | libvirt-wireshark-5.5.0-6.oe1.aarch64 |  |
+| e2fsprogs-1.45.3-4.oe1.src | level2 | e2fsprogs-1.45.3-4.oe1.aarch64 |  |
 | krb5-1.17-9.oe1.src | level1 | krb5-1.17-9.oe1.aarch64  |  |
 | krb5-1.17-9.oe1.src | level1 | krb5-libs-1.17-9.oe1.aarch64  |  |
 | krb5-1.17-9.oe1.src | level1 | krb5-server-1.17-9.oe1.aarch64 |  |
 | nss-3.40.1-11.oe1.src | level1 | nss-3.40.1-11.oe1.aarch64  |  |
 | nss-3.40.1-11.oe1.src | level1 | nss-softokn-3.40.1-11.oe1.aarch64  |  |
 | nss-3.40.1-11.oe1.src | level1 | nss-util-3.40.1-11.oe1.aarch64 |  |
-| samba-4.11.6-5.oe1.src | leve2 | libsmbclient-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | libwbclient-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | python3-samba-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | samba-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | samba-client-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | samba-common-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | samba-dc-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | samba-dc-provision-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | samba-libs-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | samba-test-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | samba-winbind-4.11.6-5.oe1.aarch64  |  |
-| samba-4.11.6-5.oe1.src | leve2 | samba-winbind-modules-4.11.6-5.oe1.aarch64 |  |
+| samba-4.11.6-5.oe1.src | level2 | libsmbclient-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | libwbclient-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | python3-samba-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | samba-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | samba-client-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | samba-common-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | samba-dc-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | samba-dc-provision-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | samba-libs-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | samba-test-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | samba-winbind-4.11.6-5.oe1.aarch64  |  |
+| samba-4.11.6-5.oe1.src | level2 | samba-winbind-modules-4.11.6-5.oe1.aarch64 |  |
 | xz-5.2.4-10.oe1.src | level1 | xz-libs-5.2.4-10.oe1.aarch64 |  |
-| ceph-12.2.8-6.oe1.src | leve2 | ceph-base-12.2.8-6.oe1.aarch64  | Subject to modification |
-| ceph-12.2.8-6.oe1.src | leve2 | libcephfs2-12.2.8-6.oe1.aarch64  |  |
-| ceph-12.2.8-6.oe1.src | leve2 | librados2-12.2.8-6.oe1.aarch64  |  |
-| ceph-12.2.8-6.oe1.src | leve2 | libradosstriper1-12.2.8-6.oe1.aarch64  |  |
-| ceph-12.2.8-6.oe1.src | leve2 | librbd1-12.2.8-6.oe1.aarch64  |  |
-| ceph-12.2.8-6.oe1.src | leve2 | librgw2-12.2.8-6.oe1.aarch64 |  |
+| ceph-12.2.8-6.oe1.src | level2 | ceph-base-12.2.8-6.oe1.aarch64  | Subject to modification |
+| ceph-12.2.8-6.oe1.src | level2 | libcephfs2-12.2.8-6.oe1.aarch64  |  |
+| ceph-12.2.8-6.oe1.src | level2 | librados2-12.2.8-6.oe1.aarch64  |  |
+| ceph-12.2.8-6.oe1.src | level2 | libradosstriper1-12.2.8-6.oe1.aarch64  |  |
+| ceph-12.2.8-6.oe1.src | level2 | librbd1-12.2.8-6.oe1.aarch64  |  |
+| ceph-12.2.8-6.oe1.src | level2 | librgw2-12.2.8-6.oe1.aarch64 |  |
 | gnutls-3.6.9-5.oe1.src | level1 | gnutls-3.6.9-5.oe1.aarch64 |  |
-| perl-constant-1.33-421.oe1.src | leve3 |  |  |
+| perl-constant-1.33-421.oe1.src | level3 |  |  |
 | curl-7.66.0-2.oe1.src | level1 | curl-7.66.0-2.oe1.aarch64 |  |
-| rpm-4.15.1-12.oe1.src | leve3 | rpm-libs-4.15.1-12.oe1.aarch64 |  |
-| shadow-4.7-10.oe1.src | leve2 |  |  |
+| rpm-4.15.1-12.oe1.src | level3 | rpm-libs-4.15.1-12.oe1.aarch64 |  |
+| shadow-4.7-10.oe1.src | level2 |  |  |
 | libjpeg-turbo-2.0.0-4.oe1.src |  | libjpeg-turbo-2.0.0-4.oe1.aarch64 | Subject to modification |
-| boost-1.66.0-18.oe1.src | leve2 | boost-atomic-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-chrono-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-container-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-context-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-coroutine-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-date-time-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-fiber-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-filesystem-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-graph-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-iostreams-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-locale-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-log-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-math-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-numpy2-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-numpy3-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-program-options-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-python2-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-python3-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-random-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-regex-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-serialization-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-signals-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-stacktrace-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-system-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-test-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-thread-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-timer-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-type_erasure-1.66.0-18.oe1.aarch64  |  |
-| boost-1.66.0-18.oe1.src | leve2 | boost-wave-1.66.0-18.oe1.aarch64 |  |
-| ruby-2.5.1-104.oe1.src | leve3 | ruby-2.5.1-104.oe1.aarch64 |  |
-| libpng-1.6.36-4.oe1.src | leve2 | libpng-1.6.36-4.oe1.aarch64 |  |
-| expat-2.2.6-5.oe1.src | leve2 | expat-2.2.6-5.oe1.aarch64 |  |
-| google-noto-cjk-fonts-20170602-9.oe1.src | leve3 |  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-atomic-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-chrono-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-container-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-context-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-coroutine-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-date-time-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-fiber-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-filesystem-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-graph-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-iostreams-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-locale-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-log-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-math-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-numpy2-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-numpy3-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-program-options-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-python2-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-python3-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-random-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-regex-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-serialization-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-signals-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-stacktrace-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-system-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-test-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-thread-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-timer-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-type_erasure-1.66.0-18.oe1.aarch64  |  |
+| boost-1.66.0-18.oe1.src | level2 | boost-wave-1.66.0-18.oe1.aarch64 |  |
+| ruby-2.5.1-104.oe1.src | level3 | ruby-2.5.1-104.oe1.aarch64 |  |
+| libpng-1.6.36-4.oe1.src | level2 | libpng-1.6.36-4.oe1.aarch64 |  |
+| expat-2.2.6-5.oe1.src | level2 | expat-2.2.6-5.oe1.aarch64 |  |
+| google-noto-cjk-fonts-20170602-9.oe1.src | level3 |  |  |
 | acl-2.2.53-7.oe1.src | level1 | libacl-2.2.53-7.oe1.aarch64 |  |
-| sqlite-3.24.0-9.oe1.src | leve2 | sqlite-3.24.0-9.oe1.aarch64 |  |
-| lvm2-2.02.181-8.oe1.src | leve2 | device-mapper-1.02.150-8.oe1.aarch64  |  |
-| lvm2-2.02.181-8.oe1.src | leve2 | device-mapper-event-1.02.150-8.oe1.aarch64  |  |
-| lvm2-2.02.181-8.oe1.src | leve2 | lvm2-2.02.181-8.oe1.aarch64 |  |
+| sqlite-3.24.0-9.oe1.src | level2 | sqlite-3.24.0-9.oe1.aarch64 |  |
+| lvm2-2.02.181-8.oe1.src | level2 | device-mapper-1.02.150-8.oe1.aarch64  |  |
+| lvm2-2.02.181-8.oe1.src | level2 | device-mapper-event-1.02.150-8.oe1.aarch64  |  |
+| lvm2-2.02.181-8.oe1.src | level2 | lvm2-2.02.181-8.oe1.aarch64 |  |
 | pam-1.3.1-8.oe1.src | level1 | pam-1.3.1-8.oe1.aarch64 |  |
-| readline-7.0-13.oe1.src | leve2 | readline-7.0-13.oe1.aarch64 |  |
-| gtk2-2.24.32-7.oe1.src | leve2 | gtk2-2.24.32-7.oe1.aarch64 |  |
-| abrt-2.13.0-4.oe1.src | leve3 | abrt-gui-2.13.0-4.oe1.aarch64  |  |
-| abrt-2.13.0-4.oe1.src | leve3 | abrt-libs-2.13.0-4.oe1.aarch64 |  |
+| readline-7.0-13.oe1.src | level2 | readline-7.0-13.oe1.aarch64 |  |
+| gtk2-2.24.32-7.oe1.src | level2 | gtk2-2.24.32-7.oe1.aarch64 |  |
+| abrt-2.13.0-4.oe1.src | level3 | abrt-gui-2.13.0-4.oe1.aarch64  |  |
+| abrt-2.13.0-4.oe1.src | level3 | abrt-libs-2.13.0-4.oe1.aarch64 |  |
 | bzip2-1.0.8-3.oe1.src | level1 | bzip2-1.0.8-3.oe1.aarch64 |  |
-| audit-3.0-5.oe1.src | leve2 | audit-libs-3.0-5.oe1.aarch64 |  |
-| cyrus-sasl-2.1.27-10.oe1.src | leve2 | cyrus-sasl-2.1.27-10.oe1.aarch64  |  |
-| cyrus-sasl-2.1.27-10.oe1.src | leve2 | cyrus-sasl-lib-2.1.27-10.oe1.aarch64  |  |
-| cyrus-sasl-2.1.27-10.oe1.src | leve2 | cyrus-sasl-sql-2.1.27-10.oe1.aarch64 |  |
-| libcap-2.27-1.oe1.src | leve2 | libcap-2.27-1.oe1.aarch64 |  |
+| audit-3.0-5.oe1.src | level2 | audit-libs-3.0-5.oe1.aarch64 |  |
+| cyrus-sasl-2.1.27-10.oe1.src | level2 | cyrus-sasl-2.1.27-10.oe1.aarch64  |  |
+| cyrus-sasl-2.1.27-10.oe1.src | level2 | cyrus-sasl-lib-2.1.27-10.oe1.aarch64  |  |
+| cyrus-sasl-2.1.27-10.oe1.src | level2 | cyrus-sasl-sql-2.1.27-10.oe1.aarch64 |  |
+| libcap-2.27-1.oe1.src | level2 | libcap-2.27-1.oe1.aarch64 |  |
 | avahi-0.7-21.oe1.src |  | avahi-0.7-21.oe1.aarch64  | Subject to modification |
 | avahi-0.7-21.oe1.src |  | avahi-compat-howl-0.7-21.oe1.aarch64  | Subject to modification |
 | avahi-0.7-21.oe1.src |  | avahi-compat-libdns_sd-0.7-21.oe1.aarch64  | Subject to modification |
@@ -178,90 +178,90 @@ openEuler 对软件包的兼容性进行分级管理，其中：
 | avahi-0.7-21.oe1.src |  | avahi-libs-0.7-21.oe1.aarch64  | Subject to modification |
 | avahi-0.7-21.oe1.src |  | avahi-ui-0.7-21.oe1.aarch64  | Subject to modification |
 | avahi-0.7-21.oe1.src |  | avahi-ui-gtk3-0.7-21.oe1.aarch64 | Subject to modification |
-| mesa-18.2.2-6.oe1.src | leve2 | mesa-libEGL-18.2.2-6.oe1.aarch64  |  |
-| mesa-18.2.2-6.oe1.src | leve2 | mesa-libGL-18.2.2-6.oe1.aarch64  |  |
-| mesa-18.2.2-6.oe1.src | leve2 | mesa-libOSMesa-18.2.2-6.oe1.aarch64  |  |
-| mesa-18.2.2-6.oe1.src | leve2 | mesa-libgbm-18.2.2-6.oe1.aarch64  |  |
-| mesa-18.2.2-6.oe1.src | leve2 | mesa-libglapi-18.2.2-6.oe1.aarch64  |  |
-| mesa-18.2.2-6.oe1.src | leve2 | mesa-libxatracker-18.2.2-6.oe1.aarch64  |  |
-| mesa-18.2.2-6.oe1.src | leve2 | mesa-omx-drivers-18.2.2-6.oe1.aarch64  |  |
-| mesa-18.2.2-6.oe1.src | leve2 | mesa-vdpau-drivers-18.2.2-6.oe1.aarch64  |  |
-| mesa-18.2.2-6.oe1.src | leve2 | mesa-vulkan-drivers-18.2.2-6.oe1.aarch64 |  |
-| popt-1.16-17.oe1.src | leve2 | popt-1.16-17.oe1.aarch64 |  |
-| openldap-2.4.46-15.oe1.src | leve2 | openldap-2.4.46-15.oe1.aarch64 |  |
-| libICE-1.0.10-2.oe1.src | leve2 | libICE-1.0.10-2.oe1.aarch64 |  |
-| perl-File-Temp-0.230.800-4.oe1.src | leve3 |  |  |
-| grep-3.4-0.oe1.src | leve3 |  |  |
+| mesa-18.2.2-6.oe1.src | level2 | mesa-libEGL-18.2.2-6.oe1.aarch64  |  |
+| mesa-18.2.2-6.oe1.src | level2 | mesa-libGL-18.2.2-6.oe1.aarch64  |  |
+| mesa-18.2.2-6.oe1.src | level2 | mesa-libOSMesa-18.2.2-6.oe1.aarch64  |  |
+| mesa-18.2.2-6.oe1.src | level2 | mesa-libgbm-18.2.2-6.oe1.aarch64  |  |
+| mesa-18.2.2-6.oe1.src | level2 | mesa-libglapi-18.2.2-6.oe1.aarch64  |  |
+| mesa-18.2.2-6.oe1.src | level2 | mesa-libxatracker-18.2.2-6.oe1.aarch64  |  |
+| mesa-18.2.2-6.oe1.src | level2 | mesa-omx-drivers-18.2.2-6.oe1.aarch64  |  |
+| mesa-18.2.2-6.oe1.src | level2 | mesa-vdpau-drivers-18.2.2-6.oe1.aarch64  |  |
+| mesa-18.2.2-6.oe1.src | level2 | mesa-vulkan-drivers-18.2.2-6.oe1.aarch64 |  |
+| popt-1.16-17.oe1.src | level2 | popt-1.16-17.oe1.aarch64 |  |
+| openldap-2.4.46-15.oe1.src | level2 | openldap-2.4.46-15.oe1.aarch64 |  |
+| libICE-1.0.10-2.oe1.src | level2 | libICE-1.0.10-2.oe1.aarch64 |  |
+| perl-File-Temp-0.230.800-4.oe1.src | level3 |  |  |
+| grep-3.4-0.oe1.src | level3 |  |  |
 | libSM-1.2.3-2.oe1.src |  | libSM-1.2.3-2.oe1.aarch64 | Subject to modification |
-| libXfixes-5.0.3-11.oe1.src | leve3 | libXfixes-5.0.3-11.oe1.aarch64 |  |
-| perl-File-Path-2.16-4.oe1.src | leve3 |  |  |
+| libXfixes-5.0.3-11.oe1.src | level3 | libXfixes-5.0.3-11.oe1.aarch64 |  |
+| perl-File-Path-2.16-4.oe1.src | level3 |  |  |
 | libgcrypt-1.8.3-5.oe1.src | level1 | libgcrypt-1.8.3-5.oe1.aarch64 |  |
-| libgpg-error-1.35-3.oe1.src | leve2 | libgpg-error-1.35-3.oe1.aarch64 |  |
-| nspr-4.20.0-4.oe1.src | leve3 | nspr-4.20.0-4.oe1.aarch64 |  |
-| polkit-0.116-4.oe1.src | leve3 | polkit-libs-0.116-4.oe1.aarch64 |  |
-| fonts-rpm-macros-2.0.2-2.oe1.src | leve3 |  |  |
+| libgpg-error-1.35-3.oe1.src | level2 | libgpg-error-1.35-3.oe1.aarch64 |  |
+| nspr-4.20.0-4.oe1.src | level3 | nspr-4.20.0-4.oe1.aarch64 |  |
+| polkit-0.116-4.oe1.src | level3 | polkit-libs-0.116-4.oe1.aarch64 |  |
+| fonts-rpm-macros-2.0.2-2.oe1.src | level3 |  |  |
 | libXi-1.7.9-11.oe1.src |  | libXi-1.7.9-11.oe1.aarch64 | Subject to modification |
-| perl-Scalar-List-Utils-1.52-2.oe1.src | leve3 |  |  |
-| chkconfig-1.10-8.oe1.src | leve3 |  |  |
-| libnl3-3.5.0-1.oe1.src | leve2 | libnl3-3.5.0-1.oe1.aarch64 |  |
-| sed-4.7-0.oe1.src | leve3 |  |  |
-| urw-base35-fonts-20170801-11.oe1.src | leve3 |  |  |
-| libcanberra-0.30-25.oe1.src | leve3 | libcanberra-0.30-25.oe1.aarch64  |  |
-| libcanberra-0.30-25.oe1.src | leve3 | libcanberra-gtk2-0.30-25.oe1.aarch64  |  |
-| libcanberra-0.30-25.oe1.src | leve3 | libcanberra-gtk3-0.30-25.oe1.aarch64 |  |
-| qt5-qtdeclarative-5.11.1-5.oe1.src | leve3 | qt5-qtdeclarative-5.11.1-5.oe1.aarch64  |  |
-| qt5-qtdeclarative-5.11.1-5.oe1.src | leve3 | qt5-qtdeclarative-devel-5.11.1-5.oe1.aarch64 |  |
-| json-glib-1.4.4-2.oe1.src | leve2 | json-glib-1.4.4-2.oe1.aarch64 |  |
+| perl-Scalar-List-Utils-1.52-2.oe1.src | level3 |  |  |
+| chkconfig-1.10-8.oe1.src | level3 |  |  |
+| libnl3-3.5.0-1.oe1.src | level2 | libnl3-3.5.0-1.oe1.aarch64 |  |
+| sed-4.7-0.oe1.src | level3 |  |  |
+| urw-base35-fonts-20170801-11.oe1.src | level3 |  |  |
+| libcanberra-0.30-25.oe1.src | level3 | libcanberra-0.30-25.oe1.aarch64  |  |
+| libcanberra-0.30-25.oe1.src | level3 | libcanberra-gtk2-0.30-25.oe1.aarch64  |  |
+| libcanberra-0.30-25.oe1.src | level3 | libcanberra-gtk3-0.30-25.oe1.aarch64 |  |
+| qt5-qtdeclarative-5.11.1-5.oe1.src | level3 | qt5-qtdeclarative-5.11.1-5.oe1.aarch64  |  |
+| qt5-qtdeclarative-5.11.1-5.oe1.src | level3 | qt5-qtdeclarative-devel-5.11.1-5.oe1.aarch64 |  |
+| json-glib-1.4.4-2.oe1.src | level2 | json-glib-1.4.4-2.oe1.aarch64 |  |
 | libXrender-0.9.10-10.oe1.src |  | libXrender-0.9.10-10.oe1.aarch64 | Subject to modification |
-| gawk-5.0.1-2.oe1.src | leve3 |  |  |
-| libtalloc-2.3.0-0.oe1.src | leve2 | libtalloc-2.3.0-0.oe1.aarch64  |  |
-| libtalloc-2.3.0-0.oe1.src | leve2 | python3-talloc-2.3.0-0.oe1.aarch64 |  |
-| libtool-2.4.6-32.oe1.src | leve2 | libtool-ltdl-2.4.6-32.oe1.aarch64 |  |
-| perl-Encode-2.98-9.oe1.src | leve3 |  |  |
-| libcap-ng-0.7.9-7.oe1.src | leve2 | libcap-ng-0.7.9-7.oe1.aarch64 |  |
-| libsoup-2.66.1-1.oe1.src | leve2 | libsoup-2.66.1-1.oe1.aarch64 |  |
-| cmake-3.12.1-5.oe1.src | leve3 |  |  |
+| gawk-5.0.1-2.oe1.src | level3 |  |  |
+| libtalloc-2.3.0-0.oe1.src | level2 | libtalloc-2.3.0-0.oe1.aarch64  |  |
+| libtalloc-2.3.0-0.oe1.src | level2 | python3-talloc-2.3.0-0.oe1.aarch64 |  |
+| libtool-2.4.6-32.oe1.src | level2 | libtool-ltdl-2.4.6-32.oe1.aarch64 |  |
+| perl-Encode-2.98-9.oe1.src | level3 |  |  |
+| libcap-ng-0.7.9-7.oe1.src | level2 | libcap-ng-0.7.9-7.oe1.aarch64 |  |
+| libsoup-2.66.1-1.oe1.src | level2 | libsoup-2.66.1-1.oe1.aarch64 |  |
+| cmake-3.12.1-5.oe1.src | level3 |  |  |
 | libXt-1.1.5-11.oe1.src |  | libXt-1.1.5-11.oe1.aarch64 | Subject to modification |
 | libxcb-1.13.1-2.oe1.src |  | libxcb-1.13.1-2.oe1.aarch64 | Subject to modification |
-| pygobject3-3.30.1-2.oe1.src | leve2 |  |  |
+| pygobject3-3.30.1-2.oe1.src | level2 |  |  |
 | wayland-1.17.0-2.oe1.src |  | wayland-1.17.0-2.oe1.aarch64 | Subject to modification |
 | alsa-lib-1.1.6-6.oe1.src |  | alsa-lib-1.1.6-6.oe1.aarch64 | Subject to modification |
-| pcre-8.43-5.oe1.src | leve3 | pcre-8.43-5.oe1.aarch64 |  |
+| pcre-8.43-5.oe1.src | level3 | pcre-8.43-5.oe1.aarch64 |  |
 | libdrm-2.4.95-2.oe1.src |  | libdrm-2.4.95-2.oe1.aarch64 | Subject to modification |
-| libtiff-4.1.0-1.oe1.src | leve2 | libtiff-4.1.0-1.oe1.aarch64 |  |
-| cups-2.2.8-8.oe1.src | leve3 | cups-libs-2.2.8-8.oe1.aarch64 |  |
-| gmp-6.1.2-10.oe1.src | leve2 | gmp-6.1.2-10.oe1.aarch64  |  |
-| gmp-6.1.2-10.oe1.src | leve2 | gmp-c++-6.1.2-10.oe1.aarch64 |  |
+| libtiff-4.1.0-1.oe1.src | level2 | libtiff-4.1.0-1.oe1.aarch64 |  |
+| cups-2.2.8-8.oe1.src | level3 | cups-libs-2.2.8-8.oe1.aarch64 |  |
+| gmp-6.1.2-10.oe1.src | level2 | gmp-6.1.2-10.oe1.aarch64  |  |
+| gmp-6.1.2-10.oe1.src | level2 | gmp-c++-6.1.2-10.oe1.aarch64 |  |
 | libXrandr-1.5.1-10.oe1.src |  | libXrandr-1.5.1-10.oe1.aarch64 | Subject to modification |
-| postgresql-10.5-12.oe1.src | leve3 | postgresql-libs-10.5-12.oe1.aarch64 |  |
+| postgresql-10.5-12.oe1.src | level3 | postgresql-libs-10.5-12.oe1.aarch64 |  |
 | elfutils-0.177-3.oe1.src | level1 | elfutils-0.177-3.oe1.aarch64 |  |
-| libtdb-1.4.2-2.oe1.src | leve2 | libtdb-1.4.2-2.oe1.aarch64 |  |
+| libtdb-1.4.2-2.oe1.src | level2 | libtdb-1.4.2-2.oe1.aarch64 |  |
 | gstreamer1-1.14.4-4.oe1.src |  | gstreamer1-1.14.4-4.oe1.aarch64 | Subject to modification |
-| lcms2-2.9-7.oe1.src | leve2 | lcms2-2.9-7.oe1.aarch64 |  |
-| libXcomposite-0.4.4-17.oe1.src | leve3 | libXcomposite-0.4.4-17.oe1.aarch64 |  |
-| libXdamage-1.1.4-18.oe1.src | leve3 | libXdamage-1.1.4-18.oe1.aarch64 |  |
-| libreport-2.10.1-7.oe1.src | leve3 | libreport-2.10.1-7.oe1.aarch64 |  |
-| perl-Data-Dumper-2.172-3.oe1.src | leve3 |  |  |
-| xorg-x11-proto-devel-2018.4-3.oe1.src | leve2 |  |  |
-| libdb-5.3.28-35.oe1.src | leve3 | libdb-5.3.28-35.oe1.aarch64 |  |
-| perl-Pod-Usage-1.69-418.oe1.src | leve3 |  |  |
-| icu-62.1-5.oe1.src | leve3 | libicu-62.1-5.oe1.aarch64 |  |
-| php-7.2.10-3.oe1.src | leve3 | php-7.2.10-3.oe1.aarch64  |  |
-| php-7.2.10-3.oe1.src | leve3 | php-embedded-7.2.10-3.oe1.aarch64 |  |
-| libtevent-0.10.1-1.oe1.src | leve2 | libtevent-0.10.1-1.oe1.aarch64 |  |
-| libxslt-1.1.32-7.oe1.src | leve2 | libxslt-1.1.32-7.oe1.aarch64  |  |
-| libxslt-1.1.32-7.oe1.src | leve2 | python2-libxslt-1.1.32-7.oe1.aarch64 |  |
-| lua-5.3.5-4.oe1.src | leve3 | lua-5.3.5-4.oe1.aarch64 |  |
-| selinux-policy-3.14.2-52.oe1.src | leve3 |  |  |
+| lcms2-2.9-7.oe1.src | level2 | lcms2-2.9-7.oe1.aarch64 |  |
+| libXcomposite-0.4.4-17.oe1.src | level3 | libXcomposite-0.4.4-17.oe1.aarch64 |  |
+| libXdamage-1.1.4-18.oe1.src | level3 | libXdamage-1.1.4-18.oe1.aarch64 |  |
+| libreport-2.10.1-7.oe1.src | level3 | libreport-2.10.1-7.oe1.aarch64 |  |
+| perl-Data-Dumper-2.172-3.oe1.src | level3 |  |  |
+| xorg-x11-proto-devel-2018.4-3.oe1.src | level2 |  |  |
+| libdb-5.3.28-35.oe1.src | level3 | libdb-5.3.28-35.oe1.aarch64 |  |
+| perl-Pod-Usage-1.69-418.oe1.src | level3 |  |  |
+| icu-62.1-5.oe1.src | level3 | libicu-62.1-5.oe1.aarch64 |  |
+| php-7.2.10-3.oe1.src | level3 | php-7.2.10-3.oe1.aarch64  |  |
+| php-7.2.10-3.oe1.src | level3 | php-embedded-7.2.10-3.oe1.aarch64 |  |
+| libtevent-0.10.1-1.oe1.src | level2 | libtevent-0.10.1-1.oe1.aarch64 |  |
+| libxslt-1.1.32-7.oe1.src | level2 | libxslt-1.1.32-7.oe1.aarch64  |  |
+| libxslt-1.1.32-7.oe1.src | level2 | python2-libxslt-1.1.32-7.oe1.aarch64 |  |
+| lua-5.3.5-4.oe1.src | level3 | lua-5.3.5-4.oe1.aarch64 |  |
+| selinux-policy-3.14.2-52.oe1.src | level3 |  |  |
 | pulseaudio-12.2-3.oe1.src |  | pulseaudio-12.2-3.oe1.aarch64 | Subject to modification |
-| yajl-2.1.0-12.oe1.src | leve2 | yajl-2.1.0-12.oe1.aarch64 |  |
-| bind-9.11.4-13.oe1.src | leve2 | bind-export-libs-9.11.4-13.oe1.aarch64  |  |
-| bind-9.11.4-13.oe1.src | leve2 | bind-libs-9.11.4-13.oe1.aarch64  |  |
-| bind-9.11.4-13.oe1.src | leve2 | bind-libs-lite-9.11.4-13.oe1.aarch64  |  |
-| bind-9.11.4-13.oe1.src | leve2 | bind-pkcs11-9.11.4-13.oe1.aarch64 |  |
-| kmod-25-6.oe1.src | leve2 | kmod-libs-25-6.oe1.aarch64 |  |
-| libnsl2-1.2.0-4.oe1.src | leve2 | libnsl2-1.2.0-4.oe1.aarch64 |  |
-| jansson-2.11-4.oe1.src | leve2 | jansson-2.11-4.oe1.aarch64 |  |
+| yajl-2.1.0-12.oe1.src | level2 | yajl-2.1.0-12.oe1.aarch64 |  |
+| bind-9.11.4-13.oe1.src | level2 | bind-export-libs-9.11.4-13.oe1.aarch64  |  |
+| bind-9.11.4-13.oe1.src | level2 | bind-libs-9.11.4-13.oe1.aarch64  |  |
+| bind-9.11.4-13.oe1.src | level2 | bind-libs-lite-9.11.4-13.oe1.aarch64  |  |
+| bind-9.11.4-13.oe1.src | level2 | bind-pkcs11-9.11.4-13.oe1.aarch64 |  |
+| kmod-25-6.oe1.src | level2 | kmod-libs-25-6.oe1.aarch64 |  |
+| libnsl2-1.2.0-4.oe1.src | level2 | libnsl2-1.2.0-4.oe1.aarch64 |  |
+| jansson-2.11-4.oe1.src | level2 | jansson-2.11-4.oe1.aarch64 |  |
 | libffi-3.3-7.oe1.src |  | libffi-3.3-7.oe1.aarch64 | Subject to modification |
 | libusbx-1.0.22-2.oe1.src |  | libusbx-1.0.22-2.oe1.aarch64 | Subject to modification |
 | libxkbcommon-0.8.4-3.oe1.src |  | libxkbcommon-0.8.4-3.oe1.aarch64  | Subject to modification |
@@ -269,22 +269,22 @@ openEuler 对软件包的兼容性进行分级管理，其中：
 | gpgme-1.13.1-5.oe1.src |  | cpp-gpgme-1.13.1-5.oe1.aarch64  | Subject to modification |
 | gpgme-1.13.1-5.oe1.src |  | gpgme-1.13.1-5.oe1.aarch64  | Subject to modification |
 | gpgme-1.13.1-5.oe1.src |  | qt-gpgme-1.13.1-5.oe1.aarch64 | Subject to modification |
-| dbus-python-1.2.8-8.oe1.src | leve3 |  |  |
-| libldb-2.0.8-2.oe1.src | leve2 | libldb-2.0.8-2.oe1.aarch64  |  |
-| libldb-2.0.8-2.oe1.src | leve2 | python3-ldb-2.0.8-2.oe1.aarch64 |  |
-| emacs-26.1-12.oe1.src | leve3 | emacs-26.1-12.oe1.aarch64 |  |
-| libgudev-233-1.oe1.src | leve2 | libgudev-233-1.oe1.aarch64 |  |
-| numactl-2.0.13-4.oe1.src | leve3 | numactl-libs-2.0.13-4.oe1.aarch64 |  |
-| NetworkManager-1.16.0-7.oe1.src | leve2 | NetworkManager-1.16.0-7.oe1.aarch64  |  |
-| NetworkManager-1.16.0-7.oe1.src | leve2 | NetworkManager-libnm-1.16.0-7.oe1.aarch64  |  |
-| NetworkManager-1.16.0-7.oe1.src | leve2 | NetworkManager-wwan-1.16.0-7.oe1.aarch64 |  |
+| dbus-python-1.2.8-8.oe1.src | level3 |  |  |
+| libldb-2.0.8-2.oe1.src | level2 | libldb-2.0.8-2.oe1.aarch64  |  |
+| libldb-2.0.8-2.oe1.src | level2 | python3-ldb-2.0.8-2.oe1.aarch64 |  |
+| emacs-26.1-12.oe1.src | level3 | emacs-26.1-12.oe1.aarch64 |  |
+| libgudev-233-1.oe1.src | level2 | libgudev-233-1.oe1.aarch64 |  |
+| numactl-2.0.13-4.oe1.src | level3 | numactl-libs-2.0.13-4.oe1.aarch64 |  |
+| NetworkManager-1.16.0-7.oe1.src | level2 | NetworkManager-1.16.0-7.oe1.aarch64  |  |
+| NetworkManager-1.16.0-7.oe1.src | level2 | NetworkManager-libnm-1.16.0-7.oe1.aarch64  |  |
+| NetworkManager-1.16.0-7.oe1.src | level2 | NetworkManager-wwan-1.16.0-7.oe1.aarch64 |  |
 | gstreamer1-plugins-base-1.14.4-3.oe1.src |  | gstreamer1-plugins-base-1.14.4-3.oe1.aarch64 | Subject to modification |
 | libogg-1.3.3-3.oe1.src |  | libogg-1.3.3-3.oe1.aarch64 | Subject to modification |
 | libssh-0.8.3-7.oe1.src | level1 | libssh-0.8.3-7.oe1.aarch64 |  |
 | libssh2-1.9.0-2.oe1.src | level1 | libssh2-1.9.0-2.oe1.aarch64 |  |
 | bpg-fonts-20120413-12.oe1.src | level3 |  |  |
 | file-5.38-1.oe1.src | level3 | file-libs-5.38-1.oe1.aarch64 |  |
-| json-c-0.13.1-6.oe1.src | leve2 | json-c-0.13.1-6.oe1.aarch64 |  |
+| json-c-0.13.1-6.oe1.src | level2 | json-c-0.13.1-6.oe1.aarch64 |  |
 | libXinerama-1.1.4-5.oe1.src |  | libXinerama-1.1.4-5.oe1.aarch64 | Subject to modification |
 | libXmu-1.1.3-1.oe1.src |  | libXmu-1.1.3-1.oe1.aarch64 | Subject to modification |
 | libarchive-3.4.1-2.oe1.src | level2 | libarchive-3.4.1-2.oe1.aarch64 |  |
