@@ -1,4 +1,10 @@
-# openEuler Software Package Compatibility Level
+# openEuler 软件包兼容性分级
+
+openEuler 对软件包的兼容性进行分级管理，其中：
+
+- level1: 软件包及软件包 API、ABI 在某个 LTS 版本的生命周期保持不变，跨 LTS 版本不保证。
+- level2: 软件包及软件包 API、ABI 在某个 SP 版本的生命周期保持不变，跨 SP 版本不保证。
+- level3: 版本升级兼容性不做保证。
 
 | source package | level | bin package | status |
 |---|---|---|---|
