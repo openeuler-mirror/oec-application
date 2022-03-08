@@ -1,6 +1,6 @@
 # openEuler社区开源软件适配流程
 
-​	openEuler社区提供2种开源软件适配方式，第一种开源软件随openEuler正式版本发布，所需要的流程以及时间较长，第二种为开源软件兼容性适配及应用，将开源软件发布到软件所仓库，所需要的时间较短。
+​	openEuler社区提供2种开源软件适配方式，第一种开源软件随openEuler正式版本发布，所需要的流程以及时间较长，第二种为开源软件兼容性适配及应用，将开源软件发布到[软件所仓库](https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/)，所需要的时间较短。
 
 ​	当开源软件存在以下问题时，推荐使用第二种方案，其余推荐随社区版本发布：
 
@@ -113,24 +113,25 @@ compass-ci将所有通过构建测试，兼容性测试的软件包发布至oepk
 compass-ci每日定时筛选oepkgs应用类软件包，将筛选出的软件包信息发布至软件兼容性清单 https://www.openeuler.org/zh/compatibility/ 中
 
 ## 三、下载使用软件
-- 以在openEuler-20.03-LTS-SP1上适配的budding-openeuler仓库为例：
-在 openEuler-20.03-LTS-SP1 os+epol 的基础上，叠加budding-openeuler仓库，并调整优先级之后使用
-openEuler os+epol  repo        priority=0   （缺省最高）
-oepkgs budding-openeuler repo    priority=100
+以软件包x2openEuler为例，由于该软件包是在openEuler-20.03-LTS-SP1上适配，已经是经过构建测试和安装测试的稳定版本(stable)，并由用户贡献(contrib)至oepkgs仓库中，因此，该软件包将会存放在https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/stable/contrib/x2openEuler仓库中：
 
-在/etc/yum.repos.d/目录下增加budding-openeuler.repo 文件：
+**软件仓配置规则：**
+
+在 openEuler-20.03-LTS-SP1 os+epol 的基础上，叠加stable仓库，并调整优先级之后使用
+openEuler os+epol  repo        priority=0   （缺省最高）
+oepkgs stable repo    priority=100
+
+在/etc/yum.repos.d/目录下增加stable.repo文件：
 ```
-cat > /etc/yum.repos.d/budding-openeuler.repo < EOF
-[budding-openeulerstandard_basearchbasearch]
-name=budding-openeulerstandard_basearchbasearch
-baseurl=https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/budding-openeuler/standard_$basearch/$basearch
+cat > /etc/yum.repos.d/stable.repo < EOF
+[stablecontribx2openEulernoarch]
+name=stablecontribx2openEulernoarch
+baseurl=https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/stable/contrib/x2openEuler/noarch
 enabled=1
 gpgcheck=0
 priority=100
 ```
 ```
 yum update
-yum install -y package
+yum install -y x2openEuler
 ```
-
-
