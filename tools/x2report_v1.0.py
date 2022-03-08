@@ -1,5 +1,6 @@
 import csv
 import pathlib
+import ast
 
 conclusion_mapping = {
     1: 'version changed',
@@ -28,16 +29,16 @@ with open('result.csv', 'w', newline='', encoding='utf-8') as f:
     writer = csv.DictWriter(f, fieldnames)
     writer.writeheader()
 
-    html_dir = pathlib.Path('.')  # 根据 html 文件所在的实际目录进行设置
-    for file in html_dir.iterdir():
-        if file.suffix != '.html':
+    html_dir = pathlib.Path('.')
+    for html_file in html_dir.iterdir():
+        if html_file.suffix != '.html':
             continue
-        html_path = file
+        html_path = html_file
         with open(html_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
             for line in lines:
                 if line.strip().startswith("data: {\'baseInfo\'"):
-                    data = eval(line.strip()[6:])[0]
+                    data = ast.literal_eval(line.strip()[6:])[0]
                     break
         # csv_name = str(html_path.with_suffix('.csv'))
         # reset all field with -
