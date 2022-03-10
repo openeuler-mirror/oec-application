@@ -308,9 +308,9 @@ openEuler 对软件包的兼容性进行分级管理，其中：
 | poppler-0.67.0-5.oe1.src | poppler-qt-0.67.0-5.oe1.aarch64  | level3 |  |
 | poppler-0.67.0-5.oe1.src | poppler-qt5-0.67.0-5.oe1.aarch64 | level3 |  |
 | tcl-8.6.8-8.oe1.src | tcl-8.6.8-8.oe1.aarch64 | level3 |  |
-| kernel-4.19.90-2003.4.0.0036.oe1.src | kernel-4.19.90-2003.4.0.0036.oe1.aarch64  | level3 | Subject to modification |
-| kernel-4.19.90-2003.4.0.0036.oe1.src | kernel-devel-4.19.90-2003.4.0.0036.oe1.aarch64  | level3 |  |
-| kernel-4.19.90-2003.4.0.0036.oe1.src | kernel-tools-4.19.90-2003.4.0.0036.oe1.aarch64 | level3 |  |
+| kernel-4.19.90-2003.4.0.0036.oe1.src | kernel-4.19.90-2003.4.0.0036.oe1.aarch64  | level0 | Subject to modification |
+| kernel-4.19.90-2003.4.0.0036.oe1.src | kernel-devel-4.19.90-2003.4.0.0036.oe1.aarch64  | level0 |  |
+| kernel-4.19.90-2003.4.0.0036.oe1.src | kernel-tools-4.19.90-2003.4.0.0036.oe1.aarch64 | level0 |  |
 | dracut-049-8.oe1.src |  | level3 |  |
 | httpd-2.4.34-15.oe1.src |  | level3 |  |
 | libwebp-1.0.0-5.oe1.src | libwebp-1.0.0-5.oe1.aarch64  |  | Subject to modification |
