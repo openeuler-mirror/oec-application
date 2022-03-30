@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# Copyright: Copyright © Huawei Technologies Co., Ltd. 2021. All rights reserved.
+# Create: 2021-06-16
+# Content: Find all executed files under PATH
+
+result_file='exe_names.json'
+
+echo '{' > ${result_file}
+
+flag=0
+
+for p in ${PATH//:/ }; do
+    echo "Analysing: $p"
+
+    [[ -d $p ]] || continue
+
+    for f in `ls $p`; do
+        [[ -x "${p}/${f}" ]] && {
+            pkgs=''
+            real_path=`realpath ${p}/${f}`
+
+            for pkg in `rpm -qf ${real_path}`; do
+                pkgs="${pkgs} ${pkg}"
+            done
+
+            pkgs=${pkgs# }
+
+	        [[ ${pkgs} = *${real_path}* ]] && pkgs=''
+
+	        if [ $flag = 0 ]; then
+                echo -e -n "  \"${f}\": {\n    \"dir\": \"${p}\",\n    \"rpmName\": \"${pkgs}\"\n  }" >> ${result_file}
+                flag=1
+            else
+                echo -e -n ",\n  \"${f}\": {\n    \"dir\": \"${p}\",\n    \"rpmName\": \"${pkgs}\"\n  }" >> ${result_file}
+            fi
+        }
+    done
+done
+
+echo -e "\n}" >> ${result_file}
+
