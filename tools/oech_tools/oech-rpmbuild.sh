@@ -4,7 +4,7 @@
 
 cstch()
 {
-	git_url="https://gitee.com/cuixucui/cstc-hardware-cap"
+	git_url="https://gitee.com/openeuler/cstc-hardware-cap"
 	filename=${git_url##*/}
 	work_dir="/root/work"
 	rpmbuild_dir="/root/rpmbuild"
@@ -14,7 +14,7 @@ cstch()
 
 oech()
 {
-	git_url="https://gitee.com/cuixucui/oec-hardware"
+	git_url="https://gitee.com/openeuler/oec-hardware"
 	filename=${git_url##*/}
 	work_dir="/root/work"
 	rpmbuild_dir="/root/rpmbuild"
