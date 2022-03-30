@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+# Copyright: Copyright © Huawei Technologies Co., Ltd. 2021. All rights reserved.
+# Create: 2021-06-16
+# Content: Install all available packages under the OS using `dnf`, the OS
+#          should support RPM, example: openEuler, CentOS, ...
+
+for package in `dnf list --available | cut -d ' ' -f 1`; do
+        dnf install -y --skip-broken $package
+done

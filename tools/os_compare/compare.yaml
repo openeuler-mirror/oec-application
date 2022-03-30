@@ -1,0 +1,12 @@
+# Comparing the RPM versions of the two OS warehouses, the URL is the link of RPM warehouse, and multiple URLs are separated by spaces
+
+os1:
+  name: centos7.6
+  url: https://vault.centos.org/7.6.1810/os/x86_64/Packages/ https://vault.centos.org/7.6.1810/updates/x86_64/Packages/
+  package_dir:
+  db_path: centos7_6_base_x86.sqlite centos7_6_updates_x86.sqlite
+os2:
+  name: openEuler20.03_sp1
+  url: https://repo.openeuler.org/openEuler-20.03-LTS-SP1/everything/x86_64/Packages/
+  package_dir:
+  db_path: openEuler20_03_sp1_x86.sqlite
