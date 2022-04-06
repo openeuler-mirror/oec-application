@@ -5,4 +5,4 @@ oech-rpmbuild.sh is used to implement oec-click packaging oec-hardware code
 
 
 # Usage description
-1. ./oech-rpmbuild.sh oech/cstcsh
+1. ./oech-rpmbuild.sh oech
