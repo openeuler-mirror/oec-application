@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 # This script is used to automatically download git_repo,
-# and install oech/cstch tools
+# and install oech tools
 
 oech()
 {
