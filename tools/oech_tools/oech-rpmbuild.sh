@@ -2,16 +2,6 @@
 # This script is used to automatically download git_repo,
 # and install oech/cstch tools
 
-cstch()
-{
-	git_url="https://gitee.com/openeuler/cstc-hardware-cap"
-	filename=${git_url##*/}
-	work_dir="/root/work"
-	rpmbuild_dir="/root/rpmbuild"
-	source_name="CSTC-hardwareCap"
-	spec_name="cstchc-hardware"
-}
-
 oech()
 {
 	git_url="https://gitee.com/openeuler/oec-hardware"
@@ -24,12 +14,10 @@ oech()
 
 parameter()
 {
-	if [[ "$@" == "cstch" ]]; then
-		cstch
-	elif [[ "$@" == "oech" ]]; then
+	if [[ "$@" == "oech" ]]; then
 		oech
 	else
-		echo "Please enter parameter: oech or cstchc" &
+		echo "Please enter parameter: oech" &
 		exit
 	fi
 }
@@ -55,7 +43,6 @@ init_work_dir()
 
 do_file()
 {
-	echo ${work_dir}/$filename
 	cd ${work_dir}/$filename || exit
 	tar jcvf ${source_name}-1.0.0.tar.bz2 *
 	cp ${source_name}-1.0.0.tar.bz2 ${rpmbuild_dir}/SOURCES/
