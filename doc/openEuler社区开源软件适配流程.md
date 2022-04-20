@@ -67,7 +67,7 @@ PR示例：https://gitee.com/openeuler/community/pulls/975/files
 ## 一、向Compass-CI注册仓库
 
 ### 添加待测试仓库 URL 到 upstream-repos 仓库
-根据[仓库注册指南](https://gitee.com/wu_fengguang/compass-ci/edit/master/doc/features/test-service/test-oss-project.zh.md)，将想要测试的代码仓信息以 yaml 文件的方式添加到 [upstream-repos](https://gitee.com/wu_fengguang/upstream-repos) 仓库。
+根据[仓库注册指南](https://gitee.com/wu_fengguang/compass-ci/edit/master/doc/test-guide/test-oss-project.zh.md)，将想要测试的代码仓信息以 yaml 文件的方式添加到 [upstream-repos](https://gitee.com/wu_fengguang/upstream-repos) 仓库。
 
 ## 二、提交任务 
 
