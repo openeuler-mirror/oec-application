@@ -67,7 +67,18 @@ PR示例：https://gitee.com/openeuler/community/pulls/975/files
 ## 一、向Compass-CI注册仓库
 
 ### 添加待测试仓库 URL 到 upstream-repos 仓库
-根据[仓库注册指南](https://gitee.com/wu_fengguang/compass-ci/edit/master/doc/test-guide/test-oss-project.zh.md)，将想要测试的代码仓信息以 yaml 文件的方式添加到 [upstream-repos](https://gitee.com/wu_fengguang/upstream-repos) 仓库。
+根据[仓库注册指南](https://gitee.com/openeuler/compass-ci/blob/master/doc/test-guide/test-oss-project.zh.md)，将想要测试的代码仓信息以 yaml 文件的方式添加到 [upstream-repos](https://gitee.com/compass-ci/upstream-repos) 仓库。
+
+**配置 upstream-repos仓库中的DEFAULTS文件：**
+
+以构建zstd软件包为例，在 upstream-repos/z/zstd/目录下增加DEFAULTS文件：
+```
+# testbox 指定测试机类型规格，详见：https://gitee.com/compass-ci/lab-z9/tree/master/hosts
+# docker_image 指定支持的os及os_version，详见：https://gitee.com/openeuler/compass-ci/blob/master/doc/job/submit/supported-testbox-matrix.md
+# custom_repo_name 需要指定上传的软件所仓库名，详见：https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/
+submit：
+- command：testbox=dc-16g docker_image=openeuler:20.03-LTS-SP1 custom_repo_name=extras rpmbuild.yaml
+```
 
 ## 二、提交任务 
 
@@ -107,13 +118,13 @@ https://gitee.com/wu_fengguang/lkp-tests/blob/master/tests/install-rpm
 - 卸载
 ## 2.3 发布
 ### 发布软件
-compass-ci将所有通过构建测试，兼容性测试的软件包发布至oepkgs仓库 https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/ 里，用户可直接访问，查找软件包
+compass-ci将所有通过构建测试，兼容性测试的软件包发布至oepkgs仓库 https://repo.oepkgs.net/openEuler/rpm/ 里，用户可直接访问，查找软件包
 
 ### 发布清单
 compass-ci每日定时筛选oepkgs应用类软件包，将筛选出的软件包信息发布至软件兼容性清单 https://www.openeuler.org/zh/compatibility/ 中
 
 ## 三、下载使用软件
-以软件包x2openEuler为例，由于该软件包是在openEuler-20.03-LTS-SP1上适配，已经是经过构建测试和安装测试的稳定版本(stable)，并由用户贡献(contrib)至oepkgs仓库中，因此，该软件包将会存放在https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/stable/contrib/x2openEuler仓库中：
+以软件包x2openEuler为例，由于该软件包是在openEuler-20.03-LTS-SP1上适配，已经是经过构建测试和安装测试的稳定版本，并由用户贡献(contrib)至oepkgs仓库中，因此，该软件包将会存放在https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/contrib/x2openEuler 仓库中：
 
 **软件仓配置规则：**
 
@@ -121,15 +132,16 @@ compass-ci每日定时筛选oepkgs应用类软件包，将筛选出的软件包�
 openEuler os+epol  repo        priority=0   （缺省最高）
 oepkgs stable repo    priority=100
 
-在/etc/yum.repos.d/目录下增加stable.repo文件：
+在/etc/yum.repos.d/目录下增加oepkgs.repo文件：
 ```
-cat > /etc/yum.repos.d/stable.repo < EOF
+cat > /etc/yum.repos.d/oepkgs.repo << EOF
 [stablecontribx2openEulernoarch]
 name=stablecontribx2openEulernoarch
-baseurl=https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/stable/contrib/x2openEuler/noarch
+baseurl=https://repo.oepkgs.net/openEuler/rpm/openEuler-20.03-LTS-SP1/contrib/x2openEuler/$basearch
 enabled=1
 gpgcheck=0
 priority=100
+EOF
 ```
 ```
 yum update
