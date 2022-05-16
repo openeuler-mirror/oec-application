@@ -67,9 +67,9 @@ openEuler 对软件包的兼容性进行分级管理，其中：
 | util-linux-2.34-8.oe1.src | libsmartcols-2.34-8.oe1.aarch64  | level3 |  |
 | util-linux-2.34-8.oe1.src | libuuid-2.34-8.oe1.aarch64 | level3 |  |
 | gdk-pixbuf2-2.38.0-9.oe1.src | gdk-pixbuf2-2.38.0-9.oe1.aarch64 |  | Subject to modification |
-| qt5-qtbase-5.11.1-9.oe1.src | qt5-qtbase-5.11.1-9.oe1.aarch64  |  | Subject to modification |
-| qt5-qtbase-5.11.1-9.oe1.src | qt5-qtbase-devel-5.11.1-9.oe1.aarch64  |  | Subject to modification |
-| qt5-qtbase-5.11.1-9.oe1.src | qt5-qtbase-gui-5.11.1-9.oe1.aarch64 |  | Subject to modification |
+| qt5-qtbase-5.11.1-9.oe1.src | qt5-qtbase-5.11.1-9.oe1.aarch64  | level2 |  |
+| qt5-qtbase-5.11.1-9.oe1.src | qt5-qtbase-devel-5.11.1-9.oe1.aarch64  | level2 |  |
+| qt5-qtbase-5.11.1-9.oe1.src | qt5-qtbase-gui-5.11.1-9.oe1.aarch64 | level2 |  |
 | pcp-4.1.3-3.oe1.src | pcp-4.1.3-3.oe1.aarch64 | level2 |  |
 | pango-1.43.0-3.oe1.src | pango-1.43.0-3.oe1.aarch64 |  | Subject to modification |
 | libselinux-2.9-1.oe1.src | libselinux-2.9-1.oe1.aarch64 | level2 |  |
@@ -209,8 +209,8 @@ openEuler 对软件包的兼容性进行分级管理，其中：
 | libcanberra-0.30-25.oe1.src | libcanberra-0.30-25.oe1.aarch64  | level3 |  |
 | libcanberra-0.30-25.oe1.src | libcanberra-gtk2-0.30-25.oe1.aarch64  | level3 |  |
 | libcanberra-0.30-25.oe1.src | libcanberra-gtk3-0.30-25.oe1.aarch64 | level3 |  |
-| qt5-qtdeclarative-5.11.1-5.oe1.src | qt5-qtdeclarative-5.11.1-5.oe1.aarch64  | level3 |  |
-| qt5-qtdeclarative-5.11.1-5.oe1.src | qt5-qtdeclarative-devel-5.11.1-5.oe1.aarch64 | level3 |  |
+| qt5-qtdeclarative-5.11.1-5.oe1.src | qt5-qtdeclarative-5.11.1-5.oe1.aarch64  | level2 |  |
+| qt5-qtdeclarative-5.11.1-5.oe1.src | qt5-qtdeclarative-devel-5.11.1-5.oe1.aarch64 | level2 |  |
 | json-glib-1.4.4-2.oe1.src | json-glib-1.4.4-2.oe1.aarch64 | level2 |  |
 | libXrender-0.9.10-10.oe1.src | libXrender-0.9.10-10.oe1.aarch64 |  | Subject to modification |
 | gawk-5.0.1-2.oe1.src |  | level3 |  |
@@ -320,8 +320,8 @@ openEuler 对软件包的兼容性进行分级管理，其中：
 | findutils-4.7.0-4.oe1.src |  | level3 |  |
 | libXft-2.3.2-13.oe1.src | libXft-2.3.2-13.oe1.aarch64 |  | Subject to modification |
 | nbdkit-1.6.2-2.oe1.src | nbdkit-ocaml-plugin-1.6.2-2.oe1.aarch64 | level3 |  |
-| qt-4.8.7-47.oe1.src | qt-4.8.7-47.oe1.aarch64  |  | Subject to modification |
-| qt-4.8.7-47.oe1.src | qt-devel-4.8.7-47.oe1.aarch64 |  | Subject to modification |
+| qt-4.8.7-47.oe1.src | qt-4.8.7-47.oe1.aarch64  |  level2 |  |
+| qt-4.8.7-47.oe1.src | qt-devel-4.8.7-47.oe1.aarch64 |  level2 |  |
 | atf-0.20-13.oe1.src | libatf-c++-0.20-13.oe1.aarch64  | level3 |  |
 | atf-0.20-13.oe1.src | libatf-c-0.20-13.oe1.aarch64 | level3 |  |
 | dbus-glib-0.110-5.oe1.src | dbus-glib-0.110-5.oe1.aarch64 | level3 |  |
@@ -1214,7 +1214,7 @@ openEuler 对软件包的兼容性进行分级管理，其中：
 | libstemmer-0-12.oe1.src | libstemmer-0-12.oe1.aarch64 | level3 |  |
 | libtimezonemap-0.4.5.1-6.oe1.src | libtimezonemap-0.4.5.1-6.oe1.aarch64 | level3 |  |
 | libvirt-glib-1.0.0-8.oe1.src | libvirt-glib-1.0.0-8.oe1.aarch64 | level1 |  |
-| libwebsockets-2.4.2-3.oe1.src | libwebsockets-2.4.2-3.oe1.aarch64 | level3 |  |
+| libwebsockets-2.4.2-3.oe1.src | libwebsockets-2.4.2-3.oe1.aarch64 | level2 |  |
 | libwmf-0.2.12-2.oe1.src | libwmf-0.2.12-2.oe1.aarch64 | level3 |  |
 | libwnck3-3.31.4-3.oe1.src | libwnck3-3.31.4-3.oe1.aarch64 | level3 |  |
 | libxmlb-0.1.13-2.oe1.src | libxmlb-0.1.13-2.oe1.aarch64 | level3 |  |
@@ -1505,7 +1505,7 @@ openEuler 对软件包的兼容性进行分级管理，其中：
 | gnome-video-effects-0.4.3-5.oe1.src |  | level3 |  |
 | gnu-efi-3.0.8-8.oe1.src |  | level3 |  |
 | gnulib-0-27.20180720git.oe1.src |  | level3 |  |
-| golang-github-coreos-go-iptables-0.4.0-2.oe1.src |  | level3 |  |
+| golang-github-coreos-go-iptables-0.4.0-2.oe1.src |  | level2 |  |
 | golang-github-golang-sys-0-0.22.20200305git7c87d13.oe1.src |  | level3 |  |
 | golang-github-russross-blackfriday-2.0.0-3.20191204git55d61fa.oe1.src |  | level3 |  |
 | golang-github-vishvananda-netlink-0-0.18.oe1.src |  | level3 |  |
