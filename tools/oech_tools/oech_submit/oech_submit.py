@@ -16,8 +16,7 @@ from pprint import pprint
 
 
 def mkdir(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+    os.makedirs(path, exist_ok=True)
 
 
 def read_yaml(yaml_path):
@@ -64,18 +63,18 @@ def deal_card_info(card_info_list):
             card["boardModel"] = card["boardModel"].replace(" ", "-")
         vendor_id = card.get("vendorID")
         device_id = card.get("deviceID")
-        ss_id = card.get("ssID")
         sv_id = card.get("svID")
+        ss_id = card.get("ssID")
 
-        card_id = "{}-{}-{}-{}".format(vendor_id, device_id, ss_id, sv_id)
+        card_id = "{}-{}-{}-{}".format(vendor_id, device_id, sv_id, ss_id)
         card_info_collect = "name:[{}] boardModel:[{}] card_id:[{}]".format(card["name"], card["boardModel"], card_id)
-        if all([vendor_id, device_id, ss_id, sv_id]):
+        if all([vendor_id, device_id, sv_id, ss_id]):
             if card_id not in card_ids_hash:
                 card_ids_hash[card_id] = card
             else:
                 print("[WARNING]: this card reappears {}".format(card_info_collect))
-#        else:
-#            print("[WARNING]: lack of information for this card {}".format(card_info_collect))
+        else:
+            print("[WARNING]: lack of information for this card {}".format(card_info_collect))
     return card_ids_hash
 
 
@@ -267,17 +266,16 @@ def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
     oech_task(yaml_content, card_with_box, submit_args, submit_output)
 
 
-def check_args(arg_name, prepare_arg, cmd_arg):
+def check_args(arg_name, cmd_arg):
     if cmd_arg:
-        prepare_arg = cmd_arg
-    elif not prepare_arg:
+        return cmd_arg
+    else:
         print("[ERROR]: {} is not entered.".format(arg_name))
         sys.exit()
-    return prepare_arg
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="")
+    parser = argparse.ArgumentParser(description="oech任务自动提交脚本")
     parser.add_argument('-j', '--job_yaml', type=str, required=False, help='oech job yaml')
     parser.add_argument('-l', '--lab_path', type=str, required=False, help='test lab which include devices dir')
     parser.add_argument('-c', '--card_conf', type=str, required=False, help='json file for all card conf')
@@ -285,14 +283,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # oech的job yaml
-    job_yaml = None
+    job_yaml = check_args('job_yaml', args.job_yaml)
     # 测试机环境的库
-    lab_path = None
+    lab_path = check_args('lab_path', args.lab_path)
     # 板卡文件
-    card_conf = None
-    
-    job_yaml = check_args('job_yaml', job_yaml, args.job_yaml)
-    lab_path = check_args('lab_path', lab_path, args.lab_path)
-    card_conf = check_args('card_conf', card_conf, args.card_conf)
+    card_conf = check_args('card_conf', args.card_conf)
 
     main(job_yaml, lab_path, card_conf, args.submit_output)
