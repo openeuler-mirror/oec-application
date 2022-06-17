@@ -16,8 +16,7 @@ from pprint import pprint
 
 
 def mkdir(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+    os.makedirs(path, exist_ok=True)
 
 
 def read_yaml(yaml_path):
@@ -64,18 +63,16 @@ def deal_card_info(card_info_list):
             card["boardModel"] = card["boardModel"].replace(" ", "-")
         vendor_id = card.get("vendorID")
         device_id = card.get("deviceID")
-        ss_id = card.get("ssID")
         sv_id = card.get("svID")
+        ss_id = card.get("ssID")
 
-        card_id = "{}-{}-{}-{}".format(vendor_id, device_id, ss_id, sv_id)
+        card_id = "{}-{}-{}-{}".format(vendor_id, device_id, sv_id, ss_id)
         card_info_collect = "name:[{}] boardModel:[{}] card_id:[{}]".format(card["name"], card["boardModel"], card_id)
-        if all([vendor_id, device_id, ss_id, sv_id]):
+        if all([vendor_id, device_id, sv_id, ss_id]):
             if card_id not in card_ids_hash:
                 card_ids_hash[card_id] = card
             else:
                 print("[WARNING]: this card reappears {}".format(card_info_collect))
-#        else:
-#            print("[WARNING]: lack of information for this card {}".format(card_info_collect))
     return card_ids_hash
 
 
@@ -101,23 +98,27 @@ def read_lab_board(path):
         box_board_hash[board_file] = board_hash.keys()
     return box_board_hash
 
-
-def choose_box(card_ids_hash, box_board_hash):
+def find_ethernet_cluter(card_id, card_with_box, box_board_hash, used_box, usable_box):
     """
-    return:
-    {
-     '19e5-1822-d136-19e5': {'client': 'taishan200-2280-2s64p-256g--a119',
-                             'name': 'ethernet',
-                             'boardModel': 'SP331',
-                             'test_para': 'y',
-                             'server': 'taishan200-2280-2s64p-256g--a111',
-                             'env_ready': True}}
+    找ethernet卡相同的两个机器组集群
     """
-    card_with_box = {}
-    used_box = []
-    usable_box = list(box_board_hash.keys())
+    for box, box_card_ids_list in box_board_hash.items():
+        if box not in used_box and card_id in box_card_ids_list:
+            if not card_with_box[card_id].get("server"):
+                card_with_box[card_id]["server"] = box
+            elif not card_with_box[card_id].get("client"):
+                card_with_box[card_id]["client"] = box
+            else:
+                # server和client端找到，这个卡的集群完成，不必再找这个卡
+                break
+            used_box.append(box)
+            usable_box.remove(box)
+    return card_with_box, used_box, usable_box
 
-    # 第一轮找ethernet卡相同的两个机器组集群
+def find_cluster(card_ids_hash, card_with_box, box_board_hash, used_box, usable_box):
+    """
+    先确定是否已经输入了sever/client，没有的话再找ethernet的测试机
+    """
     for card_id, card_info in card_ids_hash.items():
         card_with_box.setdefault(card_id, {})
         card_with_box[card_id]["name"] = card_info["name"]
@@ -132,26 +133,23 @@ def choose_box(card_ids_hash, box_board_hash):
                 card_with_box[card_id][role] = box
                 used_box.append(box)
                 usable_box.remove(box)
-        
+
+        # 如果条件成立说明，这个板卡的server、client已经输入，不用再找了
         if card_with_box[card_id].get("server") and card_with_box[card_id].get("client"):
             continue
 
+        # 第一次遍历跳过非ethernet的板卡，只找ethernet的板卡
         if card_info["name"] != "ethernet":
             continue
 
-        for box, box_card_ids_list in box_board_hash.items():
-            if box not in used_box and card_id in box_card_ids_list:
-                if not card_with_box[card_id].get("server"):
-                    card_with_box[card_id]["server"] = box
-                elif not card_with_box[card_id].get("client"):
-                    card_with_box[card_id]["client"] = box
-                else:
-                    # server和client端找到，这个卡的集群完成，不必再找这个卡
-                    break
-                used_box.append(box)
-                usable_box.remove(box)
+        card_with_box, used_box, usable_box = find_ethernet_cluter(card_id, card_with_box, box_board_hash,
+                                                                   used_box, usable_box)
+    return card_with_box, used_box, usable_box
 
-    # 第二轮找非ethernet卡的机器组集群，只找一台给client端测试
+def find_no_ethernet_client(card_ids_hash, card_with_box, box_board_hash, used_box, usable_box):
+    """
+    非ethernet卡测试，只需要找一台client符合的板卡即可，server端可以任选一台
+    """
     for card_id, card_info in card_ids_hash.items():
         if card_info["name"] == "ethernet":
             continue
@@ -164,8 +162,12 @@ def choose_box(card_ids_hash, box_board_hash):
                     usable_box.remove(box)
                 else:
                     break
+    return card_with_box, used_box, usable_box
 
-    # 第三轮，非ethernet卡的机器组集群只有一台client，再找一台机器组成集群
+def find_no_ethernet_server(card_with_box, used_box, usable_box):
+    """
+    非ethernet卡测试，只需要找一台client符合的板卡即可，server端可以任选一台
+    """
     for card_id, cluster_info in card_with_box.items():
         if len(usable_box) == 0:
             break
@@ -179,7 +181,34 @@ def choose_box(card_ids_hash, box_board_hash):
                 box = usable_box.pop()
                 used_box.append(box)
                 cluster_info["server"] = box
+    return card_with_box
 
+def choose_box(card_ids_hash, box_board_hash):
+    """
+    return:
+    {
+     '19e5-1822-d136-19e5': {'client': 'taishan200-2280-2s64p-256g--a119',
+                             'name': 'ethernet',
+                             'boardModel': 'SP331',
+                             'test_para': 'y',
+                             'server': 'taishan200-2280-2s64p-256g--a111',
+                             'env_ready': True}
+    }
+    """
+    card_with_box = {}
+    used_box = []
+    usable_box = list(box_board_hash.keys())
+
+    # 第一轮找板卡文件中已经定义好的server/client, 或者ethernet卡相同的两个机器组集群
+    card_with_box, used_box, usable_box = find_cluster(card_ids_hash, card_with_box, box_board_hash,
+                                                                used_box, usable_box)
+
+    # 第二轮找非ethernet卡的机器组集群，只找一台给client端测试
+    card_with_box, used_box, usable_box = find_no_ethernet_client(card_ids_hash, card_with_box, box_board_hash,
+                                                                used_box, usable_box)
+
+    # 第三轮，非ethernet卡的机器组集群只有一台client，再找一台机器组成集群
+    card_with_box = find_no_ethernet_server(card_with_box, used_box, usable_box)
     return card_with_box
 
 
@@ -203,6 +232,7 @@ def submit_job(job_yaml_path, now_time, yaml_name, submit_args, submit_output=Fa
     print("\n")
     job_yaml_path = os.path.expanduser(job_yaml_path)
     submit_cmd = "submit " + job_yaml_path + submit_args
+
     if submit_output:
         submit_cmd += " -o {}".format(submit_output)
     exitcode, output = exec_cmd(submit_cmd)
@@ -212,6 +242,7 @@ def submit_job(job_yaml_path, now_time, yaml_name, submit_args, submit_output=Fa
             print("[INFO]: submit job success {}/{}.yaml".format(now_time, yaml_name))
             print("[INFO]: >>>>>> job id: {}, {} >>>>>>".format(job_id[0], job_id[1]))
             return job_id
+
     if submit_output:
         print("[INFO]: submit job {}/{}.yaml".format(now_time, yaml_name))
         print("[INFO]: <<<<<< output info: {} >>>>>>".format(output))
@@ -267,17 +298,16 @@ def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
     oech_task(yaml_content, card_with_box, submit_args, submit_output)
 
 
-def check_args(arg_name, prepare_arg, cmd_arg):
+def check_args(arg_name, cmd_arg):
     if cmd_arg:
-        prepare_arg = cmd_arg
-    elif not prepare_arg:
+        return cmd_arg
+    else:
         print("[ERROR]: {} is not entered.".format(arg_name))
         sys.exit()
-    return prepare_arg
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="")
+    parser = argparse.ArgumentParser(description="oech任务自动提交脚本")
     parser.add_argument('-j', '--job_yaml', type=str, required=False, help='oech job yaml')
     parser.add_argument('-l', '--lab_path', type=str, required=False, help='test lab which include devices dir')
     parser.add_argument('-c', '--card_conf', type=str, required=False, help='json file for all card conf')
@@ -285,14 +315,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # oech的job yaml
-    job_yaml = None
+    job_yaml = check_args('job_yaml', args.job_yaml)
     # 测试机环境的库
-    lab_path = None
+    lab_path = check_args('lab_path', args.lab_path)
     # 板卡文件
-    card_conf = None
-    
-    job_yaml = check_args('job_yaml', job_yaml, args.job_yaml)
-    lab_path = check_args('lab_path', lab_path, args.lab_path)
-    card_conf = check_args('card_conf', card_conf, args.card_conf)
+    card_conf = check_args('card_conf', args.card_conf)
 
     main(job_yaml, lab_path, card_conf, args.submit_output)

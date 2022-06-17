@@ -17,14 +17,14 @@
 
 # 使用方法：
 ```
-    测试命令：
-    python3 oech_submit.py -o /home/hi2036/tmp \
-                            -j /home/hi2036/lkp-tests/jobs/oech.yaml \
-                            -l /home/hi2036/lab-z9 \
+    本地测试命令，不真实提交，只是看提交流程是否正确：
+    python3 oech_submit.py -o /home/user/tmp \
+                            -j $LKP_SRC/jobs/oech.yaml \
+                            -l /home/user/lab-z9 \
                             -c ./test_conf.json
     提交命令：
-    python3 oech_submit.py -j /home/hi2036/lkp-tests/jobs/oech.yaml \
-                            -l /home/hi2036/lab-z9 \
+    python3 oech_submit.py -j $LKP_SRC/jobs/oech.yaml \
+                            -l /home/user/lab-z9 \
                             -c ./test_conf.json
 ```
 ### 参数解释
@@ -68,6 +68,7 @@
     - submit_result
 ```
 这个submit_result文件包含了提交的信息和job_id,可以根据job_id来查询job的执行过程和结果。
+注意测试提交时也会有这个文件，但是没有job_id的。
 
-另一个yaml文件就是提交的完整job yaml。
+另一个yaml文件就是提交的完整job yaml(无论测试还是真实提交都会有这个文件)。
     
