@@ -1,13 +1,24 @@
 # **构建rpm包流程**
 
 ###### 总体流程：
-**1.提交构建rpm包任务
-2.查看日志判断是否构建成功
-3.构建成功则会自动进行安装测试，若成功则入库
-4.构建/安装测试失败则查看日志分析原因并进行修复
-5.在oepkgs-management仓库建仓
-6.将修复的源码以及spec等文件放入
-7.仓库的webhook将自动触发提交构建任务**
+1. 基于PR，在oepkgs-mangement仓库中创建配置文件，用于建仓
+2. 往步骤一生成的https://gitee.com/src-oepkgs/仓库中补充构建所需源码文件
+3. 仓库的webhook将自动触发构建任务
+
+#### 一、基于PR，创建仓库
+在[oepkgs-management](https://gitee.com/oepkgs/oepkgs-management)仓库提PR，填写配置文件，用于在[src-oepkgs](https://gitee.com/src-oepkgs)（以perf-）下面创建仓库
+#### 二、补充源码文件
+
+#### 三、基于webhook，自动触发构建任务原理
+
+
+1. 提交构建rpm包任务
+2. 查看日志判断是否构建成功
+3. 构建成功则会自动进行安装测试，若成功则入库
+4. 构建/安装测试失败则查看日志分析原因并进行修复
+5. 在oepkgs-management仓库建仓
+6. 将修复的源码以及spec等文件放入
+7. 仓库的webhook将自动触发提交构建任务
 
 ####  一. 提交构建rpm包任务
 `submit rpmbuild.yaml -m -I ssh-on-fail.yaml`（如果job失败了，自动sleep）
