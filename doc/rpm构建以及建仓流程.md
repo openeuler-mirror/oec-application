@@ -95,19 +95,20 @@ os_version: $upstream_branch
 # docker_image: $upstream_branch
 ```
 #### 2. 查看日志判断是否构建成功
-###### 2.1 可通过job_id来查看日志(该job_id之后将由门禁系统，以评论形式评论只仓库PR中，目前暂无)
+###### 2.1 可通过job_id来查看日志(该job_id之后将由门禁系统，以评论形式评论至仓库PR中，目前暂无)
  <u>https://compass-ci.openeuler.org/jobs</u>
 
 
-#### 三. rpmbuild脚本
+#### 3. rpmbuild脚本
 在submit rpmbuild.yaml 时，测试用例**rpmbuild**会去引用脚本
 ```https://gitee.com/wu_fengguang/lkp-tests/blob/master/tests/rpmbuild```
 
 该脚本会通过rpmbuild.yaml提供的信息进行```rpmbuild -ba *.spec```。
 
 如果构建成功，则通过upload_rpm_pkg函数先将测试机上打好的软件包放入```/srv/rpm/upload```,再通过update_repo_mq处理上传的软件包。处理完的包会先放入/srv/rpm/testing中，每天零点定时更新到/srv/rpm/pub中,也就是https://repo.oepkgs.net/openEuler/rpm/仓库中
-#### 四. 测试构建的包能否正常安装
-###### 4.1  可以查看/srv/result/install-rpm(自动构建任务，无需提交)
+#### 4. 测试构建的包能否正常安装
+###### 4.1  可以查看job_id(自动构建任务，无需提交,可通过job_id来查看日志,该job_id之后将由门禁系统，以评论形式评论至仓库PR中，目前暂无)
+<u>https://compass-ci.openeuler.org/jobs</u>
 
 ###### 4.2  手动提交install.yaml
 需要加入以下参数
@@ -133,20 +134,22 @@ mount_repo_addr: https://api.compass-ci.openeuler.org:20018/rpm/testing/openeule
 mount_repo_name: compatible/c7
 ```
 
-#### 五. 处理自动构建失败的包
+#### 5. 处理自动构建失败的包
 ###### 5.1 查找原因并修复
-可以通过2.1得知构建失败的原因，可在执行任务的虚拟机/容器中进行重新构建并一步步修复
+可以通过2.1得知构建失败的原因，可在虚拟机/容器中进行重新构建并一步步修复
 修复完成的源码以及spec文件放入以下仓库中
-###### 5.2 建仓
+
+# QA
+
+### 如何提PR进行建仓？
 在<u>https://gitee.com/oepkgs/oepkgs-management/</u>仓库进行建仓
 
-**5.2.1 先将该仓库forked到自己账号的仓库中**
+**1 先将该仓库forked到自己账号的仓库中**
 
-**5.2.2 将forked的仓库git clone到本地，进行建仓**
+**2 将forked的仓库git clone到本地，新增两个配置文件**
 
-**5.2.3 将修复完成的源码/spec文件放入到自己仓库中，再将自己仓库的内容Pull requests到企业仓**
+**3 将自己仓库的内容Pull requests到企业仓**
 
-**5.2.4 当前src-oepkgs仓库配置了webhook，只要把软件源码以及spec文件合入到仓库里，compass-ci这边就会自动触发提交构建任务**
-#### 六. 查询软件包
+### 如何查询软件包位置？
 [https://compass-ci.openeuler.org/oepkgs](https://compass-ci.openeuler.org/oepkgs)
 可在此查询引入到软件所的软件包
