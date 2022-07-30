@@ -6,8 +6,56 @@
 3. 仓库的webhook将自动触发构建任务
 
 #### 一、基于PR，创建仓库
-在[oepkgs-management](https://gitee.com/oepkgs/oepkgs-management)仓库提PR，填写配置文件，用于在[src-oepkgs](https://gitee.com/src-oepkgs)（以perf-）下面创建仓库
+在[oepkgs-management](https://gitee.com/oepkgs/oepkgs-management)仓库提PR，填写两个配置文件，创仓机器人ci-rebot会在[src-oepkgs](https://gitee.com/src-oepkgs)下面自动创建仓库。
+
+oepkgs-management仓库中的两个配置文件(以qemu为例)：
+```
+# 在oepkgs-management仓库sig目录下面创建虚拟化领域的sig组
+# 创建oepkgs-management/sig/virtual/sig-info.yaml文件
+oepkgs-management/sig/virtual/sig-info.yaml:
+
+# sig组名称，一般跟软件包领域相关
+name: virtual
+description: "To support the field of virtual"
+mailing_list: NA
+meeting_url: NA
+mature_level: startup
+# sig组的管理者
+maintainers:
+- gitee_id: lipingEmmaSiguyi
+  name: Ping Li
+  orgnization: Huawei
+  email: liping136@huawei.com
+# 该sig组管理的仓库
+repositories:
+- repo: 
+  - src-oepkgs/qemu   
+
+# 在oepkgs-management/sig/virtual下面创建src-oepkgs/仓库名称首字母/仓库名称.yaml
+# ci-rebot将依据这个文件进行自动建仓
+oepkgs-management/sig/virtual/src-oepkgs/q/qemu.yaml:
+
+# 仓库名称
+name: qemu
+description: "QEMU is a generic and open source processor emulator which achieves a good emulation speed by using dynamic translation"
+# 仓库地址
+upstream: https://gitee.com/src-oepkgs/qemu
+# 仓库分支
+branches:
+- name: master
+  type: protected
+- name: openEuler-20.03-LTS-SP3
+  type: protected
+  create_from: master
+- name: openEuler-22.03-LTS
+  type: protected
+  create_from: master
+type: public
+```
 #### 二、补充源码文件
+完成步骤一之后，5分钟内会生成https://gitee.com/src-oepkgs/qemu仓库，需要往这个仓库中补充源码文件：
+
+分别是可用于支撑生成rpm包的qemu.spec文件、软件包源码包qemu-2.12.0.tar.bz2，详见：https://gitee.com/src-oepkgs/qemu
 
 #### 三、基于webhook，自动触发构建任务原理
 
