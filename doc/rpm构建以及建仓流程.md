@@ -57,50 +57,55 @@ type: public
 
 分别是可用于支撑生成rpm包的qemu.spec文件、软件包源码包qemu-2.12.0.tar.bz2，详见：https://gitee.com/src-oepkgs/qemu
 
+-------------------------------------------
+**接下来的动作都是基于compass-ci构建系统自动完成，属于原理解析，无需用户操作，但如果你想更加清楚的了解软件包构建进展，可继续阅读。**
 #### 三、基于webhook，自动触发构建任务原理
 
-
-1. 提交构建rpm包任务
+1. 仓库的webhook将自动触发提交构建任务
 2. 查看日志判断是否构建成功
 3. 构建成功则会自动进行安装测试，若成功则入库
 4. 构建/安装测试失败则查看日志分析原因并进行修复
-5. 在oepkgs-management仓库建仓
-6. 将修复的源码以及spec等文件放入
-7. 仓库的webhook将自动触发提交构建任务
 
-####  一. 提交构建rpm包任务
-`submit rpmbuild.yaml -m -I ssh-on-fail.yaml`（如果job失败了，自动sleep）
+####  1. webhook自动提交构建rpm包构建任务
+`submit rpmbuild.yaml (rpmbuild.yaml是包构建任务的配置参数文件)`
 ```
 # 测试用例名称
 suite: rpmbuild
-# 类别
-category: functional
 # 测试用例 ~/lkp-test/tests/rpmbuild
 rpmbuild:
 # 远程仓库源码包地址
-repo_addr: https://xxxxxx/xx.src.rpm
-# 构建后的包仓库分支
-custom_repo_name: compatible/c7
+upstream_repo: https://gitee.com/src-oepkgs/qemu
+# 构建后的包仓库位置，都将放置在contrib/$sig仓库中
+custom_repo_name: contrib/virtual
 
 # 测试机为虚拟机时:
 testbox: vm-2p8g
-arch: aarch64
+arch:
+  - aarch64
+  - x86_64
 os: openeuler
-os_version: 22.03-LTS
+# 这个参数由源码文件合入的仓库分支决定
+os_version: $upstream_branch
 
 # 测试机为容器时:
 # testbox: dc-8g
-# arch: aarch64
-# docker_image: openeuler:22.03-LTS
+# arch:
+#  - aarch64
+#  - x86_64
+# docker_image: $upstream_branch
 ```
-#### 二. 查看日志判断是否构建成功
-###### 2.1 可通过job_id来查看日志
+#### 2. 查看日志判断是否构建成功
+###### 2.1 可通过job_id来查看日志(该job_id之后将由门禁系统，以评论形式评论只仓库PR中，目前暂无)
  <u>https://compass-ci.openeuler.org/jobs</u>
 
 
 #### 三. rpmbuild脚本
-在submit rpmbuild.yaml 时，测试用例“rpmbuild”会去引用脚本 ~/lkp-tests/tests/rpmbuild
-该脚本会通过rpmbuild.yaml提供的信息进行rpmbuild -ba xxx。如果构建成功，则通过upload_rpm_pkg函数先将测试机上打好的软件包放入/srv/rpm/upload，再通过update_repo_mq处理上传的软件包。处理完的包会先放入/srv/rpm/testing中，每天零点定时更新到/srv/rpm/pub中。
+在submit rpmbuild.yaml 时，测试用例**rpmbuild**会去引用脚本
+```https://gitee.com/wu_fengguang/lkp-tests/blob/master/tests/rpmbuild```
+
+该脚本会通过rpmbuild.yaml提供的信息进行```rpmbuild -ba *.spec```。
+
+如果构建成功，则通过upload_rpm_pkg函数先将测试机上打好的软件包放入```/srv/rpm/upload```,再通过update_repo_mq处理上传的软件包。处理完的包会先放入/srv/rpm/testing中，每天零点定时更新到/srv/rpm/pub中,也就是https://repo.oepkgs.net/openEuler/rpm/仓库中
 #### 四. 测试构建的包能否正常安装
 ###### 4.1  可以查看/srv/result/install-rpm(自动构建任务，无需提交)
 
