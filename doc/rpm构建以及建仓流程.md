@@ -156,4 +156,4 @@ mount_repo_name: compatible/c7
 
 ### 如何下载使用仓库中的软件包？
 在[https://compass-ci.openeuler.org/oepkgs](https://compass-ci.openeuler.org/oepkgs)
-查询软件包在软件所中的仓库存放位置之后，详见[openEuler社区开源软件适配流程.md](https://gitee.com/openeuler/oec-application/edit/master/doc/openEuler%E7%A4%BE%E5%8C%BA%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6%E9%80%82%E9%85%8D%E6%B5%81%E7%A8%8B.md)的最后一节：**下载使用软件**，修改这一节中的示例中的**baseurl**即可。
+查询软件包在软件所中的仓库存放位置之后，详见[openEuler社区开源软件适配流程.md](https://gitee.com/openeuler/oec-application/master/doc/openEuler%E7%A4%BE%E5%8C%BA%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6%E9%80%82%E9%85%8D%E6%B5%81%E7%A8%8B.md)的最后一节：**下载使用软件**，修改这一节中的示例中的**baseurl**即可。
