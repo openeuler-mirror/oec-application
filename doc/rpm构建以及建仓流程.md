@@ -2,7 +2,7 @@
 
 ###### 总体流程：
 1. 基于PR，在oepkgs-mangement仓库中创建配置文件，用于建仓
-2. 往步骤一生成的https://gitee.com/src-oepkgs/仓库中补充构建所需源码文件
+2. 往步骤一生成的https://gitee.com/src-oepkgs/  仓库中补充构建所需源码文件
 3. 仓库的webhook将自动触发构建任务
 
 #### 一、基于PR，创建仓库
