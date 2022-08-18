@@ -63,7 +63,7 @@ type: public
 
 PR合入之后会在合入的commit下面给出构建测试结果，以及安装测试结果，以及软件包上传到目标内部测试仓库**testing_repo**中,如果测试结果成功，第二天会更新至**oepkgs_reop**中(注：oepkgs仓库每日零点定时更新，测试结果中只是给出预计要存放的oepkgs仓库地址)：
 
-
+![输入图片说明](commit1image.png)
 ![输入图片说明](commit2image.png)
 ![输入图片说明](testrtimage.png)
 ![输入图片说明](testrt2image.png)
