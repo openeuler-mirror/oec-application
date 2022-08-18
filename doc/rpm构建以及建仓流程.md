@@ -1,3 +1,10 @@
+# **构建rpm包流程**
+
+###### 总体流程：
+1. 基于PR，在oepkgs-mangement仓库中创建配置文件，用于建仓
+2. 往步骤一生成的https://gitee.com/src-oepkgs/  仓库中补充构建所需源码文件
+3. 仓库的webhook将自动触发构建任务
+
 #### 一、基于PR，创建仓库
 在[oepkgs-management](https://gitee.com/oepkgs/oepkgs-management)仓库提PR(如何提PR，详见文档最后的[QA](##QA))，填写两个配置文件，PR合入之后，创仓机器人ci-rebot会在[src-oepkgs](https://gitee.com/src-oepkgs)下面自动创建仓库。
 
