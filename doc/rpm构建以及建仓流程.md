@@ -54,7 +54,8 @@ type: public
 
 提了PR之后，在5~30分钟时间内，会进行PR门禁构建测试，PR会评论出PR构建结果，建议在**Build_Result**显示为**SUCCESS**之后合入PR
 
-![输入图片说明](%E9%97%A8%E7%A6%81image.png)
+![输入图片说明](prtestimage.png)
+
 
 前面配置文件oepkgs-management/sig/virtual/sig-info.yaml中指定的maintanier，可通过在PR下面评论/lgtm及/approve合入PR
 
@@ -62,7 +63,7 @@ type: public
 
 PR合入之后会在合入的commit下面给出构建测试结果，以及安装测试结果，以及软件包上传到目标内部测试仓库**testing_repo**中,如果测试结果成功，第二天会更新至**oepkgs_reop**中(注：oepkgs仓库每日零点定时更新，测试结果中只是给出预计要存放的oepkgs仓库地址)：
 
-![输入图片说明](commitimage.png)
+
 ![输入图片说明](commit2image.png)
 ![输入图片说明](testrtimage.png)
 ![输入图片说明](testrt2image.png)
