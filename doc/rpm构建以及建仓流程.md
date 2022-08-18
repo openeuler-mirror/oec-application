@@ -1,12 +1,5 @@
-# **构建rpm包流程**
-
-###### 总体流程：
-1. 基于PR，在oepkgs-mangement仓库中创建配置文件，用于建仓
-2. 往步骤一生成的https://gitee.com/src-oepkgs/  仓库中补充构建所需源码文件
-3. 仓库的webhook将自动触发构建任务
-
 #### 一、基于PR，创建仓库
-在[oepkgs-management](https://gitee.com/oepkgs/oepkgs-management)仓库提PR，填写两个配置文件，创仓机器人ci-rebot会在[src-oepkgs](https://gitee.com/src-oepkgs)下面自动创建仓库。
+在[oepkgs-management](https://gitee.com/oepkgs/oepkgs-management)仓库提PR(如何提PR，详见文档最后的[QA](##QA))，填写两个配置文件，PR合入之后，创仓机器人ci-rebot会在[src-oepkgs](https://gitee.com/src-oepkgs)下面自动创建仓库。
 
 oepkgs-management仓库中的两个配置文件(以qemu为例)：
 ```
@@ -30,7 +23,9 @@ maintainers:
 repositories:
 - repo: 
   - src-oepkgs/qemu   
+```
 
+```
 # 在oepkgs-management/sig/virtual下面创建src-oepkgs/仓库名称首字母/仓库名称.yaml
 # ci-rebot将依据这个文件进行自动建仓
 oepkgs-management/sig/virtual/src-oepkgs/q/qemu.yaml:
@@ -53,9 +48,24 @@ branches:
 type: public
 ```
 #### 二、补充源码文件
-完成步骤一之后，5分钟内会生成https://gitee.com/src-oepkgs/qemu仓库，需要往这个仓库中补充源码文件：
+完成步骤一之后，5分钟内会生成https://gitee.com/src-oepkgs/qemu仓库，通过PR往这个仓库中补充源码文件：
 
 分别是可用于支撑生成rpm包的qemu.spec文件、软件包源码包qemu-2.12.0.tar.bz2，详见：https://gitee.com/src-oepkgs/qemu
+
+提了PR之后，在5~30分钟时间内，会进行PR门禁构建测试，PR会评论出PR构建结果，建议在**Build_Result**显示为**SUCCESS**之后合入PR
+
+![输入图片说明](%E9%97%A8%E7%A6%81image.png)
+
+前面配置文件oepkgs-management/sig/virtual/sig-info.yaml中指定的maintanier，可通过在PR下面评论/lgtm及/approve合入PR
+
+![输入图片说明](maintainerimage.png)
+
+PR合入之后会在合入的commit下面给出构建测试结果，以及安装测试结果，以及软件包上传到目标内部测试仓库**testing_repo**中,如果测试结果成功，第二天会更新至**oepkgs_reop**中(注：oepkgs仓库每日零点定时更新，测试结果中只是给出预计要存放的oepkgs仓库地址)：
+
+![输入图片说明](commitimage.png)
+![输入图片说明](commit2image.png)
+![输入图片说明](testrtimage.png)
+![输入图片说明](testrt2image.png)
 
 -------------------------------------------
 **接下来的动作都是基于compass-ci构建系统自动完成，属于原理解析，无需用户操作，但如果你想更加清楚的了解软件包构建进展，可继续阅读。**
@@ -137,7 +147,7 @@ mount_repo_name: compatible/c7
 #### 5. 处理自动构建失败的包
 ###### 5.1 查找原因并修复
 可以通过2.1得知构建失败的原因，可在虚拟机/容器中进行重新构建并一步步修复
-修复完成的源码以及spec文件放入以下仓库中
+修复完成的源码以及spec文件重新放入仓库中
 
 # QA
 
@@ -145,10 +155,12 @@ mount_repo_name: compatible/c7
 在<u>https://gitee.com/oepkgs/oepkgs-management/</u>仓库进行建仓
 
 **1 先将该仓库forked到自己账号的仓库中**
+![输入图片说明](forkimage.png)
 
-**2 将forked的仓库git clone到本地，新增两个配置文件**
+**2 将forked的仓库git clone到本地，新增两个配置文件，git push到forked的仓库中**
 
 **3 将自己仓库的内容Pull requests到企业仓**
+![输入图片说明](primage.png)
 
 ### 如何查询软件包位置？
 [https://compass-ci.openeuler.org/oepkgs](https://compass-ci.openeuler.org/oepkgs)
