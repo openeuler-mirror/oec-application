@@ -155,11 +155,13 @@ mount_repo_name: compatible/c7
 在<u>https://gitee.com/oepkgs/oepkgs-management/</u>仓库进行建仓
 
 **1 先将该仓库forked到自己账号的仓库中**
+
 ![输入图片说明](forkimage.png)
 
 **2 将forked的仓库git clone到本地，新增两个配置文件，git push到forked的仓库中**
 
 **3 将自己仓库的内容Pull requests到企业仓**
+
 ![输入图片说明](primage.png)
 
 
