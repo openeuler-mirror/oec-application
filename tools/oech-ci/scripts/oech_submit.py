@@ -12,7 +12,7 @@
 # Author: @weijihui
 # Create: 2022-06-17
 # Modified: @meitingli
-# Desc: Submit oech job automatically on compass-ci
+# Desc: Submit oec-hardware job automatically on compass-ci
 
 import os
 import re
@@ -20,7 +20,7 @@ from random import randint
 from .common import *
 
 
-class Oech_Submit:
+class OechSubmit:
     def __init__(self, card_info_hash, lab_path, yaml_content, group_id):
         self.card_info_hash = card_info_hash
         self.lab_path = lab_path
@@ -101,6 +101,7 @@ class Oech_Submit:
     def _get_useful_client(self, card_id, card_info, card_with_box, box_board_hash):
         """
         非ethernet卡测试, 只需要找一台client符合的板卡即可, 无需server端机器
+        如果配置文件中指定client机器，会使用指定机器进行测试
         """
         card_with_box[card_id]["server"] = None
         box = card_info.get("client")
@@ -112,7 +113,14 @@ class Oech_Submit:
                 if card_id in box_card_ids_list:
                     useful_box.append(box)
 
-            num = randint(0, len(useful_box)-1)
+            if len(useful_box) == 0:
+                print("[ERROR]: The lab env cannot find corresponding machine to test!")
+                card_with_box[card_id]["env_ready"] = False
+                return card_with_box
+            elif len(useful_box) == 1:
+                num = 0
+            else:
+                num = randint(0, len(useful_box)-1)
             card_with_box[card_id]["client"] = useful_box[num]
 
         card_with_box[card_id]["env_ready"] = True
@@ -184,6 +192,8 @@ class Oech_Submit:
     def oech_task(self, card_with_box, submit_args, submit_output):
         mkdir("./{}".format(self.group_id))
         for card_id, cluster_info in card_with_box.items():
+            if not cluster_info["env_ready"]:
+                continue
             card_type = cluster_info["type"]
             board_model = cluster_info["boardModel"]
             card_info_collect = "type:[{}] boardModel:[{}] card_id:[{}]".format(

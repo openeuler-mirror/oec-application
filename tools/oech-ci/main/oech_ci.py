@@ -24,7 +24,7 @@ cur_path = "/".join(cur_path.split("/")[:-1])
 sys.path.append(cur_path)
 os.putenv("PYTHONPATH", cur_path)
 
-from scripts.oech_submit import Oech_Submit
+from scripts.oech_submit import OechSubmit
 from scripts.common import *
 
 def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
@@ -32,7 +32,7 @@ def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
     yaml_content = read_yaml(oech_yaml_path)
     card_info_hash = read_json(card_conf_path)
     
-    oech_submit = Oech_Submit(card_info_hash, lab_path, yaml_content, group_id)
+    oech_submit = OechSubmit(card_info_hash, lab_path, yaml_content, group_id)
     card_ids_hash = oech_submit.deal_card_info(card_info_hash["card_info"])
 
     submit_args = oech_submit.get_submit_args()
@@ -43,9 +43,9 @@ def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="oech integrated compass-ci tool")
+        description="oec-hardware integrated compass-ci tool")
     parser.add_argument('-j', '--job_yaml', type=str,
-                        required=False, help='oech job yaml')
+                        required=False, help='oec-hardware job yaml')
     parser.add_argument('-l', '--lab_path', type=str,
                         required=False, help='test lab which include devices dir')
     parser.add_argument('-c', '--card_conf', type=str,
@@ -54,7 +54,7 @@ if __name__ == "__main__":
                         help='submit job for get job yaml but not post to server')
     args = parser.parse_args()
 
-    # oech job yaml file
+    # oec-hardware job yaml file
     job_yaml = check_args('job_yaml', args.job_yaml)
     # lab machine path
     lab_path = check_args('lab_path', args.lab_path)
