@@ -25,16 +25,15 @@
 
     * 调试命令，不真实提交，只是看提交流程是否正确：
 
-            python3 oech_ci.py -o /home/user/tmp \
-                                    -j $LKP_SRC/jobs/oech.yaml \
-                                    -l /home/user/lab-z9 \
-                                    -c ./test_conf.json
+            cd oech-ci/main
+
+            python3 oech_ci.py -o /home/user/tmp -j $LKP_SRC/jobs/oec-hardware.yaml -l /home/user/lab-z9 -c ../config/test_config.json
     
     * 提交命令：
 
-            python3 oech_ci.py -j $LKP_SRC/jobs/oech.yaml \
-                                    -l /home/user/lab-z9 \
-                                    -c ./test_conf.json
+            cd oech-ci/main
+            
+            python3 oech_ci.py -j $LKP_SRC/jobs/oec-hardware.yaml -l /home/user/lab-z9 -c ../config/test_config.json
 
 
 #### 参数解释
@@ -46,7 +45,7 @@
 
 -j
 
-    oech的job yaml 文件路径
+    oec-hardware的job yaml 文件路径
 
 -l
 

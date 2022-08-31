@@ -41,9 +41,9 @@
 
     （3）配置项由配置文件管理，无需用户交互；
 
-2.	oech-ci与oech工具分离
+2.	oech-ci与oec-hardware工具分离
 
-    oech工具手动执行分离解耦；oech-ci自动化执行前的环境准备在compass-ci中实现，和oech工具解耦。
+    oec-hardware工具手动执行分离解耦；oech-ci自动化执行前的环境准备在compass-ci中实现，和oec-hardware工具解耦。
 
 ### 设计方案
 
@@ -74,13 +74,15 @@
 
 1. 任务执行方式
 
-        python3 oech_ci.py -j $LKP_SRC/jobs/oech.yaml -l /home/user/lab-z9 -c ./test_conf.json
+        cd oech-ci/main
+
+        python3 oech_ci.py -j $LKP_SRC/jobs/oec-hardware.yaml -l /home/user/lab-z9 -c ../config/test_config.json
 
 * 必选参数
 
     -j / --job_yaml
         
-        oech的job yaml，文件主要路径为 lkp-tests/jobs/oech.yaml
+        oec-hardware的job yaml，文件主要路径为 lkp-tests/jobs/oec-hardware.yaml
     
     -l / --lab_path
     
@@ -138,9 +140,9 @@ test_config.json
 
 * 可选参数
 
-    "server"：指定服务端机器，在不指定时随机选择满足条件的机器进行测试
+    "server"：对于网卡测试，该参数为必选参数，用于指定服务端机器；非网卡测试无需指定；
 
-    "client": 指定客户端机器，在不指定时随机选择满足条件的机器进行测试
+    "client": 对于网卡测试，该参数为必选参数，用于指定客户端机器；非网卡测试，该参数为可选参数，指定该参数时可以指定测试机器，在不指定时随机选择满足条件的机器进行测试；
 
 * 配置文件示例
 
@@ -252,11 +254,11 @@ choose_box
         {
             '19e5-1822-d136-19e5': 
             {
-                'client': 'taishan200-2280-2s64p-256g--a119',
                 'name': 'ethernet',
                 'boardModel': 'SP331',
                 'test_para': 'y',
                 'server': 'taishan200-2280-2s64p-256g--a111',
+                'client': 'taishan200-2280-2s64p-256g--a119',
                 'env_ready': True
             }
         }
@@ -288,7 +290,7 @@ oech_task
 
 * 输入
 
-    yaml_content：lkp-tests/jobs/oech.yaml job执行文件
+    yaml_content：lkp-tests/jobs/oec-hardware.yaml job执行文件
     
     card_with_box：满足条件的测试机
     
@@ -331,12 +333,12 @@ search_task
 
 |模块 | 接口名称 | 接口描述 |
 | -- | -- | -- |
-|lkp-tests和compass-ci调度的接口 | lkp-tests/jobs/oech.yaml | 测试任务提交配置文件 | 
-| lkp-tests框架和oech的接口 | lkp-tests/setup/oech-init | 服务端和测试端环境统一初始化准备脚本 |
-| lkp-tests框架和oech的接口 | lkp-tests/daemon/oech-server | 服务端测试环境准备及执行脚本 |
-| lkp-tests框架和oech的接口 | lkp-tests/tests/oech | 客户端测试环境准备及执行脚本 |
+| lkp-tests 和 compass-ci 调度的接口 | lkp-tests/jobs/oec-hardware.yaml | 测试任务提交配置文件 | 
+| lkp-tests 框架和 oec-hardware 的接口 | lkp-tests/distro/depends/oec-hardware | 服务端和测试端构建测试用例依赖包文件 |
+| lkp-tests 框架和 oec-hardware 的接口 | lkp-tests/daemon/oec-hardware-server | 服务端测试环境准备及执行脚本 |
+| lkp-tests 框架和 oec-hardware 的接口 | lkp-tests/tests/oec-hardware | 客户端测试环境准备及执行脚本 |
 
-#### 2.1 lkp-tests/jobs/oech.yaml 接口交互
+#### 2.1 lkp-tests/jobs/oec-hardware.yaml 接口交互
 
 * 描述：
 
@@ -344,33 +346,35 @@ search_task
 
 * 输入
  
-    oech.yaml
+    oec-hardware.yaml
 
     处理：由lkp-tests提交该任务
         
-        submit testbox oech.yaml os os_version arch
+        submit oec-hardware.yaml testbox os os_version os_arch
 
 * 输出
 
     submit命令发送到compass-ci，由compass-ci返回job id
 
-#### 2.2 lkp-tests/daemon/oech-server 接口交互
+#### 2.2 lkp-tests/daemon/oec-hardware-server 接口交互
 
 * 描述
 
-    服务端测试环境准备及执行，安装部署oech-server服务端。
+    服务端测试环境准备及执行，安装部署oec-hardware-server服务端。
 
 * 输入
 
-    test_card_id：板卡信息
+    test_card_id：板卡四元组id
 
     test_card_type：板卡类型
+
+    test_card_name：板卡型号
 
 * 输出
 
     无。
 
-#### 2.3 lkp-tests/test/oech 接口交互
+#### 2.3 lkp-tests/test/oec-hardware 接口交互
 
 * 描述
 
@@ -378,12 +382,14 @@ search_task
 
 * 输入
 
-    test_card_id：板卡信息
+    test_card_id：板卡四元组id
 
     test_card_type：板卡类型
+
+    test_card_name：板卡型号
 
     driverlink：驱动下载链接（inbox/outbox）
 
 * 输出
 
-    upload_files：oech执行生成的测试报告
+    upload_files：oec-hardware执行生成的html测试报告、测试日志
