@@ -10,21 +10,22 @@
  * See the Mulan PSL v2 for more details.
  */
 
-package com.huawei.kunpeng.openeuler.southbound;
+package com.openeuler.southbound.model;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import lombok.Data;
 
 /**
- * SouthBound入口
+ * 板卡查询Model
  *
- * @since 2022-06-27
+ * @since 2022-8-29
  */
-@EnableScheduling
-@SpringBootApplication
-public class SouthBoundApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(SouthBoundApplication.class, args);
-    }
+@Data
+public class BoardQueryBean {
+    String chipFactory;
+    String modelList;
+    String model;
+    String architecture;
+    String driverName;
+    String driverVersion;
+    String versionName;
 }
