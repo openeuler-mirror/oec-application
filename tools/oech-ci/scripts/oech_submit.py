@@ -96,6 +96,7 @@ class OechSubmit:
             box = card_info.get(role)
             if box:
                 card_with_box[card_id][role] = box
+                card_with_box[card_id]["env_ready"] = True
         return card_with_box
 
     def _get_useful_client(self, card_id, card_info, card_with_box, box_board_hash):
