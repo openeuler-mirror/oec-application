@@ -119,7 +119,7 @@ public class LogAspect {
         }
         HttpServletRequest request = (HttpServletRequest) requestObj;
         business.setHost(request.getRemoteAddr());
-        business.setUserName(TokenUtil.getUser(request.getHeader("token")));
+        business.setUserName(TokenUtil.getUserNameByToken(request.getHeader("token")));
         return business;
     }
 }

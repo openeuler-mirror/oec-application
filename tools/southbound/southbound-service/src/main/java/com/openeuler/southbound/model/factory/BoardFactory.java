@@ -58,5 +58,6 @@ public class BoardFactory extends BaseRequestBean {
      * 仅用于数据库查询
      */
     private String architecture;
+    private String versionId;
     private String versionName;
 }

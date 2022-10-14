@@ -26,7 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Data
 public class SouthBoundUser extends BaseRequestBean {
-    private Integer id;
+    private String id;
     private String username;
     private String password;
 

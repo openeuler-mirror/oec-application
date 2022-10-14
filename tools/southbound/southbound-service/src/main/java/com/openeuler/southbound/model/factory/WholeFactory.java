@@ -49,4 +49,6 @@ public class WholeFactory extends BaseRequestBean {
     private Date createTime;
 
     private String modelStatus;
+    private String versionId;
+    private String versionName;
 }

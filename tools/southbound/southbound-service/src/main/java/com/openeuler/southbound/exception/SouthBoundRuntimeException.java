@@ -18,21 +18,17 @@ package com.openeuler.southbound.exception;
  * @since 2022-8-25
  */
 public class SouthBoundRuntimeException extends RuntimeException {
-    private final Integer code;
-
     /**
      * 通过状态码和错误消息创建异常对象
      *
      * @param message 异常信息
-     * @param code 状态码
      */
-    public SouthBoundRuntimeException(String message, Integer code) {
+    public SouthBoundRuntimeException(String message) {
         super(message);
-        this.code = code;
     }
 
     @Override
     public String toString() {
-        return "ResourceNotFoundException{" + "code=" + code + ", message=" + this.getMessage() + '}';
+        return "SouthBoundRuntimeException{" + ", message=" + this.getMessage() + "}";
     }
 }

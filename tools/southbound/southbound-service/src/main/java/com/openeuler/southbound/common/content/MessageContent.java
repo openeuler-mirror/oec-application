@@ -15,7 +15,7 @@ package com.openeuler.southbound.common.content;
 import com.openeuler.southbound.common.utils.I18NServer;
 
 /**
- * 异常message
+ * message
  *
  * @since 2022-08-25
  */
@@ -122,6 +122,16 @@ public class MessageContent {
     public static final String FORM_DATA_IS_INCORRECT_EXC = I18NServer.get("southbound_form_data_is_incorrect");
 
     /**
+     * 导入数据中不存在对应的芯片厂商及芯片型号
+     */
+    public static final String FORM_DATA_NOT_EXIST_CHIP_EXC = I18NServer.get("southbound_form_data_not_exist_chip");
+
+    /**
+     * 导入数据中不存在对应的CPU厂商及CPU代次
+     */
+    public static final String FORM_DATA_NOT_EXIST_CPU_EXC = I18NServer.get("southbound_form_data_not_exist_cpu");
+
+    /**
      * 无当前工作表，请重新确认！
      */
     public static final String FORM_NO_CURRENT_WORKSHEET_EXC = I18NServer.get("southbound_form_no_current_worksheet");
@@ -130,4 +140,29 @@ public class MessageContent {
      * CPU厂商
      */
     public static final String FORM_SHEET_NAME_CPU = I18NServer.get("southbound_form_sheet_name_cpu");
+
+    /**
+     * 整机厂商
+     */
+    public static final String FORM_SHEET_NAME_WHOLE = I18NServer.get("southbound_form_sheet_name_whole");
+
+    /**
+     * 板卡厂商
+     */
+    public static final String FORM_SHEET_NAME_BOARD = I18NServer.get("southbound_form_sheet_name_board");
+
+    /**
+     * 芯片厂商
+     */
+    public static final String FORM_SHEET_NAME_CHIP = I18NServer.get("southbound_form_sheet_name_chip");
+
+    /**
+     * 驱动管理
+     */
+    public static final String FORM_SHEET_NAME_DRIVER = I18NServer.get("southbound_form_sheet_name_driver");
+
+    /**
+     * 当前查询时间没有新增数据
+     */
+    public static final String SUCCESS_QUERY = I18NServer.get("southbound_current_time_no_date");
 }

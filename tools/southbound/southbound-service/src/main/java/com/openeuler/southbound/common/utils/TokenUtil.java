@@ -12,22 +12,20 @@
 
 package com.openeuler.southbound.common.utils;
 
-import com.openeuler.southbound.model.SouthBoundUser;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
-import java.util.Date;
-
+import com.openeuler.southbound.model.SouthBoundUser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * token工具类
@@ -36,8 +34,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 public class TokenUtil {
-    private static final long EXPIRE_TIME = 1 * 30 * 60 * 1000;
-    private static final String TOKEN_SECRET = "southbound-dashboard";  // 密钥盐
+    // 密钥盐
+    private static final String TOKEN_SECRET = "southbound-dashboard";
 
     /**
      * 签名生成
@@ -46,13 +44,10 @@ public class TokenUtil {
      * @return token
      */
     public static String sign(SouthBoundUser user) {
-        Date expiresAt = new Date(System.currentTimeMillis() + EXPIRE_TIME);
         return JWT.create()
                 .withIssuer("auth0")
-                .withClaim("username", user.getUsername())
                 .withClaim("userid", user.getId())
-                .withExpiresAt(expiresAt)
-                // 使用了HMAC256加密算法。
+                .withClaim("username", user.getUsername())
                 .sign(Algorithm.HMAC256(TOKEN_SECRET));
     }
 
@@ -74,6 +69,28 @@ public class TokenUtil {
     }
 
     /**
+     * 刷新token
+     *
+     * @param token token
+     * @return boolean
+     */
+    public static boolean refreshToken(String token) {
+        if (!StringUtils.isEmpty(token)) {
+            // 校验token有效性，注意需要校验的是缓存中的token
+            if (verify(token)) {
+                long tokenTime = TokenCacheUtil.getServerStartLongTime(token);
+                long minute = (System.currentTimeMillis() - tokenTime) / 1000 / 60;
+                // 更新token缓存
+                if (minute < 30) {
+                    TokenCacheUtil.setTokenCache(token, new Date().getTime());
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * 获取request
      *
      * @return request
@@ -92,12 +109,12 @@ public class TokenUtil {
     }
 
     /**
-     * getUser
+     * 获得token中的用户名信息
      *
      * @param token token
-     * @return String
+     * @return token中包含的用户名
      */
-    public static String getUser(String token) {
+    public static String getUserNameByToken(String token) {
         String username = null;
         try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("auth0").build();
