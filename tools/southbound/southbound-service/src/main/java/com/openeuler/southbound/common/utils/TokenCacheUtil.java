@@ -12,13 +12,13 @@
 
 package com.openeuler.southbound.common.utils;
 
+import org.springframework.util.ObjectUtils;
+
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.springframework.util.ObjectUtils;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * token缓存工具类
@@ -26,7 +26,7 @@ import org.springframework.util.ObjectUtils;
  * @since 2022-06-27
  */
 public class TokenCacheUtil {
-    private static Map<Object, Object> cacheMap = new HashMap<>();
+    private static Map<String, Long> cacheMap = new ConcurrentHashMap<>();
 
     /**
      * 设置布尔值的缓存
@@ -34,7 +34,7 @@ public class TokenCacheUtil {
      * @param key  key
      * @param date date
      */
-    public static synchronized void setSimpleFlag(String key, Long date) {
+    public static synchronized void setTokenCache(String key, Long date) {
         cacheMap.put(key, date);
     }
 
@@ -73,13 +73,6 @@ public class TokenCacheUtil {
     }
 
     /**
-     * 清除所有缓存
-     */
-    public static synchronized void clearAll() {
-        cacheMap.clear();
-    }
-
-    /**
      * 清除指定的缓存
      *
      * @param key key
@@ -89,48 +82,22 @@ public class TokenCacheUtil {
     }
 
     /**
-     * 获取缓存中的大小
-     *
-     * @return cacheMapSize
-     */
-    public static int getCacheSize() {
-        return cacheMap.size();
-    }
-
-    /**
      * 根据最新的token通过用户名相同删除之前的token
      *
      * @param token token
      */
     public static void existByUserName(String token) {
-        String nowUserName = TokenUtil.getUser(token);
-        Iterator<Entry<Object, Object>> it = cacheMap.entrySet().iterator();
+        String nowUserName = TokenUtil.getUserNameByToken(token);
+        Iterator<Entry<String, Long>> it = cacheMap.entrySet().iterator();
         while (it.hasNext()) {
-            Entry<Object, Object> entry = it.next();
-            String key = entry.getKey().toString();
-            String value = entry.getValue().toString();
-            if (nowUserName.equalsIgnoreCase(TokenUtil.getUser(key))) {
+            Entry<String, Long> entry = it.next();
+            String key = entry.getKey();
+            Long value = entry.getValue();
+            if (nowUserName.equals(TokenUtil.getUserNameByToken(key))) {
                 it.remove();
             }
             // 超过30分钟，清理缓存
-            if ((new Date()).getTime() - (Long.parseLong(value)) >= 1000 * 60 * 30) {
-                it.remove();
-            }
-        }
-    }
-
-    /**
-     * 过滤当前时间如果过期了就移除
-     *
-     * @param time time
-     */
-    public static void deleteTokenForExpired(Long time) {
-        Iterator<Entry<Object, Object>> it = cacheMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Entry<Object, Object> entry = it.next();
-            String value = entry.getValue().toString();
-            // 顺路可以把过期的也移除下
-            if ((new Date()).getTime() - (Long.parseLong(value)) >= time) {
+            if ((new Date().getTime() - value) >= 1000 * 60 * 30) {
                 it.remove();
             }
         }

@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -36,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @since : 2022-09-06
  */
-@Slf4j
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
     @Override
@@ -73,6 +71,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             result.put("msg", I18NServer.get("southbound_user_error_provided"));
         }
         result.put("code", ResCode.HTTP_401_UNAUTHORIZED.value());
+        result.put("msg", I18NServer.get("southbound_user_error_provided"));
         ServletOutputStream outputStream = response.getOutputStream();
         outputStream.write(JSON.toJSONString(result).getBytes());
         return false;

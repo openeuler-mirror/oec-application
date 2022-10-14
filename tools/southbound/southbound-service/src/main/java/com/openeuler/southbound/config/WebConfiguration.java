@@ -57,6 +57,7 @@ public class WebConfiguration implements WebMvcConfigurer {
         // 排除拦截，除了登录和判断是否第一次登录(此时还没token)，其他都拦截
         registry.addInterceptor(interceptor)
                 .addPathPatterns("/**")
+                .excludePathPatterns("/**/template/downloadExcel/**")
                 .excludePathPatterns("/**/user/login/**", "/**/user/adminStatus/**", "/**/user/addAdmin/**");
         WebMvcConfigurer.super.addInterceptors(registry);
     }

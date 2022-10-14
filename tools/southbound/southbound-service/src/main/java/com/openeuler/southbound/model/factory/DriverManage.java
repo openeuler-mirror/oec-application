@@ -39,6 +39,6 @@ public class DriverManage extends BaseRequestBean {
     private String webDriverUrl;                // 官网驱动链接
     private String allDriverUrl;                // 软件所驱动链接
     private String createTime;                  // 创建日期
-    private String versionIds;
-    private String versionNames;
+    private String versionId;
+    private String versionName;
 }
