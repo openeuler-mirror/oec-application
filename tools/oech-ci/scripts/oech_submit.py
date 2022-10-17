@@ -99,15 +99,15 @@ class OechSubmit:
                 card_with_box[card_id]["env_ready"] = True
         return card_with_box
 
-    def _get_useful_client(self, card_id, card_info, card_with_box, box_board_hash):
+    @staticmethod
+    def _get_useful_client(card_id, card_info, card_with_box, box_board_hash):
         """
-        非ethernet卡测试, 只需要找一台client符合的板卡即可, 无需server端机器
-        如果配置文件中指定client机器，会使用指定机器进行测试
+        非ethernet卡测试, 只需要找一台testbox符合的板卡即可, client/server端在一台机器上运行
+        如果配置文件中指定testbox机器，会使用指定机器进行测试
         """
-        card_with_box[card_id]["server"] = None
-        box = card_info.get("client")
+        box = card_info.get("testbox")
         if box:
-            card_with_box[card_id]["client"] = box
+            card_with_box[card_id]["testbox"] = box
         else:
             useful_box = []
             for box, box_card_ids_list in box_board_hash.items():
@@ -122,8 +122,9 @@ class OechSubmit:
                 num = 0
             else:
                 num = randint(0, len(useful_box)-1)
-            card_with_box[card_id]["client"] = useful_box[num]
+            card_with_box[card_id]["testbox"] = useful_box[num]
 
+        card_with_box[card_id]["cluster"] = "cs-localhost"
         card_with_box[card_id]["env_ready"] = True
         return card_with_box
 
@@ -206,22 +207,20 @@ class OechSubmit:
                     card_info_collect))
                 continue
 
-            server = cluster_info["server"]
-            client = cluster_info["client"]
-            if server:
+            if not cluster_info.get('cluster'):
+                server = cluster_info["server"]
+                client = cluster_info["client"]
                 cluster = "-".join(["cs-s1", server.split("--")[-1],
                                     "c1", client.split("--")[-1]])
                 self.yaml_content["cluster"] = cluster
                 self.yaml_content["cluster_spec"] = {"ip0": 1,
                                                      "nodes": {server: {"roles": ["server"]},
                                                                client: {"roles": ["client"]}}}
+                self.yaml_content["testbox"] = client
             else:
-                cluster = "-".join(["cs-s1", client.split("--")[-1]])
+                cluster = cluster_info.get('cluster')
                 self.yaml_content["cluster"] = cluster
-                self.yaml_content["cluster_spec"] = {"ip0": 1,
-                                                     "nodes": {client: {"roles": ["client"]}}}
-
-            self.yaml_content["testbox"] = client
+                self.yaml_content["testbox"] = cluster_info['testbox']
             yaml_name = "{}-{}-{}-{}".format(card_type,
                                              board_model, card_id, cluster)
             self.yaml_content["group_id"] = self.group_id
