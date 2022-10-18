@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.adaptstatus.WholeAdaptStatusMapper">
+    <select id="queryWholeFactoryNames" resultType="java.lang.String">
+        select distinct(whole_factory) from `whole_factory`
+    </select>
+
+    <select id="queryWholeByFactory" parameterType="com.openeuler.southbound.model.factory.WholeFactory"
+            resultType="com.openeuler.southbound.model.factory.WholeFactory">
+        SELECT
+        whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM
+        `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        <where>
+            whole_factory = #{wholeFactory}
+        </where>
+    </select>
+
+    <!-- 查询是否在适配计划中-->
+    <select id="queryWholeMachineModelStatusFromPlan" resultType="int">
+        SELECT COUNT(*)
+        FROM
+        `whole_plan` wp LEFT JOIN version_plan vp ON wp.version_id= vp.version_id
+        <where>
+            whole_factory = #{hardwareFactory}
+            and version_name=#{versionName}
+            and (
+            FIND_IN_SET( #{hardwareModel}, beta_list) OR FIND_IN_SET( #{hardwareModel}, release_list)
+            )
+        </where>
+    </select>
+
+    <!-- 查询机型是否匹配 -->
+    <select id="queryWholeMachineModelStatusFromCommunity" resultType="int">
+        SELECT COUNT(*)
+        FROM `whole_community`
+        <where>
+            and hardware_factory = #{hardwareFactory}
+            and hardware_model = #{hardwareModel}
+            <if test="architecture!=null and architecture!=''">
+                and architecture = #{architecture}
+            </if>
+            and os_version = #{versionName}
+            and cpu = #{cpuModel}
+        </where>
+    </select>
+
+    <!--查询整机版本是否支持 - CPU厂商 -->
+    <select id="queryCpuSupportOfCpuFactory" parameterType="string" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        ( cpu_factory cf LEFT JOIN cpu_version cv ON cf.cpu_id = cv.cpu_id )
+        LEFT JOIN version_plan vp ON cv.version_id = vp.version_id
+        <where>
+            cf.cpu_factory = #{cpuFactory}
+            AND cf.cpu_model = #{cpuModel}
+            AND vp.version_name = #{versionName}
+        </where>
+    </select>
+
+    <select id="queryCpuFactoryNames" resultType="java.lang.String">
+        select distinct(cpu_factory) from `cpu_factory`
+    </select>
+    <select id="queryWholeByCpuFactory" resultType="com.openeuler.southbound.model.factory.WholeFactory">
+        SELECT
+        whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM
+        `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        <where>
+            cpu_factory = #{cpuFactory}
+        </where>
+    </select>
+
+    <!-- CPU型号-->
+    <select id="queryCpuModelNames" resultType="java.lang.String">
+        select distinct(cpu_model) from `cpu_factory`
+    </select>
+    <select id="queryWholeByCpuModel" resultType="com.openeuler.southbound.model.factory.WholeFactory">
+        SELECT
+        whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM
+        `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        <where>
+            cpu_model = #{cpuModel}
+        </where>
+    </select>
+
+    <!--操作系统名称（操作系统版本）-->
+    <select id="queryVersionName" resultType="java.lang.String">
+        select distinct(version_name) from version_plan
+    </select>
+
+    <!--架构-->
+    <select id="queryArchitectures" resultType="java.lang.String">
+        select distinct(architecture) from whole_machine
+    </select>
+
+    <!-- 查询所有的整机-->
+    <select id="queryAllWholeMachineInWholeFactory"
+            resultType="com.openeuler.southbound.model.factory.WholeFactory">
+        SELECT
+        whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM
+        `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+    </select>
+</mapper>
