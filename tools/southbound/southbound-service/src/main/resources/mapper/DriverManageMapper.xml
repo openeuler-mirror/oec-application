@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.factory.DriverManageMapper">
+    <resultMap id="BaseResultMap" type="com.openeuler.southbound.model.factory.DriverManage">
+        <id property="driverId" column="driver_id"/>
+        <result property="chipFactory" column="chip_factory"/>
+        <result property="driverName" column="driver_name"/>
+        <result property="kernelDriverPublish" column="kernel_driver_publish"/>
+        <result property="kernelDriverVersion" column="kernel_driver_version"/>
+        <result property="exteriorDriverPublish" column="exterior_driver_publish"/>
+        <result property="exteriorDriverPublishTime" column="exterior_driver_publish_time"/>
+        <result property="exteriorDriverVersion" column="exterior_driver_version"/>
+        <result property="webDriverUrl" column="web_driver_url"/>
+        <result property="allDriverUrl" column="all_driver_url"/>
+        <result property="createTime" column="create_time"/>
+        <result property="versionId" column="version_id"/>
+        <result property="versionName" column="version_name"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        driver_id, chip_factory, driver_name, kernel_driver_publish, kernel_driver_version,
+        exterior_driver_publish, exterior_driver_publish_time, exterior_driver_version,
+        web_driver_url, all_driver_url,create_time
+    </sql>
+    <!--查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT dm.*, vp.version_id, vp.version_name
+        FROM `driver_manage` dm
+        INNER JOIN `version_plan` vp ON vp.version_id = dm.version_id
+        <where>
+            <if test="chipFactory != null and chipFactory != ''">
+                and dm.chip_factory = #{chipFactory}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                and vp.version_id = #{versionId}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (dm.driver_name LIKE CONCAT('%', #{keyword}, '%')
+                OR dm.kernel_driver_version LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY dm.create_time DESC
+    </select>
+
+    <!--增加-->
+    <insert id="add" useGeneratedKeys="true" keyProperty="driverId"
+            parameterType="com.openeuler.southbound.model.factory.DriverManage">
+        insert into driver_manage (
+        chip_factory,
+        driver_name,
+        kernel_driver_publish,
+        kernel_driver_version,
+        exterior_driver_publish,
+        exterior_driver_publish_time,
+        exterior_driver_version,
+        web_driver_url,
+        all_driver_url,
+        version_id,
+        create_time )
+        values(
+        #{chipFactory},
+        #{driverName},
+        #{kernelDriverPublish},
+        #{kernelDriverVersion},
+        #{exteriorDriverPublish},
+        #{exteriorDriverPublishTime},
+        #{exteriorDriverVersion},
+        #{webDriverUrl},
+        #{allDriverUrl},
+        #{versionId},
+        now())
+    </insert>
+
+    <!--修改-->
+    <update id="update" parameterType="com.openeuler.southbound.model.factory.DriverManage">
+        update driver_manage
+        <set>
+            <if test="chipFactory != null">
+                `chip_factory` = #{chipFactory,jdbcType=VARCHAR},
+            </if>
+            <if test="driverName != null">
+                `driver_name` = #{driverName,jdbcType=VARCHAR},
+            </if>
+            <if test="kernelDriverPublish != null">
+                `kernel_driver_publish` = #{kernelDriverPublish,jdbcType=VARCHAR},
+            </if>
+            <if test="kernelDriverVersion != null">
+                `kernel_driver_version` = #{kernelDriverVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="exteriorDriverPublish != null">
+                `exterior_driver_publish` = #{exteriorDriverPublish,jdbcType=VARCHAR},
+            </if>
+            <if test="exteriorDriverPublishTime != null">
+                `exterior_driver_publish_time` = #{exteriorDriverPublishTime,jdbcType=VARCHAR},
+            </if>
+            <if test="exteriorDriverVersion != null">
+                `exterior_driver_version` = #{exteriorDriverVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="webDriverUrl != null">
+                `web_driver_url` = #{webDriverUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="allDriverUrl != null">
+                `all_driver_url` = #{allDriverUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="versionId != null">
+                `version_id` = #{versionId,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where driver_id = #{driverId,jdbcType=INTEGER}
+    </update>
+
+    <!--批量删除-->
+    <delete id="deleteByIds">
+        DELETE FROM driver_manage WHERE driver_id in
+        <foreach collection="ids.split(',')" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 查询芯片厂商名称列表 -->
+    <select id="queryChipNameList" resultType="String">
+        SELECT DISTINCT(chip_factory) FROM `driver_manage`
+    </select>
+
+    <!-- 查询芯片型号名称列表 -->
+    <select id="queryModelList" resultType="String">
+        SELECT DISTINCT(chip_model)chip_model FROM `driver_manage`
+    </select>
+
+    <!-- 根据芯片厂商名称查询驱动名称 -->
+    <select id="queryDriverName" resultType="string">
+        SELECT DISTINCT(driver_name) FROM `driver_manage`
+        <where>
+            <if test="chipFactory != null and chipFactory != ''">
+                chip_factory = #{chipFactory}
+            </if>
+        </where>
+    </select>
+
+    <!-- 导出所有驱动数据 -->
+    <select id="exportAllData" resultMap="BaseResultMap">
+        SELECT dm.*, vp.version_name
+        FROM `driver_manage` dm
+        INNER JOIN `version_plan` vp ON vp.version_id = dm.version_id
+        ORDER BY dm.create_time DESC
+    </select>
+</mapper>
