@@ -33,7 +33,7 @@ export default {
       type: Function
     }
   },
-  setup(props, ctx) {
+  setup (props, ctx) {
     watch(
       () => props.versionName,
       (newVal, oldVal) => {
@@ -115,7 +115,6 @@ export default {
           ];
         }
         wholeData[1].risk = res.data.releaseTableStatus ? true : false;
-
         rowWholeData.value = wholeData;
         chartRef.value.update(whole.value.beta, whole.value.release);
       }
@@ -163,8 +162,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.chart-content {
-  margin: 0 auto;
-  width: 100%;
-}
+  .chart-content {
+    margin: 0 auto;
+    width: 100%;
+  }
 </style>

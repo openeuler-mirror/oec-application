@@ -7,47 +7,19 @@
             <div class="filter-area d-flex">
               <div class="filter-area-left">
                 <el-form-item label="操作系统" :show-message="false" style="min-width: 220px;">
-                  <el-select
-                    v-model="versionId"
-                    placeholder="请选择操作系统"
-                    clearable
-                    @change="versionChange"
-                    multiple
-                    collapse-tags
-                  >
-                    <el-option
-                      v-for="(item, index) in versionList"
-                      :key="index"
-                      :label="item.versionName"
-                      :value="item.versionId"
-                    />
+                  <el-select v-model="versionId" placeholder="请选择操作系统" clearable @change="versionChange" multiple collapse-tags>
+                    <el-option v-for="(item, index) in versionList" :key="index" :label="item.versionName" :value="item.versionId" />
                   </el-select>
                 </el-form-item>
                 <el-form-item label="芯片厂商" :show-message="false">
-                  <el-select
-                    v-model="queryForm.chipFactory"
-                    placeholder="请选择"
-                    clearable
-                    @change="toQuery"
-                  >
-                    <el-option
-                      v-for="item in chipFactoryList"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    />
+                  <el-select v-model="queryForm.chipFactory" placeholder="请选择" clearable @change="toQuery">
+                    <el-option v-for="item in chipFactoryList" :key="item" :label="item" :value="item" />
                   </el-select>
                 </el-form-item>
               </div>
               <div class="filter-area-right">
                 <el-form-item label="搜索" style="margin-right: 0;">
-                  <el-input
-                    placeholder="类型、型号"
-                    size="default"
-                    v-model="queryForm.keyword"
-                    style="width: 100%"
-                    @keyup.enter.native="toQuery"
-                  >
+                  <el-input placeholder="类型、型号" size="default" v-model="queryForm.keyword" style="width: 100%" @keyup.enter.native="toQuery">
                     <template #suffix>
                       <el-icon @click="toQuery" class="pointer">
                         <Search></Search>
@@ -55,65 +27,25 @@
                     </template>
                   </el-input>
                 </el-form-item>
-                <el-button
-                  style="margin-left: 10px"
-                  type="primary"
-                  v-if="$hasAuth([0, 1])"
-                  @click="exportExcel"
-                >导出</el-button>
-                <el-button
-                  style="margin-left: 10px"
-                  type="success"
-                  v-if="$hasAuth([0, 1])"
-                  @click="router.push('/state/board');"
-                >状态详情</el-button>
+                <el-button style="margin-left: 10px" type="primary" v-if="$hasAuth([0, 1])" @click="exportExcel">导出</el-button>
+                <el-button style="margin-left: 10px" type="success" v-if="$hasAuth([0, 1])" @click="router.push('/state/board');">状态详情</el-button>
               </div>
             </div>
           </el-form>
           <div class="table-main">
-            <el-table
-              :data="data"
-              style="width: 100%"
-              height="100%"
-              :header-cell-style="{'text-align':'center'}"
-              :cell-style="{'text-align':'center'}"
-              v-loading="loading"
-              ref="eTable"
-              border
-            >
+            <el-table :data="data" style="width: 100%" height="100%" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" v-loading="loading" ref="eTable" border>
               <el-table-column type="selection"></el-table-column>
               <el-table-column fixed label="芯片厂商" show-overflow-tooltip width="100">
                 <template #default="scope">{{scope.row.chipFactory || '/'}}</template>
               </el-table-column>
-              <el-table-column
-                fixed
-                label="板卡类型"
-                show-overflow-tooltip
-                width="100"
-                :filters="boardTypeFilterList"
-                :filter-method="(value,row) => row.boardType === value"
-              >
+              <el-table-column fixed label="板卡类型" show-overflow-tooltip width="100" :filters="boardTypeFilterList" :filter-method="(value,row) => row.boardType === value">
                 <template #default="scope">{{scope.row.boardType || '/'}}</template>
               </el-table-column>
 
-              <el-table-column
-                fixed
-                label="芯片型号"
-                show-overflow-tooltip
-                width="120"
-                :filters="chipModelFilterList"
-                :filter-method="(value,row) => row.chipModel === value"
-              >
+              <el-table-column fixed label="芯片型号" show-overflow-tooltip width="120" :filters="chipModelFilterList" :filter-method="(value,row) => row.chipModel === value">
                 <template #default="scope">{{scope.row.chipModel || '/'}}</template>
               </el-table-column>
-              <el-table-column
-                fixed
-                label="典型板卡型号"
-                show-overflow-tooltip
-                width="130"
-                :filters="typicalBoardModelFilterList"
-                :filter-method="(value,row) => row.typicalBoardModel === value"
-              >
+              <el-table-column fixed label="典型板卡型号" show-overflow-tooltip width="130" :filters="typicalBoardModelFilterList" :filter-method="(value,row) => row.typicalBoardModel === value">
                 <template #default="scope">{{scope.row.typicalBoardModel || '/'}}</template>
               </el-table-column>
               <el-table-column label="扩展板卡" show-overflow-tooltip>
@@ -122,23 +54,12 @@
                 </el-table-column>
                 <el-table-column label="型号" width="336">
                   <template #default="scope">
-                    <el-popover
-                      v-if="scope.row.extendBoardModel  && scope.row.extendBoardModel.length > 40"
-                      placement="top"
-                      :width="400"
-                      trigger="hover"
-                      :content="scope.row.extendBoardModel"
-                      popper-class="customPopover"
-                    >
+                    <el-popover v-if="scope.row.extendBoardModel  && scope.row.extendBoardModel.length > 40" placement="top" :width="400" trigger="hover" :content="scope.row.extendBoardModel" popper-class="customPopover">
                       <template #reference>
                         <div class="noWarp" ref="extendBoardModelRef">{{scope.row.extendBoardModel}}</div>
                       </template>
                     </el-popover>
-                    <div
-                      v-else
-                      class="noWarp"
-                      ref="extendBoardModelRef"
-                    >{{scope.row.extendBoardModel || '/'}}</div>
+                    <div v-else class="noWarp" ref="extendBoardModelRef">{{scope.row.extendBoardModel || '/'}}</div>
                   </template>
                 </el-table-column>
               </el-table-column>
@@ -150,116 +71,53 @@
                 <template #header>
                   <div style="display: flex;align-items: center;justify-content: center;">
                     <span>适配状态</span>
-                    <el-tooltip
-                      content="<div><span style='display: inline-block;width: 10px; height: 10px; background: #909399';></span>  未适配：未加入版本计划，无适配计划</div>
+                    <el-tooltip content="<div><span style='display: inline-block;width: 10px; height: 10px; background: #909399';></span>  未适配：未加入版本计划，无适配计划</div>
                       <div><span style='display: inline-block;width: 10px; height: 10px; background: #7030a0';></span>  适配中：已加入版本计划，正在适配中</div>
                       <div><span style='display: inline-block;width: 10px; height: 10px; background: #67c23a';></span>  已适配：适配完成，已发布兼容性清单</div>
-                      <div><span style='display: inline-block;width: 10px; height: 10px; background: #f56c6c';></span>  版本不支持：版本不支持该CPU代次</div>"
-                      placement="top"
-                      raw-content
-                    >
+                      <div><span style='display: inline-block;width: 10px; height: 10px; background: #f56c6c';></span>  版本不支持：版本不支持该CPU代次</div>" placement="top" raw-content>
                       <el-icon>
                         <QuestionFilled style="width: 15px; height: 15px;cursor: pointer;" />
                       </el-icon>
                     </el-tooltip>
                   </div>
                 </template>
-                <el-table-column
-                  label="典型板卡(arm)"
-                  show-overflow-tooltip
-                  min-width="120"
-                  :resizable="false"
-                >
+                <el-table-column label="典型板卡(arm)" show-overflow-tooltip min-width="120" :resizable="false">
                   <template #default="scope">
                     <div v-if="scope.row.typicalBoardArm">
-                      <el-button
-                        size="small"
-                        type="info"
-                        v-if="scope.row.typicalBoardArm === '未适配'"
-                      >{{scope.row.typicalBoardArm}}</el-button>
-                      <el-button
-                        size="small"
-                        type="success"
-                        v-if="scope.row.typicalBoardArm === '已适配'"
-                      >{{scope.row.typicalBoardArm}}</el-button>
-                      <el-button
-                        color="#7030a0"
-                        size="small"
-                        class="custom-btn"
-                        v-if="scope.row.typicalBoardArm === '适配中'"
-                      >{{scope.row.typicalBoardArm}}</el-button>
-                      <el-button
-                        type="danger"
-                        size="small"
-                        v-if="scope.row.typicalBoardArm === '版本不支持'"
-                      >{{scope.row.typicalBoardArm}}</el-button>
+                      <el-button size="small" type="info" v-if="scope.row.typicalBoardArm === '未适配'">{{scope.row.typicalBoardArm}}</el-button>
+                      <el-button size="small" type="success" v-if="scope.row.typicalBoardArm === '已适配'">{{scope.row.typicalBoardArm}}</el-button>
+                      <el-button color="#7030a0" size="small" class="custom-btn" v-if="scope.row.typicalBoardArm === '适配中'">{{scope.row.typicalBoardArm}}</el-button>
+                      <el-button type="danger" size="small" v-if="scope.row.typicalBoardArm === '版本不支持'">{{scope.row.typicalBoardArm}}</el-button>
                     </div>
                     <div v-else>
                       <el-button size="small" type="info">未适配</el-button>
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  label="典型板卡(x86)"
-                  show-overflow-tooltip
-                  min-width="120"
-                  :resizable="false"
-                >
+                <el-table-column label="典型板卡(x86)" show-overflow-tooltip min-width="120" :resizable="false">
                   <template #default="scope">
                     <div v-if="scope.row.typicalBoardX86">
-                      <el-button
-                        size="small"
-                        type="info"
-                        v-if="scope.row.typicalBoardX86 === '未适配'"
-                      >{{scope.row.typicalBoardX86}}</el-button>
-                      <el-button
-                        size="small"
-                        type="success"
-                        v-if="scope.row.typicalBoardX86 === '已适配'"
-                      >{{scope.row.typicalBoardX86}}</el-button>
-                      <el-button
-                        color="#7030a0"
-                        class="custom-btn"
-                        size="small"
-                        v-if="scope.row.typicalBoardX86 === '适配中'"
-                      >{{scope.row.typicalBoardX86}}</el-button>
-                      <el-button
-                        type="danger"
-                        size="small"
-                        v-if="scope.row.typicalBoardX86 === '版本不支持'"
-                      >{{scope.row.typicalBoardX86}}</el-button>
+                      <el-button size="small" type="info" v-if="scope.row.typicalBoardX86 === '未适配'">{{scope.row.typicalBoardX86}}</el-button>
+                      <el-button size="small" type="success" v-if="scope.row.typicalBoardX86 === '已适配'">{{scope.row.typicalBoardX86}}</el-button>
+                      <el-button color="#7030a0" class="custom-btn" size="small" v-if="scope.row.typicalBoardX86 === '适配中'">{{scope.row.typicalBoardX86}}</el-button>
+                      <el-button type="danger" size="small" v-if="scope.row.typicalBoardX86 === '版本不支持'">{{scope.row.typicalBoardX86}}</el-button>
                     </div>
                     <div v-else>
                       <el-button size="small" type="info">未适配</el-button>
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  label="扩展板卡(arm)"
-                  show-overflow-tooltip
-                  min-width="120"
-                  :resizable="false"
-                >
+                <el-table-column label="扩展板卡(arm)" show-overflow-tooltip min-width="120" :resizable="false">
                   <template #default="scope">{{scope.row.extendBoardArm || '/'}}</template>
                 </el-table-column>
-                <el-table-column
-                  label="扩展板卡(x86)"
-                  show-overflow-tooltip
-                  min-width="120"
-                  :resizable="false"
-                >
+                <el-table-column label="扩展板卡(x86)" show-overflow-tooltip min-width="120" :resizable="false">
                   <template #default="scope">{{scope.row.extendBoardX86 || '/'}}</template>
                 </el-table-column>
               </el-table-column>
             </el-table>
           </div>
           <div class="example-pagination-block" style="margin-top:7px">
-            <base-pagination
-              :current-page="queryForm.pageIndex"
-              :page-size="queryForm.pageSize"
-              :total="total"
-              @change="paginationChange"
-            />
+            <base-pagination :current-page="queryForm.pageIndex" :page-size="queryForm.pageSize" :total="total" @change="paginationChange" />
           </div>
         </el-card>
       </div>
@@ -284,7 +142,7 @@ export default defineComponent({
     ElConfigProvider,
     BasePagination
   },
-  setup() {
+  setup () {
     // 数据
     // use List
     const router = useRouter();
@@ -460,23 +318,23 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.system-user-container {
-  height: 100%;
-  .operation {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .filter-area {
-    display: flex;
-    justify-content: space-between;
-    .filter-area-right,
-    .filter-area-left {
+  .system-user-container {
+    height: 100%;
+    .operation {
       display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .filter-area {
+      display: flex;
+      justify-content: space-between;
+      .filter-area-right,
+      .filter-area-left {
+        display: flex;
+      }
     }
   }
-}
-.el-checkbox {
-  display: block;
-}
+  .el-checkbox {
+    display: block;
+  }
 </style>

@@ -2,20 +2,18 @@
   <div class="card-warpper">
     <el-card shadow="hover">
       <!-- 头部过滤 -->
-      <el-form :model="queryForm" :show-message="false" inline >
+      <el-form :model="queryForm" :show-message="false" inline>
         <div class="filter-area d-flex">
           <div class="filter-area-left">
             <el-form-item label="操作系统" :show-message="false">
-              <el-select v-model="queryForm.versionId" multiple collapse-tags collapse-tags-tooltip 
-                placeholder="请选择操作系统" clearable @change="queryList">
-                <el-option v-for="item in versionList" :key="item" :label="item.versionName" :value="item.versionId"/>
+              <el-select v-model="queryForm.versionId" multiple collapse-tags collapse-tags-tooltip placeholder="请选择操作系统" clearable @change="queryList">
+                <el-option v-for="item in versionList" :key="item" :label="item.versionName" :value="item.versionId" />
               </el-select>
             </el-form-item>
           </div>
           <div class="filter-area-right">
             <el-form-item label="搜索" style="width: 320px">
-              <el-input @keyup.enter.native="queryList" :show-message="false" v-model="queryForm.keyword"
-                placeholder="芯片厂商、典型板卡、扩展板卡" style="width: 100%">
+              <el-input @keyup.enter.native="queryList" :show-message="false" v-model="queryForm.keyword" placeholder="芯片厂商、典型板卡、扩展板卡" style="width: 100%">
                 <template #suffix>
                   <el-icon @click="queryList" class="pointer">
                     <Search></Search>
@@ -33,24 +31,16 @@
       </el-form>
       <!-- 表格 -->
       <div class="table-main">
-        <el-table height="100%" :data="renderData" :highlight-current-row="false" :border="true" ref="tableRef"
-          v-loading="loading"
-          :header-cell-style="{backgroundColor: '#f5f7fa', 'text-align':'center'}"
-          :cell-style="{'text-align':'center'}"
-          @header-dragend="headerDragend"
-          @expand-change="expandChange"
-          @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" v-if="$hasAuth([0, 1])"/>
+        <el-table height="100%" :data="renderData" :highlight-current-row="false" :border="true" ref="tableRef" v-loading="loading" :header-cell-style="{backgroundColor: '#f5f7fa', 'text-align':'center'}" :cell-style="{'text-align':'center'}" @header-dragend="headerDragend" @expand-change="expandChange" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" v-if="$hasAuth([0, 1])" />
           <el-table-column type="expand" fixed="left">
             <template #default="props">
               <div class="expand-area">
-                <PlanBreakdown v-if="expandIndexList.includes(props.$index)" :betaData="props.row.betaListArr"
-                 :releaseData="props.row.releaseListArr"></PlanBreakdown>
+                <PlanBreakdown v-if="expandIndexList.includes(props.$index)" :betaData="props.row.betaListArr" :releaseData="props.row.releaseListArr"></PlanBreakdown>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="chipFactory" label="芯片厂商" width="100" fixed="left"
-            :filters="filterOptions.chipFactoryList" :filter-method="(value,row) => row.chipFactory === value">
+          <el-table-column prop="chipFactory" label="芯片厂商" width="100" fixed="left" :filters="filterOptions.chipFactoryList" :filter-method="(value,row) => row.chipFactory === value">
             <template v-slot="scope">
               {{scope.row['chipFactory'] || '/'}}
             </template>
@@ -61,8 +51,7 @@
           <el-table-column label="版本发布前">
             <el-table-column prop="betaList" label="适配型号" width="400">
               <template v-slot="scope">
-                  <el-popover v-if="scope.row.betaList && scope.row.betaList.length > 50" placement="top"
-                    :width="400" trigger="hover" :content="scope.row.betaList" popper-class="customPopover">
+                <el-popover v-if="scope.row.betaList && scope.row.betaList.length > 50" placement="top" :width="400" trigger="hover" :content="scope.row.betaList" popper-class="customPopover">
                   <template #reference>
                     <div class="noWarp">{{scope.row.betaList}}</div>
                   </template>
@@ -75,8 +64,7 @@
           <el-table-column label="版本发布后">
             <el-table-column prop="releaseList" label="适配型号" width="400">
               <template v-slot="scope">
-                  <el-popover v-if="scope.row.releaseList && scope.row.releaseList.length > 50" placement="top"
-                    :width="400" trigger="hover" :content="scope.row.releaseList" popper-class="customPopover">
+                <el-popover v-if="scope.row.releaseList && scope.row.releaseList.length > 50" placement="top" :width="400" trigger="hover" :content="scope.row.releaseList" popper-class="customPopover">
                   <template #reference>
                     <div class="noWarp">{{scope.row.releaseList}}</div>
                   </template>
@@ -86,18 +74,16 @@
             </el-table-column>
             <el-table-column prop="releaseProcess" label="适配进度" width="100" show-overflow-tooltip></el-table-column>
           </el-table-column>
-         
           <el-table-column prop="remark" label="备注" show-overflow-tooltip :resizable="false"></el-table-column>
           <el-table-column label="操作" fixed="right" width="80" align="center" :resizable="false" v-if="$hasAuth([0, 1])">
             <template v-slot="scope">
-                <el-button type="primary" size="small" @click="handleAddOrUpdate('edit', scope.row)">编辑</el-button>
+              <el-button type="primary" size="small" @click="handleAddOrUpdate('edit', scope.row)">编辑</el-button>
             </template>
           </el-table-column>
-        </el-table>      
+        </el-table>
       </div>
       <div class="pagination-block">
-        <base-pagination :current-page="pagination.currentPage" :page-size="pagination.pageSize" 
-        :total="pagination.total" @change="paginationChange"/>
+        <base-pagination :current-page="pagination.currentPage" :page-size="pagination.pageSize" :total="pagination.total" @change="paginationChange" />
       </div>
     </el-card>
     <board-add-or-update ref="boardAddOrUpdate" @refreshList="queryList"></board-add-or-update>
@@ -105,7 +91,7 @@
 </template>
 
 <script>
-import { reactive, ref, markRaw, onMounted} from 'vue';
+import { reactive, ref, markRaw, onMounted } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { WarningFilled } from '@element-plus/icons-vue';
 import BasePagination from '@/components/BasePagination.vue';
@@ -115,8 +101,8 @@ import { queryVersionNames } from '@/common/api/versionPlan';
 import PlanBreakdown from './plan-breakdown.vue';
 export default {
   name: 'planBoard',
-  components: {BasePagination, boardAddOrUpdate, PlanBreakdown},
-  setup() {
+  components: { BasePagination, boardAddOrUpdate, PlanBreakdown },
+  setup () {
     const queryForm = reactive({
       keyword: '',
       versionId: []
@@ -168,7 +154,7 @@ export default {
         });
         renderData.value = data;
         pagination.total = res.data.total;
-        filterOptions.chipFactoryList = Array.from(chipFactorySet).map(item => ({text: item, value: item}));
+        filterOptions.chipFactoryList = Array.from(chipFactorySet).map(item => ({ text: item, value: item }));
       }
     };
     const handleProcess = (obj) => {
@@ -178,9 +164,8 @@ export default {
       if (!obj.fitCount || !obj.sum) {
         return '0 %';
       }
-      return ((obj.fitCount  / obj.sum) * 100).toFixed(2) + '%';
+      return ((obj.fitCount / obj.sum) * 100).toFixed(2) + '%';
     };
-   
     const boardAddOrUpdate = ref();
     /**
      * 添加或修改 
@@ -195,10 +180,10 @@ export default {
           driverName: rowdata.driverName,
           driverVersion: rowdata.driverVersion,
           versionId: rowdata.versionId,
-          betaList: rowdata.betaList ? rowdata.betaList.split(',') : [],  
+          betaList: rowdata.betaList ? rowdata.betaList.split(',') : [],
           releaseList: rowdata.releaseList ? rowdata.releaseList.split(',') : [],
           remark: rowdata.remark
-        }; 
+        };
       }
       boardAddOrUpdate.value.open(type, data);
     };
@@ -215,20 +200,16 @@ export default {
         icon: markRaw(WarningFilled)
       })
         .then(async () => {
-          let ids = multipleSelection.value.reduce((preval, item) => {preval.push(item.id); return preval;}, []);
+          let ids = multipleSelection.value.reduce((preval, item) => { preval.push(item.id); return preval; }, []);
           let res = await doDelete(ids.join(','));
           if (res.code === 200) {
             ElMessage.success('删除成功');
             queryList();
           }
         })
-        .catch(() => {});
-
-      
+        .catch(() => { });
     };
     const versionList = ref([]);
-   
-    
     // 查询操作系统
     const queryOptions = async () => {
       let res = await queryVersionNames();
@@ -236,7 +217,7 @@ export default {
         versionList.value = res.data;
       }
     };
-    
+
     onMounted(() => {
       queryList();
       queryOptions();
@@ -251,11 +232,11 @@ export default {
       }
     };
     const headerDragend = (newWidth, oldWidth, column) => {
-      if (newWidth < 100 ) {
+      if (newWidth < 100) {
         column.width = 100;
       }
     };
-    
+
     // 导出
     const exportExcel = () => {
       loading.value = true;
@@ -282,7 +263,7 @@ export default {
       let data = [];
       jsonData.forEach(item => {
         data.push([item.chipFactory, item.versionName, item.betaList || '/', handleProcess(item.jsonBetaList),
-        item.releaseList || '/', handleProcess(item.jsonReleaseList)]);
+          item.releaseList || '/', handleProcess(item.jsonReleaseList)]);
       });
       return data;
     };
@@ -305,20 +286,18 @@ export default {
       exportExcel,
       paginationChange,
       tableRef
-      
     };
   }
 };
- 
+
 </script>
 <style lang="scss" scoped>
-.expand-area {
-  padding: 10px 20px;
-}
-.filter-area-right {
-  .el-form-item {
-    margin-right: 0px;
+  .expand-area {
+    padding: 10px 20px;
   }
-}
-
+  .filter-area-right {
+    .el-form-item {
+      margin-right: 0px;
+    }
+  }
 </style>

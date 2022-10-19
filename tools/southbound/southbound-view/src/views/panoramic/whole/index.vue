@@ -422,23 +422,23 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.system-user-container {
-  height: 100%;
-  .operation {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .filter-area {
-    display: flex;
-    justify-content: space-between;
-    .filter-area-right,
-    .filter-area-left {
+  .system-user-container {
+    height: 100%;
+    .operation {
       display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .filter-area {
+      display: flex;
+      justify-content: space-between;
+      .filter-area-right,
+      .filter-area-left {
+        display: flex;
+      }
     }
   }
-}
-.el-checkbox {
-  display: block;
-}
+  .el-checkbox {
+    display: block;
+  }
 </style>
