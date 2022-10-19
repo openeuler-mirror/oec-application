@@ -16,7 +16,7 @@
       <p>版本不支持</p>
       <p>{{notSupportCount}}</p>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
@@ -43,40 +43,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header-summary {
-  display: flex;
-  margin-bottom: 10px;
-  .item {
-    width: 200px;
-    padding: 8px 16px;
-    border-left: 5px solid #409eff;
-    border-radius: 4px;
-    p {
-      font-size: 14px;
-      color: #999;
-      line-height: 1.5em;
+  .header-summary {
+    display: flex;
+    margin-bottom: 10px;
+    .item {
+      width: 200px;
+      padding: 8px 16px;
+      border-left: 5px solid #409eff;
+      border-radius: 4px;
+      p {
+        font-size: 14px;
+        color: #999;
+        line-height: 1.5em;
+      }
+      p:nth-child(2) {
+        font-size: 20px;
+        color: #000;
+      }
     }
-    p:nth-child(2) {
-      font-size: 20px;
-      color: #000;
+    .item:nth-child(1) {
+      border-color: rgb(103, 194, 58);
+      background-color: rgba(103, 194, 58, 0.1);
+    }
+    .item:nth-child(2) {
+      border-color: rgb(144, 147, 153);
+      background-color: rgba(144, 147, 153, 0.1);
+      margin: 0 10px;
+    }
+    .item:nth-child(3) {
+      border-color: rgb(112, 48, 160);
+      background-color: rgba(112, 48, 160, 0.1);
+    }
+    .item:nth-child(4) {
+      border-color: rgb(245, 108, 108);
+      background-color: rgba(245, 108, 108, 0.1);
     }
   }
-  .item:nth-child(1) {
-    border-color: rgb(103, 194, 58);
-    background-color: rgba(103, 194, 58, 0.1);
-  }
-  .item:nth-child(2) {
-    border-color: rgb(144, 147, 153);
-    background-color: rgba(144, 147, 153, 0.1);
-    margin: 0 10px;
-  }
-  .item:nth-child(3) {
-    border-color: rgb(112, 48, 160);
-    background-color: rgba(112, 48, 160, 0.1);
-  }
-  .item:nth-child(4) {
-    border-color: rgb(245, 108, 108);
-    background-color: rgba(245, 108, 108, 0.1);
-  }
-}
 </style>
