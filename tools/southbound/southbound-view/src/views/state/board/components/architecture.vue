@@ -1,7 +1,6 @@
 <template>
   <div style="height: 100%;">
-    <state-count :adaptCount="adaptCount" :notAdaptCount="notAdaptCount" :planAdaptCount="planAdaptCount" 
-    :notSupportCount="notSupportCount"></state-count>
+    <state-count :adaptCount="adaptCount" :notAdaptCount="notAdaptCount" :planAdaptCount="planAdaptCount" :notSupportCount="notSupportCount"></state-count>
     <div class="state-table-main">
       <main-table :data="rowData" :total="total" :rowProps="{prop: 'osArch', label: '架构'}"></main-table>
     </div>
@@ -20,9 +19,9 @@ export default {
     versionName: {
       type: String,
       default: ''
-    } 
+    }
   },
-  setup(props){
+  setup (props) {
     watch(() => props.versionName, (newVal, oldVal) => {
       if (newVal !== oldVal) {
         queryList();
@@ -40,7 +39,6 @@ export default {
       let res = await getArchStatus(props.versionName);
       if (res.code === 200) {
         rowData.value = res.data;
-       
         let adaptCount = 0, notAdaptCount = 0, planAdaptCount = 0, notSupportCount = 0;
         res.data.forEach(item => {
           adaptCount += (item.typicalModelAdaptList.length + item.extendModelAdaptList.length);
@@ -57,7 +55,6 @@ export default {
     };
     onMounted(() => {
       queryList();
-      
     });
     return {
       total,
@@ -69,7 +66,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.state-table-main {
-  height: calc(100% - 77px);
-}
+  .state-table-main {
+    height: calc(100% - 77px);
+  }
 </style>

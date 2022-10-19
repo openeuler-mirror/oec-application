@@ -1,52 +1,40 @@
 <template>
-  <el-dialog v-model="dialogVisible" :before-close="closeHandle" :close-on-click-modal="false" draggable 
-    :title="type === 'add' ? '新增整机计划' : '修改整机计划'" width="40vw">
+  <el-dialog v-model="dialogVisible" :before-close="closeHandle" :close-on-click-modal="false" draggable :title="type === 'add' ? '新增整机计划' : '修改整机计划'" width="40vw">
     <el-form v-if="dialogVisible" ref="formRef" :model="formData" :rules="rules" label-width="145px" status-icon>
       <el-row>
         <el-col :span="11">
           <el-form-item label="整机厂商" prop="wholeFactory">
             <el-select v-model="formData.wholeFactory" @change="wholeFactoryChange" placeholder="请选择整机厂商" clearable>
-              <el-option v-for="(item, index) in wholeFactoryOptions" :key="index" :label="item" :value="item"/>
+              <el-option v-for="(item, index) in wholeFactoryOptions" :key="index" :label="item" :value="item" />
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="11">
           <el-form-item label="操作系统" prop="versionId" label-width="100px">
             <el-select v-model="formData.versionId" placeholder="请选择操作系统" @change="versionChange" clearable>
-              <el-option v-for="item in versionOptions" :key="item.versionId" :label="item.versionName"
-                :value="(item.versionId + '')"/>
+              <el-option v-for="item in versionOptions" :key="item.versionId" :label="item.versionName" :value="(item.versionId + '')" />
             </el-select>
           </el-form-item>
         </el-col>
       </el-row>
       <!-- 版本发布前阶段 -->
       <el-form-item label="版本发布前适配机型" prop="betaList">
-        <el-select v-model="formData.betaList" multiple collapse-tags collapse-tags-tooltip
-          @change="handleListChange($event, 'beta')"
-          style="width: 50%;" placeholder="请选择适配机型" clearable>
-          <el-option-group 
-            v-for="(item, index) in typeFilterOptions.betaOptions" 
-            :key="index"
-            :label="item.label">
-            <el-option v-for="(opitem, opindex) in item.options" :key="opindex" :label="opitem" :value="opitem"/>
+        <el-select v-model="formData.betaList" multiple collapse-tags collapse-tags-tooltip @change="handleListChange($event, 'beta')" style="width: 50%;" placeholder="请选择适配机型" clearable>
+          <el-option-group v-for="(item, index) in typeFilterOptions.betaOptions" :key="index" :label="item.label">
+            <el-option v-for="(opitem, opindex) in item.options" :key="opindex" :label="opitem" :value="opitem" />
           </el-option-group>
         </el-select>
       </el-form-item>
       <!-- 版本发布后阶段 -->
       <el-form-item label="版本发布后适配机型" prop="releaseList">
-        <el-select v-model="formData.releaseList" multiple collapse-tags collapse-tags-tooltip
-          @change="handleListChange($event, 'release')"
-          style="width: 50%;" placeholder="请选择适配机型" clearable>
-          <el-option-group 
-            v-for="(item, index) in typeFilterOptions.releaseOptions" 
-            :key="index"
-            :label="item.label">
-            <el-option v-for="(opitem, opindex) in item.options" :key="opindex" :label="opitem" :value="opitem"/>
+        <el-select v-model="formData.releaseList" multiple collapse-tags collapse-tags-tooltip @change="handleListChange($event, 'release')" style="width: 50%;" placeholder="请选择适配机型" clearable>
+          <el-option-group v-for="(item, index) in typeFilterOptions.releaseOptions" :key="index" :label="item.label">
+            <el-option v-for="(opitem, opindex) in item.options" :key="opindex" :label="opitem" :value="opitem" />
           </el-option-group>
         </el-select>
       </el-form-item>
       <el-form-item label="备注" prop="remark" style="width: 90%">
-        <el-input type="textarea" v-model="formData.remark" placeholder="请输入备注"/>
+        <el-input type="textarea" v-model="formData.remark" placeholder="请输入备注" />
       </el-form-item>
       <el-form-item style="width:90%;">
         <div class="form-btn">
@@ -65,12 +53,12 @@ import { add, edit, queryModels, queryFactoryNames, queryVersionListByWholeFacto
 export default {
   name: 'planWholeAddOrUpdate',
   emits: ['refreshList'],
-  setup(_, {emit}) {
+  setup (_, { emit }) {
     let formData = ref({});
     const initForm = () => {
       formData.value = {
         id: undefined,
-        versionId: '', 
+        versionId: '',
         wholeFactory: '',
         cpuFactory: '',
         cpuModel: '',
@@ -89,11 +77,11 @@ export default {
         { required: true, message: '请选择操作系统', trigger: 'change' }
       ]
     };
-   
+
     let dialogVisible = ref(false);
     let type = ref('add');
     const formRef = ref();
-    
+
     let wholeFactoryOptions = ref([]);
     let versionOptions = ref([]);
 
@@ -112,7 +100,7 @@ export default {
         let data = [];
         res.data.forEach(item => {
           if (item) {
-            data.push({versionId:item.versionId, versionName:item.versionName});
+            data.push({ versionId: item.versionId, versionName: item.versionName });
           }
         });
         versionOptions.value = data;
@@ -126,9 +114,9 @@ export default {
       versionChange();
       if (!value) {
         return;
-      } 
+      }
       queryVersionOptionsByFactory(formData.value.wholeFactory);
-      
+
     };
     const versionChange = (versionId) => {
       formData.value.betaList = [];
@@ -139,11 +127,11 @@ export default {
       }
       queryModelByFactory(formData.value.wholeFactory, versionId);
     };
-    const queryModelByFactory = async (wholeFactory,versionName) => {
-      let res = await queryModels(wholeFactory,versionName);
+    const queryModelByFactory = async (wholeFactory, versionName) => {
+      let res = await queryModels(wholeFactory, versionName);
       if (res.code === 200) {
-        hardwareModelList = res.data.hardwareModelList ? res.data.hardwareModelList.split(/,|、/): [];
-        extendModelList = res.data.extendModelList ? res.data.extendModelList.split(/,|、/): [];
+        hardwareModelList = res.data.hardwareModelList ? res.data.hardwareModelList.split(/,|、/) : [];
+        extendModelList = res.data.extendModelList ? res.data.extendModelList.split(/,|、/) : [];
       }
       handleListChange([], 'factoryChanage');
     };
@@ -155,27 +143,28 @@ export default {
     const initModelOptions = () => {
       typeFilterOptions.value = {
         betaOptions: [
-          { label: '典型机型', options: []},
-          { label: '扩展机型', options: []}
+          { label: '典型机型', options: [] },
+          { label: '扩展机型', options: [] }
         ],
         releaseOptions: [
-          { label: '典型机型', options: []},
-          { label: '扩展机型', options: []}
+          { label: '典型机型', options: [] },
+          { label: '扩展机型', options: [] }
         ]
       };
     };
     initModelOptions();
-    
+
     const handleListChange = (e, type) => {
       if (type === 'factoryChanage') {
         typeFilterOptions.value.betaOptions = [
-          { label: '典型机型', options: hardwareModelList},
-          { label: '扩展机型', options: extendModelList
+          { label: '典型机型', options: hardwareModelList },
+          {
+            label: '扩展机型', options: extendModelList
           }
         ];
         typeFilterOptions.value.releaseOptions = [
-          { label: '典型机型', options: hardwareModelList},
-          { label: '扩展机型', options: extendModelList}
+          { label: '典型机型', options: hardwareModelList },
+          { label: '扩展机型', options: extendModelList }
         ];
         return;
       }
@@ -196,14 +185,14 @@ export default {
     const open = (recType, rowdata) => {
       type.value = recType;
       if (recType === 'add') {
-        versionOptions.value = []; 
+        versionOptions.value = [];
       } else {
         formData.value = rowdata;
         queryVersionOptionsByFactory(rowdata.wholeFactory);
         queryModelByFactory(rowdata.wholeFactory, rowdata.versionId);
       }
       dialogVisible.value = true;
-    }; 
+    };
     const close = () => {
       dialogVisible.value = false;
     };
@@ -216,7 +205,7 @@ export default {
     const submitForm = async (formEl) => {
       await formEl.validate((valid) => {
         if (valid) {
-          let data = {...formData.value};
+          let data = { ...formData.value };
           data.betaList = data.betaList.join(',');
           data.releaseList = data.releaseList.join(',');
           if (type.value === 'add') {
@@ -224,7 +213,7 @@ export default {
           } else {
             doEdit(data);
           }
-        } 
+        }
       });
     };
     const doAdd = async (data) => {
@@ -247,7 +236,6 @@ export default {
       formRef.value.resetFields();
       initForm();
       dialogVisible.value = false;
-      
     };
 
     return {
@@ -274,9 +262,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form-btn {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
+  .form-btn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
 </style>

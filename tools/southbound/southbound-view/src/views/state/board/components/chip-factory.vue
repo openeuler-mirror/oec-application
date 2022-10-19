@@ -1,7 +1,6 @@
 <template>
   <div style="height: 100%;">
-    <state-count :adaptCount="adaptCount" :notAdaptCount="notAdaptCount" :planAdaptCount="planAdaptCount" 
-    :notSupportCount="notSupportCount"></state-count>
+    <state-count :adaptCount="adaptCount" :notAdaptCount="notAdaptCount" :planAdaptCount="planAdaptCount" :notSupportCount="notSupportCount"></state-count>
     <div class="state-table-main">
       <main-table :data="rowData" :total="total" :rowProps="{prop: 'chipFactory', label: '芯片厂商'}"></main-table>
     </div>
@@ -10,7 +9,7 @@
 
 <script>
 import { ref, watch, toRefs, reactive } from 'vue';
-import { getChipFactoryStatus} from '@/common/api/boardStatus';
+import { getChipFactoryStatus } from '@/common/api/boardStatus';
 import StateCount from '../../state-count';
 import MainTable from './main-table';
 export default {
@@ -20,9 +19,9 @@ export default {
     versionName: {
       type: String,
       default: ''
-    } 
+    }
   },
-  setup(props){
+  setup (props) {
     watch(() => props.versionName, (newVal, oldVal) => {
       if (newVal !== oldVal) {
         queryList();
@@ -64,7 +63,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.state-table-main {
-  height: calc(100% - 77px);
-}
+  .state-table-main {
+    height: calc(100% - 77px);
+  }
 </style>
