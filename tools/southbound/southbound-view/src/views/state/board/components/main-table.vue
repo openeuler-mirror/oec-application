@@ -48,7 +48,7 @@ import { h } from 'vue';
 import hoverDisplay from '../../hover-display.vue';
 export default {
   name: 'boardMainTable',
-  components: {hoverDisplay},
+  components: { hoverDisplay },
   props: {
     total: {
       type: Number,
@@ -70,7 +70,7 @@ export default {
       default: '120'
     }
   },
-  setup(prop){
+  setup (prop) {
     const getSummaries = (param) => {
       const { columns, data } = param;
       const sums = [];
@@ -78,9 +78,9 @@ export default {
       columns.forEach((column, index) => {
         if (index === 0) {
           sums[index] = sums[index] = h('div', null, [
-            h('div', {class: 'dv-top'}, '总计'),
-            h('div', {class: 'dv-center'}, ''),
-            h('div', {class: 'dv-bottom'}, '比例')
+            h('div', { class: 'dv-top' }, '总计'),
+            h('div', { class: 'dv-center' }, ''),
+            h('div', { class: 'dv-bottom' }, '比例')
           ]);
           return;
         }
@@ -89,13 +89,13 @@ export default {
           return prev + curr;
         }, 0);
         process = '0 %';
-        if(sum && prop.total) {
+        if (sum && prop.total) {
           process = ((sum / prop.total) * 100).toFixed(2) + '%';
-        } 
+        }
         sums[index] = h('div', null, [
-          h('div', {class: 'dv-top'}, sum),
-          h('div', {class: 'dv-center'}, ''),
-          h('div', {class: 'dv-bottom'}, process)
+          h('div', { class: 'dv-top' }, sum),
+          h('div', { class: 'dv-center' }, ''),
+          h('div', { class: 'dv-bottom' }, process)
         ]);
       });
       return sums;
@@ -108,17 +108,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:deep(.dv-center) {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: #eee;
-}
-:deep(.dv-top) {
-  padding-bottom: 8px;
-}
-:deep(.dv-bottom) {
-  padding-top: 8px;
-}
+  :deep(.dv-center) {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #eee;
+  }
+  :deep(.dv-top) {
+    padding-bottom: 8px;
+  }
+  :deep(.dv-bottom) {
+    padding-top: 8px;
+  }
 </style>

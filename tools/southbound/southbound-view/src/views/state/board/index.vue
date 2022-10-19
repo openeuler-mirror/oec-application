@@ -11,7 +11,7 @@
       <div class="filter-area d-flex">
         <el-form-item label="操作系统" :show-message="false" v-if="tabValue !== '5'">
           <el-select v-model="queryForm.versionName" placeholder="请选择操作系统">
-            <el-option v-for="item in versionList" :key="item" :label="item.versionName" :value="item.versionName"/>
+            <el-option v-for="item in versionList" :key="item" :label="item.versionName" :value="item.versionName" />
           </el-select>
         </el-form-item>
       </div>
@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import { reactive, ref, onMounted} from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import ChipFactory from './components/chip-factory.vue';
 import ChipModel from './components/chip-model.vue';
@@ -40,8 +40,8 @@ import { queryVersionNames } from '@/common/api/versionPlan';
 export default {
   name: 'stateBoard',
   components: { ChipFactory, ChipModel, BoardType, Version, Architecture },
-  setup() {
-    const route = useRoute(); 
+  setup () {
+    const route = useRoute();
     const queryForm = reactive({
       versionName: ''
     });
@@ -63,7 +63,7 @@ export default {
       versionList
     };
   },
-  beforeRouteEnter(to) {
+  beforeRouteEnter (to) {
     if (!to.query.versionName) {
       let query = JSON.parse(sessionStorage.getItem('queryBoardState'));
       if (query) {
@@ -71,21 +71,21 @@ export default {
         to.fullPath += `?versionName=${query.versionName}`;
         to.href += `?versionName=${query.versionName}`;
       }
-    } 
+    }
   },
-  beforeRouteLeave(to, from) {
-    if(from.query.versionName) {
-      sessionStorage.setItem('queryBoardState', JSON.stringify({versionName: from.query.versionName}));
+  beforeRouteLeave (to, from) {
+    if (from.query.versionName) {
+      sessionStorage.setItem('queryBoardState', JSON.stringify({ versionName: from.query.versionName }));
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.content-main {
-  height: calc(100% - 104px);
-  &.version {
-    height: calc(100% - 54px);
+  .content-main {
+    height: calc(100% - 104px);
+    &.version {
+      height: calc(100% - 54px);
+    }
   }
-}
 </style>

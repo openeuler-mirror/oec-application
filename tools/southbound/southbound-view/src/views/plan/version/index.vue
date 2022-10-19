@@ -4,7 +4,7 @@
       <el-button type="success" @click="handleAddOrEdit('add')" v-if="$hasAuth([0, 1])">新增</el-button>
     </div>
     <el-timeline>
-      <el-timeline-item  v-for="(item, index) of versionList" :key="index" :timestamp="item.year" placement="top">
+      <el-timeline-item v-for="(item, index) of versionList" :key="index" :timestamp="item.year" placement="top">
         <el-row :gutter="20">
           <el-col :span="7" v-for="subItem in item.list" :key="subItem.versionId">
             <el-card>
@@ -12,25 +12,25 @@
               <div class="version-info">
                 <div class="info-title">发布版本：</div>
                 <div class="info-summary">
-                  <h4 class="noWarp">{{subItem.versionName}}</h4> 
+                  <h4 class="noWarp">{{subItem.versionName}}</h4>
                 </div>
               </div>
               <div class="version-info">
                 <div class="info-title">技术验证：</div>
                 <div class="info-summary">
-                  <p style="font-size:14px;" class="noWarp">{{subItem.alphaStartDate}} ~ {{subItem.alphaEndDate}}</p> 
+                  <p style="font-size:14px;" class="noWarp">{{subItem.alphaStartDate}} ~ {{subItem.alphaEndDate}}</p>
                 </div>
               </div>
               <div class="version-info">
                 <div class="info-title">版本发布前：</div>
                 <div class="info-summary">
-                  <p style="font-size:14px;" class="noWarp">{{subItem.betaStartDate}} ~ {{subItem.betaEndDate}}</p> 
+                  <p style="font-size:14px;" class="noWarp">{{subItem.betaStartDate}} ~ {{subItem.betaEndDate}}</p>
                 </div>
               </div>
               <div class="version-info">
                 <div class="info-title">版本发布后：</div>
                 <div class="info-summary">
-                  <p style="font-size:14px;" class="noWarp">{{subItem.releaseStartDate}} ~ {{subItem.releaseEndDate}}</p> 
+                  <p style="font-size:14px;" class="noWarp">{{subItem.releaseStartDate}} ~ {{subItem.releaseEndDate}}</p>
                 </div>
               </div>
               <div class="version-info version-detail" @click="toDetail(subItem)">
@@ -46,13 +46,12 @@
         </el-row>
       </el-timeline-item>
     </el-timeline>
-    <version-add-or-update ref="addOrUpdateRef" v-if="showAddOrUpdate" @close="showAddOrUpdate = false"
-      @refreshList="queryList"></version-add-or-update>
+    <version-add-or-update ref="addOrUpdateRef" v-if="showAddOrUpdate" @close="showAddOrUpdate = false" @refreshList="queryList"></version-add-or-update>
   </div>
 </template>
 <script>
 import { ref, markRaw, onMounted, nextTick } from 'vue';
-import { useRouter} from 'vue-router';
+import { useRouter } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import VersionAddOrUpdate from './add-or-update.vue';
 import { WarningFilled } from '@element-plus/icons-vue';
@@ -60,7 +59,7 @@ import { getAllList, doDelete } from '@/common/api/versionPlan';
 export default ({
   name: 'planVersion',
   components: { VersionAddOrUpdate },
-  setup() {
+  setup () {
     const router = useRouter();
     const versionList = ref({});
     const queryList = async () => {
@@ -79,29 +78,29 @@ export default ({
           if (index !== -1) {
             arr[index].list.push(item);
           } else {
-            arr.push({year, list: [item]});
+            arr.push({ year, list: [item] });
           }
-          
+
         });
         versionList.value = arr;
       }
     };
     onMounted(() => {
       queryList();
-    }); 
-    
-    const handleAddOrEdit  = (type, rowdata)=>{
+    });
+
+    const handleAddOrEdit = (type, rowdata) => {
       showAddOrUpdate.value = true;
       let data = null;
       if (type !== 'add') {
         data = {
-          versionId: rowdata.versionId, 
+          versionId: rowdata.versionId,
           alphaRangeDate: [rowdata.alphaStartDate, rowdata.alphaEndDate],
-          betaRangeDate: [rowdata.betaStartDate, rowdata.betaEndDate], 
-          releaseRangeDate: [rowdata.releaseStartDate, rowdata.releaseEndDate], 
+          betaRangeDate: [rowdata.betaStartDate, rowdata.betaEndDate],
+          releaseRangeDate: [rowdata.releaseStartDate, rowdata.releaseEndDate],
           versionName: rowdata.versionName,
-          alphaDetail: rowdata.alphaDetail, 
-          remark: rowdata.remark 
+          alphaDetail: rowdata.alphaDetail,
+          remark: rowdata.remark
         };
       }
       nextTick(() => {
@@ -122,10 +121,10 @@ export default ({
             queryList();
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     };
     const toDetail = (item) => {
-      router.push({name: 'planVersionDetail', query: {versionName: item.versionName}});
+      router.push({ name: 'planVersionDetail', query: { versionName: item.versionName } });
     };
     let showAddOrUpdate = ref(false);
     const addOrUpdateRef = ref();
@@ -142,99 +141,99 @@ export default ({
 });
 </script>
 <style lang="scss" scoped>
-.version-plan {
-  padding-left: 5px;
-  :deep(.el-card .el-card__body) {
-    position: relative;
-    padding-bottom: 10px;
+  .version-plan {
+    padding-left: 5px;
+    :deep(.el-card .el-card__body) {
+      position: relative;
+      padding-bottom: 10px;
+    }
+    :deep(.el-button + .el-button) {
+      margin-left: 12px;
+    }
   }
-  :deep(.el-button+.el-button) {
-    margin-left: 12px;
+  .bor-blue {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    border-top: 2px solid blue;
+    box-sizing: border-box;
   }
-}
-.bor-blue {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 20px;
-  border-top: 2px solid blue;
-  box-sizing: border-box;
-}
-.version-show{
-  display: flex;
-  align-items: center;
-  .el-icon :hover {
-    color: blue;
-    cursor: pointer;
-  }
-}
-h4 {
-  font-size: 100%;
-  margin: 0;
-  font-weight: normal;
-  vertical-align: baseline;
-}
-
-h4 {
-  font-size: 16px;
-  line-height: 30px;
-  display: inline;
-}
-p {
-  margin: 10px 0;
-}
-.version-edit-content{
-  display: flex;
-  flex-direction: column;
-  margin: 3px 0px;
-  align-items: center;
-}
-.version-header {
-  margin-bottom: 10px;
-}
-
-.version-info {
-  display: flex;
-  align-items: center;
-  .info-title {
-    width: 120px;
-    flex-shrink: 0;
-    text-align: right;
-    color: #666;
-    font-size: 14px;
-  }
-  .info-summary {
+  .version-show {
     display: flex;
     align-items: center;
-    width: calc(100% - 120px);
+    .el-icon :hover {
+      color: blue;
+      cursor: pointer;
+    }
+  }
+  h4 {
+    font-size: 100%;
+    margin: 0;
+    font-weight: normal;
+    vertical-align: baseline;
   }
 
-  &.version-detail {
-    color: blue;
-    font-size: 10px;
-    justify-content: flex-end;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-    cursor: pointer;
+  h4 {
+    font-size: 16px;
+    line-height: 30px;
+    display: inline;
   }
-}
-.version-plan {
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  .divider {
-    width: 100%;
-    height: 1px;
+  p {
     margin: 10px 0;
-    background-color: #f5f5f5;
   }
-  .btn-grounp {
+  .version-edit-content {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    margin: 3px 0px;
+    align-items: center;
   }
-  :deep(.el-col) {
-    margin-top: 10px;
+  .version-header {
+    margin-bottom: 10px;
   }
-}
+
+  .version-info {
+    display: flex;
+    align-items: center;
+    .info-title {
+      width: 120px;
+      flex-shrink: 0;
+      text-align: right;
+      color: #666;
+      font-size: 14px;
+    }
+    .info-summary {
+      display: flex;
+      align-items: center;
+      width: calc(100% - 120px);
+    }
+
+    &.version-detail {
+      color: blue;
+      font-size: 10px;
+      justify-content: flex-end;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+  }
+  .version-plan {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .divider {
+      width: 100%;
+      height: 1px;
+      margin: 10px 0;
+      background-color: #f5f5f5;
+    }
+    .btn-grounp {
+      display: flex;
+      justify-content: flex-end;
+    }
+    :deep(.el-col) {
+      margin-top: 10px;
+    }
+  }
 </style>
