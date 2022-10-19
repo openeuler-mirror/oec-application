@@ -1,15 +1,14 @@
 <template>
-  <el-dialog v-model="dialogVisible" :before-close="closeHandle" :close-on-click-modal="false" draggable
-    :title="type === 'add' ? '新增系统用户' : '修改系统用户'" width="40vw">
+  <el-dialog v-model="dialogVisible" :before-close="closeHandle" :close-on-click-modal="false" draggable :title="type === 'add' ? '新增系统用户' : '修改系统用户'" width="40vw">
     <el-form ref="formRef" :model="formData" :rules="rules" label-width="145px" status-icon>
       <el-form-item label="用户名" prop="username" style="width: 80%">
-        <el-input type="text" v-model="formData.username" placeholder="请输入用户名" :disabled="formData.role === 0"/>
+        <el-input type="text" v-model="formData.username" placeholder="请输入用户名" :disabled="formData.role === 0" />
       </el-form-item>
       <el-form-item label="密码" prop="password" style="width: 80%">
-        <el-input type="text" v-model="formData.password" placeholder="请输入密码"/>
+        <el-input type="text" v-model="formData.password" placeholder="请输入密码" />
       </el-form-item>
       <el-form-item label="确认密码" prop="rePassword" style="width: 80%">
-        <el-input type="text" v-model="formData.rePassword" placeholder="请再次输入密码"/>
+        <el-input type="text" v-model="formData.rePassword" placeholder="请再次输入密码" />
       </el-form-item>
       <el-form-item label="角色" prop="role" v-if="formData.role !== 0">
         <el-radio-group v-model="formData.role">
@@ -34,12 +33,12 @@ import { add, edit } from '@/common/api/sys/user';
 export default {
   name: 'sysUserAddOrUpdate',
   emits: ['refreshList'],
-  setup(_, {emit}) {
+  setup (_, { emit }) {
     let formData = ref({});
     const initForm = () => {
       formData.value = {
         id: undefined,
-        username: '', 
+        username: '',
         password: '',
         rePassword: '',
         role: 1
@@ -66,19 +65,19 @@ export default {
         { required: true, validator: validatePass, trigger: 'blur' }
       ]
     };
-   
+
     let dialogVisible = ref(false);
     let type = ref('add');
     const formRef = ref();
     const open = (recType, rowdata) => {
       type.value = recType;
       if (recType === 'add') {
-        initForm(); 
+        initForm();
       } else {
         formData.value = rowdata;
       }
       dialogVisible.value = true;
-    }; 
+    };
     const close = () => {
       dialogVisible.value = false;
     };
@@ -95,7 +94,7 @@ export default {
           } else {
             doEdit(formData.value);
           }
-        } 
+        }
       });
     };
     const doAdd = async (data) => {

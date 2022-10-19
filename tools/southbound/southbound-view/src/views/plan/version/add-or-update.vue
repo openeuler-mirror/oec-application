@@ -1,64 +1,33 @@
 <template>
-  <el-dialog v-model="dialogVisible" :before-close="closeHandle" :close-on-click-modal="false" draggable 
-    :title="type === 'add' ? '新增版本计划' : '修改版本计划'" width="40vw">
-    <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="150px"
-        status-icon
-    >
-        <el-form-item label="版本名称" prop="versionName" style="width: 80%">
-          <el-input v-model="form.versionName" placeholder="请填写版本名称" maxlength="50" show-word-limit/>
-        </el-form-item>
-        <el-form-item label="技术验证" prop="alphaRangeDate" style="width: 80%">
-          <el-date-picker
-            v-model="form.alphaRangeDate"
-            value-format="YYYY-MM-DD"
-            size="small"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-          />
-        </el-form-item>
-        <el-form-item label="技术验证说明" prop="alphaDetail" style="width: 90%">
-          <WangEditor v-model="form.alphaDetail" placeholder="请输入技术验证说明" :height="240"></WangEditor>
-        </el-form-item>
-        <el-form-item label="版本发布前" prop="betaRangeDate" style="width: 80%">
-          <el-date-picker
-            v-model="form.betaRangeDate"
-            value-format="YYYY-MM-DD"
-            size="small"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-          />
-        </el-form-item>
-        <el-form-item label="版本发布后" prop="releaseRangeDate" style="width: 80%">
-          <el-date-picker
-            v-model="form.releaseRangeDate"
-            value-format="YYYY-MM-DD"
-            size="small"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-          />
-        </el-form-item>        
-        <el-form-item style="width: 90%">
-          <div class="form-btn">
-            <el-button @click="cancelForm()">取 消</el-button>
-            <el-button type="primary" @click="submitForm(formRef)">确 定</el-button>
-          </div>
-        </el-form-item>
+  <el-dialog v-model="dialogVisible" :before-close="closeHandle" :close-on-click-modal="false" draggable :title="type === 'add' ? '新增版本计划' : '修改版本计划'" width="40vw">
+    <el-form ref="formRef" :model="form" :rules="rules" label-width="150px" status-icon>
+      <el-form-item label="版本名称" prop="versionName" style="width: 80%">
+        <el-input v-model="form.versionName" placeholder="请填写版本名称" maxlength="50" show-word-limit />
+      </el-form-item>
+      <el-form-item label="技术验证" prop="alphaRangeDate" style="width: 80%">
+        <el-date-picker v-model="form.alphaRangeDate" value-format="YYYY-MM-DD" size="small" type="daterange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" />
+      </el-form-item>
+      <el-form-item label="技术验证说明" prop="alphaDetail" style="width: 90%">
+        <WangEditor v-model="form.alphaDetail" placeholder="请输入技术验证说明" :height="240"></WangEditor>
+      </el-form-item>
+      <el-form-item label="版本发布前" prop="betaRangeDate" style="width: 80%">
+        <el-date-picker v-model="form.betaRangeDate" value-format="YYYY-MM-DD" size="small" type="daterange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" />
+      </el-form-item>
+      <el-form-item label="版本发布后" prop="releaseRangeDate" style="width: 80%">
+        <el-date-picker v-model="form.releaseRangeDate" value-format="YYYY-MM-DD" size="small" type="daterange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" />
+      </el-form-item>
+      <el-form-item style="width: 90%">
+        <div class="form-btn">
+          <el-button @click="cancelForm()">取 消</el-button>
+          <el-button type="primary" @click="submitForm(formRef)">确 定</el-button>
+        </div>
+      </el-form-item>
     </el-form>
   </el-dialog>
 </template>
 
 <script>
-import {  ref } from 'vue';
+import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { add, edit } from '@/common/api/versionPlan';
 import { isIncludeCh } from '@/common/utils';
@@ -66,14 +35,14 @@ import WangEditor from '@/components/WangEditor';
 
 export default {
   name: 'boardAddOrUpdate',
-  components:  {WangEditor },
+  components: { WangEditor },
   emits: ['refreshList', 'close'],
-  setup(_, {emit}) {
+  setup (_, { emit }) {
     let form = ref();
     const initForm = () => {
       form.value = {
         versionId: undefined,
-        versionName: '', 
+        versionName: '',
         alphaDetail: '',
         remark: '',
         alphaRangeDate: [],
@@ -118,18 +87,18 @@ export default {
       betaRangeDate: [
         { required: true, message: '请选择版本发布前阶段', trigger: 'blur' },
         { validator: validateBetaRangeDate, trigger: 'blur' }
-      ],  
+      ],
       releaseRangeDate: [
         { required: true, message: '请选择版本发布后阶段', trigger: 'blur' },
         { validator: validateReleaseRangeDate, trigger: 'blur' }
-      ]               
+      ]
     };
     let dialogVisible = ref(false);
     let type = ref('add');
     const open = (recType, rowdata) => {
       type.value = recType;
       if (recType !== 'add') {
-        form.value = {...rowdata};
+        form.value = { ...rowdata };
       } else {
         initForm();
       }
@@ -184,7 +153,7 @@ export default {
       emit('close');
       initForm();
     };
-   
+
     return {
       dialogVisible,
       form,
@@ -202,12 +171,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:deep(.el-button+.el-button) {
-  margin-left: 12px!important;
-}
-.form-btn {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
+  :deep(.el-button + .el-button) {
+    margin-left: 12px !important;
+  }
+  .form-btn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
 </style>

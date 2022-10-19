@@ -10,22 +10,22 @@ export default {
   props: {
     beta: {
       type: Array,
-      default: () => [0,0]
+      default: () => [0, 0]
     },
     release: {
       type: Array,
-      default: () => [0,0]
-    }  
+      default: () => [0, 0]
+    }
   },
-  setup() {
+  setup () {
     let myChart = null;
     let chartRef = ref('');
     const init = () => {
       myChart = echarts.init(chartRef.value);
       const option = {
         title: [
-          {text:'版本发布前',show: true, left: '17%', bottom: '5%'},
-          {text:'版本发布后',show: true, left: '63%', bottom: '5%'}
+          { text: '版本发布前', show: true, left: '17%', bottom: '5%' },
+          { text: '版本发布后', show: true, left: '63%', bottom: '5%' }
         ],
         grid: {
           left: '10%',
@@ -36,7 +36,7 @@ export default {
             label: {
               show: true,
               position: 'inside',
-              formatter(params) {
+              formatter (params) {
                 return `${params.name}\n(${params.percent}%)`;
               }
             },
@@ -54,7 +54,7 @@ export default {
             label: {
               show: true,
               position: 'inside',
-              formatter(params) {
+              formatter (params) {
                 return `${params.name}\n(${params.percent}%)`;
               }
             },
@@ -67,7 +67,7 @@ export default {
               borderRadius: 5
             },
             data: [
-            
+
             ]
           }
         ]
@@ -93,7 +93,7 @@ export default {
         ]
       });
     };
-  
+
     onMounted(() => {
       init();
       window.addEventListener('resize', () => {
@@ -101,12 +101,12 @@ export default {
           myChart.resize();
         }
       });
-    }); 
+    });
     onUnmounted(() => {
       if (myChart) {
         myChart.dispose();
       }
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', () => { });
     });
     return {
       chartRef,
@@ -117,7 +117,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chart-box {
-  height: 300px;
-}
+  .chart-box {
+    height: 300px;
+  }
 </style>
