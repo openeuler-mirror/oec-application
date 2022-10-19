@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.factory.ChipFactoryMapper">
+    <resultMap id="BaseResultMap" type="com.openeuler.southbound.model.factory.ChipFactory">
+        <id property="chipId" column="chip_id"/>
+        <result property="chipFactory" column="chip_factory"/>
+        <result property="chipModel" column="chip_model"/>
+        <result property="versionIds" column="versionIds"/>
+        <result property="versionNames" column="versionNames"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, chip_factory, chip_model, support_version
+    </sql>
+
+    <!-- 查询芯片厂商列表 -->
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT c.chip_id,c.chip_factory,c.chip_model,GROUP_CONCAT(v.version_id)
+        versionIds,GROUP_CONCAT(v.version_name) versionNames
+        FROM chip_factory c
+        LEFT JOIN chip_version cv ON c.chip_id=cv.chip_id
+        LEFT JOIN version_plan v ON v.version_id =cv.version_id
+        <where>
+            1 = 1
+            <if test="chipId != null and chipId != ''">
+                and c.chip_id = #{chipId}
+            </if>
+            <if test="chipFactory != null and chipFactory != ''">
+                and c.chip_factory = #{chipFactory}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (c.chip_model like concat('%', #{keyword}, '%')
+                OR v.version_name like concat('%', #{keyword}, '%'))
+            </if>
+        </where>
+        GROUP BY c.chip_id
+        ORDER BY c.create_time DESC
+    </select>
+
+    <!-- 往芯片厂商表添加数据芯片厂商 -->
+    <insert id="add" useGeneratedKeys="true" keyProperty="chipId"
+            parameterType="com.openeuler.southbound.model.factory.ChipFactory">
+        insert into chip_factory (chip_factory, chip_model, create_time)
+        values( #{chipFactory}, #{chipModel}, now())
+    </insert>
+
+    <!-- 往芯片厂商与版本关联表添加数据 -->
+    <insert id="addChipVersion" parameterType="com.openeuler.southbound.model.factory.ChipFactory">
+        insert into chip_version (chip_id, version_id) values
+        <foreach collection="versionIds.split(',')" item="item" index="index"  separator="," >
+            (#{chipId}, #{item})
+        </foreach>
+    </insert>
+
+    <!-- 修改芯片厂商 -->
+    <update id="update" parameterType="com.openeuler.southbound.model.factory.ChipFactory">
+        update chip_factory
+        <set>
+            <if test="chipFactory != null">
+                `chip_factory` = #{chipFactory,jdbcType=VARCHAR},
+            </if>
+            <if test="chipModel != null">
+                `chip_model` = #{chipModel,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where chip_id = #{chipId,jdbcType=INTEGER}
+    </update>
+
+    <!-- 删除芯片厂商 -->
+    <delete id="deleteByIds">
+        DELETE FROM chip_factory WHERE chip_id in
+        <foreach collection="ids.split(',')" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <!-- 删除芯片厂商与版本关表 -->
+    <delete id="deleteChipVersion">
+        DELETE FROM chip_version WHERE chip_id in
+        <foreach collection="ids.split(',')" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 查询芯片厂商名称列表 -->
+    <select id="queryNameList" resultType="String">
+        SELECT DISTINCT(chip_factory) FROM `chip_factory`
+    </select>
+
+    <!-- 查询芯片型号名称列表 -->
+    <select id="queryModelList" resultType="String">
+        SELECT DISTINCT(chip_model) chip_model FROM `chip_factory`
+    </select>
+
+    <!-- 查询芯片型号名称列表 -->
+    <select id="queryChipModelName" resultType="string">
+        SELECT DISTINCT(chip_model) FROM `chip_factory`
+        WHERE chip_factory = #{chip_factory}
+    </select>
+
+    <!--查询版本是否支持-->
+    <select id="queryVersionSupport" resultType="int">
+        SELECT COUNT(*) FROM `chip_factory` cf
+        INNER JOIN `chip_version` cv ON cv.chip_id = cf.chip_id
+        INNER JOIN `version_plan` vp ON vp.version_id = cv.version_id
+        <where>
+            <if test="chipModel != null">
+                cf.chip_model = #{chipModel}
+            </if>
+            <if test="versionName != null">
+                AND vp.version_name = #{versionName}
+            </if>
+        </where>
+    </select>
+
+    <select id="exportAllData" resultMap="BaseResultMap">
+        SELECT c.chip_id,c.chip_factory,c.chip_model,GROUP_CONCAT(v.version_id)
+        versionIds,GROUP_CONCAT(v.version_name) versionNames
+        FROM chip_factory c
+        LEFT JOIN chip_version cv ON c.chip_id=cv.chip_id
+        LEFT JOIN version_plan v ON v.version_id =cv.version_id
+        GROUP BY c.chip_id
+        ORDER BY c.create_time DESC
+    </select>
+</mapper>
