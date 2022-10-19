@@ -33,7 +33,7 @@ export default {
       type: Function
     }
   },
-  setup(props, ctx) {
+  setup (props, ctx) {
     watch(
       () => props.versionName,
       (newVal, oldVal) => {
@@ -104,12 +104,10 @@ export default {
             resObj.adapting.length
           ];
         }
-
         boardData[1].risk = res.data.betaTableStatus ? true : false;
         if (Array.isArray(res.data.releaseTables)) {
           let resObj = handleData(res.data.releaseTables);
           Object.assign(boardData[1], resObj);
-
           board.value.release = [
             resObj.adaptedList.length,
             resObj.adapting.length
@@ -165,8 +163,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chart-content {
-  margin: 0 auto;
-  width: 100%;
-}
+  .chart-content {
+    margin: 0 auto;
+    width: 100%;
+  }
 </style>

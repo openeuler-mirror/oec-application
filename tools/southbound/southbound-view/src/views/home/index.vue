@@ -75,29 +75,10 @@
       </el-col>
       <el-col :span="12" class="rightChart" v-loading="rightLoading">
         <div class="selectBox second">
-          <el-select
-            v-model="versionId"
-            placeholder="请选择"
-            multiple
-            collapse-tags
-            collapse-tags-tooltip
-            @change="getVersionChartData"
-            :multiple-limit="3"
-            style="width: 260px;margin-right: 10px;"
-          >
-            <el-option
-              v-for="item in versionList"
-              :key="item.id"
-              :label="item.versionName"
-              :value="item.versionId"
-            />
+          <el-select v-model="versionId" placeholder="请选择" multiple collapse-tags collapse-tags-tooltip @change="getVersionChartData" :multiple-limit="3" style="width: 260px;margin-right: 10px;">
+            <el-option v-for="item in versionList" :key="item.id" :label="item.versionName" :value="item.versionId" />
           </el-select>
-          <el-select
-            v-model="versionSelect"
-            placeholder="请选择"
-            @change="getVersionChartData"
-            style="width: 80px"
-          >
+          <el-select v-model="versionSelect" placeholder="请选择" @change="getVersionChartData" style="width: 80px">
             <el-option label="整机" :value="1" />
             <el-option label="板卡" :value="2" />
           </el-select>
@@ -128,7 +109,7 @@ import 'echarts-wordcloud';
 
 export default defineComponent({
   name: 'myHome',
-  setup() {
+  setup () {
     const router = useRouter();
     let homePieRef = ref();
     let homeBarRef = ref();
@@ -479,7 +460,7 @@ export default defineComponent({
       });
     });
     onUnmounted(() => {
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', () => { });
     });
     return {
       homePieRef,
@@ -502,108 +483,108 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-.home-container {
-  overflow: auto;
-  min-width: 700px;
-  .tooltipBox {
-    max-height: 200px;
-    overflow-y: auto;
-  }
-  .home-card-one {
-    height: 130px;
-    width: 100%;
+  .home-container {
+    overflow: auto;
+    min-width: 700px;
+    .tooltipBox {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .home-card-one {
+      height: 130px;
+      width: 100%;
 
-    .home-card-item {
-      .text {
-        width: 70%;
-        height: 100%;
-        color: #fff;
-        .font30 {
-          font-size: 30px;
-          margin-right: 5px;
-          display: inline-block;
+      .home-card-item {
+        .text {
+          width: 70%;
+          height: 100%;
+          color: #fff;
+          .font30 {
+            font-size: 30px;
+            margin-right: 5px;
+            display: inline-block;
+          }
+
+          .font16 {
+            font-size: 16px;
+            color: red;
+            flex: 1;
+          }
+
+          .info {
+            margin-top: 10px;
+          }
         }
 
-        .font16 {
-          font-size: 16px;
-          color: red;
-          flex: 1;
-        }
+        .myImg {
+          line-height: 100%;
 
-        .info {
-          margin-top: 10px;
+          img {
+            height: 35px;
+          }
         }
       }
+    }
 
-      .myImg {
-        line-height: 100%;
-
-        img {
-          height: 35px;
-        }
+    .home-card-two,
+    .home-card-three {
+      height: 500px;
+      width: 100%;
+    }
+    .leftChart,
+    .rightChart {
+      position: relative;
+      .selectBox {
+        width: 150px;
+        position: absolute;
+        top: 15px;
+        right: 50px;
+        z-index: 99;
+        display: flex;
+      }
+      .second {
+        width: 350px;
       }
     }
-  }
 
-  .home-card-two,
-  .home-card-three {
-    height: 500px;
-    width: 100%;
-  }
-  .leftChart,
-  .rightChart {
-    position: relative;
-    .selectBox {
-      width: 150px;
-      position: absolute;
-      top: 15px;
-      right: 50px;
-      z-index: 99;
-      display: flex;
+    #status {
+      width: 100%;
     }
-    .second {
-      width: 350px;
+
+    #online {
+      width: 100%;
     }
-  }
 
-  #status {
-    width: 100%;
-  }
-
-  #online {
-    width: 100%;
-  }
-
-  #ciyun {
-    height: 100%;
-    width: 90%;
-  }
-
-  #bar {
-    height: 400px;
-    width: 90%;
-  }
-
-  .home-card-one,
-  .home-card-two,
-  .home-card-three {
-    margin: 20px 0;
-    margin-top: 10px;
-
-    .home-card-item {
+    #ciyun {
       height: 100%;
-      padding: 20px;
-      display: flex;
-      border-radius: 4px;
-      border: 1px solid #c8c9cc;
-      background-color: white;
+      width: 90%;
+    }
 
-      box-sizing: border-box;
-      &:hover {
-        box-shadow: 5px 10px 10px gray;
-        transition: all ease 0.3s;
+    #bar {
+      height: 400px;
+      width: 90%;
+    }
+
+    .home-card-one,
+    .home-card-two,
+    .home-card-three {
+      margin: 20px 0;
+      margin-top: 10px;
+
+      .home-card-item {
+        height: 100%;
+        padding: 20px;
+        display: flex;
+        border-radius: 4px;
+        border: 1px solid #c8c9cc;
+        background-color: white;
+
+        box-sizing: border-box;
+        &:hover {
+          box-shadow: 5px 10px 10px gray;
+          transition: all ease 0.3s;
+        }
       }
     }
   }
-}
 </style>

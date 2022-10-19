@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-popover v-if="list.length > 0" :placement="placement" :width="270" trigger="hover"> 
+    <el-popover v-if="list.length > 0" :placement="placement" :width="270" trigger="hover">
       <template #default>
         <ul>
           <div class="ul-header" v-if="type === 'whole'">
@@ -41,23 +41,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-ul {
-  max-height: 240px;
-  overflow-y: auto;
-  position: relative;
-  padding-top: 0px;
-}
-.ul-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 30px;
-}
-li {
-  margin: 5px 0;
-}
-ul li:nth-of-type(1) {
-  margin-top: 25px;
-}
+  ul {
+    max-height: 240px;
+    overflow-y: auto;
+    position: relative;
+    padding-top: 0px;
+  }
+  .ul-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+  }
+  li {
+    margin: 5px 0;
+  }
+  ul li:nth-of-type(1) {
+    margin-top: 25px;
+  }
 </style>
