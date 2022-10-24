@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.overall.WholeOverallMapper">
+    <resultMap id="BaseResultMap" type="com.openeuler.southbound.model.overall.WholeOverall">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="whole_factory" jdbcType="VARCHAR" property="hardwareFactory"/>
+        <result column="cpu_factory" jdbcType="VARCHAR" property="cpuFactory"/>
+        <result column="cpu_model" jdbcType="VARCHAR" property="cpuModel"/>
+        <result column="hardware_model" jdbcType="VARCHAR" property="hardwareModel"/>
+        <result column="extend_model" jdbcType="VARCHAR" property="extendModel"/>
+        <result column="architecture" jdbcType="VARCHAR" property="architecture"/>
+        <result column="version_name" jdbcType="VARCHAR" property="versionName"/>
+        <result column="version_id" jdbcType="VARCHAR" property="versionId"/>
+        <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
+    </resultMap>
+
+    <!-- 查询全景整机列表 -->
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT wf.whole_factory, cf.cpu_factory, cf.cpu_model, wf.hardware_model, wf.extend_model,
+        cf.architecture, vp.version_name, vp.version_id, wf.create_time
+        FROM `whole_factory` wf
+        INNER JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id,
+        `version_plan` vp
+        <where>
+            <if test="versionId != null and versionId != ''">
+                vp.version_id IN
+                <foreach collection="versionId.split(',')" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="architecture != null and architecture != ''">
+                AND cf.architecture = #{architecture}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (wf.whole_factory LIKE CONCAT('%', #{keyword}, '%')
+                OR wf.hardware_model LIKE CONCAT('%', #{keyword}, '%')
+                OR wf.extend_model LIKE CONCAT('%', #{keyword}, '%')
+                OR cf.cpu_factory LIKE CONCAT('%', #{keyword}, '%')
+                OR cf.cpu_model LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY wf.create_time DESC
+    </select>
+
+    <!-- 查询全景整机列表典型机型是否适配 -->
+    <select id="queryHardwareModelStatus" resultType="int">
+        SELECT COUNT(*) FROM `whole_community`
+        <where>
+            1 = 1
+            and hardware_factory = #{hardwareFactory}
+            and hardware_model = #{hardwareModel}
+            and architecture = #{architecture}
+            and os_version = #{versionName}
+            and cpu = #{cpuModel}
+        </where>
+    </select>
+
+    <!-- 查询全景整机列表扩展机型是否适配 -->
+    <select id="queryExtendModelStatus" resultType="int">
+        SELECT COUNT(*) FROM `whole_community`
+        <where>
+            1 = 1
+            and hardware_factory = #{hardwareFactory}
+            and FIND_IN_SET(hardware_model, #{extendModel})
+            and architecture = #{architecture}
+            and os_version = #{versionName}
+            and cpu = #{cpuModel}
+        </where>
+    </select>
+
+    <!-- 查询全景整机列表版本是否在适配计划中 -->
+    <select id="queryHardwareModelStatusForPlan" resultType="int">
+        SELECT COUNT(*) FROM `whole_plan` wp
+        INNER JOIN `version_plan` vp ON wp.version_id = vp.version_id
+        WHERE wp.whole_factory = #{hardwareFactory}
+        AND vp.version_name = #{versionName}
+        AND FIND_IN_SET(#{hardwareModel}, wp.beta_list)
+        OR FIND_IN_SET(#{hardwareModel}, wp.release_list)
+    </select>
+
+    <!-- 查询全景整机列表版本是否在适配计划中 -->
+    <select id="exportAllData" resultMap="BaseResultMap">
+        SELECT wf.whole_factory, cf.cpu_factory, cf.cpu_model, wf.hardware_model, wf.extend_model,
+        cf.architecture, vp.version_name, vp.version_id, wf.create_time
+        FROM `whole_factory` wf
+        INNER JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id,
+        `version_plan` vp
+        ORDER BY wf.create_time DESC
+    </select>
+</mapper>
