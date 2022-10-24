@@ -48,11 +48,20 @@ public interface CommunityWholeMachineMapper {
     List<CommunityWholeMachineBean> selectAll();
 
     /**
-     * 查询认证时间数据
+     * 查询认证时间整机数据
      *
      * @param startTime 开始时间
      * @param endTime   结束时间
      * @return List
      */
-    CommunityWholeMachineBean selectAllByData(@Param("startTime") String startTime, @Param("endTime") String endTime);
+    List<String> selectAllWholeByData(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    /**
+     * 查询认证时间CPU数据
+     *
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return List
+     */
+    List<String> selectAllCpuByData(@Param("startTime") String startTime, @Param("endTime") String endTime);
 }

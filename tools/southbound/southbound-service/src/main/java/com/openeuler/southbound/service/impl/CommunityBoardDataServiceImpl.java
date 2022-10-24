@@ -45,8 +45,13 @@ public class CommunityBoardDataServiceImpl implements CommunityDataService<Commu
     }
 
     @Override
-    public CommunityBoardBean queryData(String startTime, String endTime) {
-        return communityBoardMapper.selectAllByData(startTime, endTime);
+    public JSONObject queryData(String startTime, String endTime) {
+        JSONObject jsonObject = new JSONObject();
+        List boardModelList = communityBoardMapper.selectAllBoardByData(startTime, endTime);
+        List chipModelList = communityBoardMapper.selectAllChipByData(startTime, endTime);
+        jsonObject.put("boardModel", boardModelList);
+        jsonObject.put("chipModel", chipModelList);
+        return jsonObject;
     }
 
     @Override

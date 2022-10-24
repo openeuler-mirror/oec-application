@@ -45,8 +45,13 @@ public class CommunityWholeDataServiceImpl implements CommunityDataService<Commu
     }
 
     @Override
-    public CommunityWholeMachineBean queryData(String startTime, String endTime) {
-        return communityWholeMachineMapper.selectAllByData(startTime, endTime);
+    public JSONObject queryData(String startTime, String endTime) {
+        JSONObject jsonObject = new JSONObject();
+        List hardwareModelList = communityWholeMachineMapper.selectAllWholeByData(startTime, endTime);
+        List cpuList = communityWholeMachineMapper.selectAllCpuByData(startTime, endTime);
+        jsonObject.put("cpu", cpuList);
+        jsonObject.put("hardwareModel", hardwareModelList);
+        return jsonObject;
     }
 
     @Override
