@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.log.BusinessLogMapper">
+    <!--  增加-->
+    <insert id="insert" parameterType="com.openeuler.southbound.model.log.BusinessLog">
+        insert into business_log(
+        user_name, operation, host, date_time,
+        result,detail
+        )
+        values(
+        #{userName}, #{operation}, #{host}, #{dateTime},
+        #{result}, #{detail}
+        )
+    </insert>
+    <!--    查询-->
+    <select id="queryAll" resultType="com.openeuler.southbound.model.log.BusinessLog">
+        select * from business_log
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                user_name LIKE concat('%', #{keyword}, '%')
+                OR operation LIKE concat('%', #{keyword}, '%')
+                OR detail LIKE concat('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY date_time DESC
+    </select>
+</mapper>
