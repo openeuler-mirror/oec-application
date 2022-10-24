@@ -154,29 +154,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.filter-area-right {
-  margin-left: auto;
-  .el-form-item {
-    margin-right: 10px;
+  .filter-area-right {
+    margin-left: auto;
+    .el-form-item {
+      margin-right: 10px;
+    }
   }
-}
-.table-main-circle {
-  position: relative;
-  display: inline-block;
-  width: 100px;
-  text-align: left;
-}
-.table-main-circle::before {
-  content: '';
-  position: absolute;
-  left: -16px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: inline-block;
-  background-color: var(--circleBgc);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: 12px;
-}
+  .table-main-circle {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+  }
+  .table-main-circle::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+    background-color: var(--circleBgc);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
 </style>

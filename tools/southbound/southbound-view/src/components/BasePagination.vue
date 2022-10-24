@@ -1,19 +1,10 @@
 <template>
-  <el-pagination
-    :currentPage="currentPage"
-    :page-size="pageSize"
-    :page-sizes="pageSizes"
-    :background="background"
-    :layout="layout"
-    :total="total"
-    @size-change="handleSizeChange"
-    @current-change="handleCurrentChange"
-  />
+  <el-pagination :currentPage="currentPage" :page-size="pageSize" :page-sizes="pageSizes" :background="background" :layout="layout" :total="total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
-export default defineComponent({
+import { reactive, toRefs } from 'vue';
+export default {
   name: 'base-pagination',
   emits: ['change'],
   props: {
@@ -42,7 +33,7 @@ export default defineComponent({
       default: 0
     }
   },
-  setup(props, ctx) {
+  setup (props, ctx) {
     let pageInfo = reactive({
       currentPage: props.currentPage,
       pageSize: props.pageSize
@@ -55,6 +46,7 @@ export default defineComponent({
         pageSize: pageInfo.pageSize
       });
     };
+
     const handleCurrentChange = e => {
       pageInfo.currentPage = e;
       ctx.emit('change', {
@@ -62,11 +54,12 @@ export default defineComponent({
         pageSize: pageInfo.pageSize
       });
     };
+
     return {
       ...toRefs(pageInfo),
       handleSizeChange,
       handleCurrentChange
     };
   }
-});
+};
 </script>
