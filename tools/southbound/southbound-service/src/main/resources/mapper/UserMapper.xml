@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.openeuler.southbound.model.SouthBoundUser">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="role" property="role"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 查询是否第一次登录-->
+    <select id="getAdminStatus" resultType="int">
+        SELECT COUNT(*) FROM `south_user` where username= 'admin'
+    </select>
+    <!-- 设置管理员密码 -->
+    <insert id="addAdmin">
+        insert into `south_user` (username, password, role, create_time)
+        values('admin', #{password}, '0', now())
+    </insert>
+    <!-- 通过用户名查询用户 -->
+    <select id="findByUserName" resultType="com.openeuler.southbound.model.SouthBoundUser">
+        SELECT * FROM `south_user` where username= #{username}
+    </select>
+    <!-- 查询所有用户-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT * FROM `south_user`
+        <where>
+            <if test="role != null and role != ''">
+                role = #{role}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND username like concat('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY role,create_time DESC
+    </select>
+    <!-- 添加用户 -->
+    <insert id="addUser" parameterType="com.openeuler.southbound.model.SouthBoundUser">
+        insert into `south_user` (username, password, role, create_time)
+        values(#{username}, #{password}, #{role}, now())
+    </insert>
+    <!-- 修改用户 -->
+    <update id="updateUser" parameterType="com.openeuler.southbound.model.SouthBoundUser">
+        update `south_user`
+        <set>
+            <if test="username != null">
+                `username` = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                `password` = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                `role` = #{role,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <!-- 删除用户 -->
+    <delete id="deleteUserByIds">
+        DELETE FROM `south_user` WHERE id in
+        <foreach collection="ids.split(',')" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="password">
+        update `south_user`
+        <set>
+            <if test="newPassword != null">
+                `password` = #{newPassword,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where username = #{username,jdbcType=INTEGER} and `password` = #{oldPassword,jdbcType=VARCHAR}
+    </update>
+
+</mapper>
