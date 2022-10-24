@@ -49,6 +49,7 @@ public class DriverManageController {
      * @return 查询结果
      */
     @GetMapping("/queryAll")
+    @Log(operation = "QueryAll DriverManage", detail = "QueryAll data of driver-manage.")
     public ResponseBean queryAll(DriverManage driverManage) {
         return ResponseBean.success(driverManageService.queryAll(driverManage));
     }
@@ -60,6 +61,7 @@ public class DriverManageController {
      * @return 新增结果
      */
     @PostMapping("/add")
+    @Log(operation = "Add DriverManage", detail = "Add one item of driver-manage.")
     public ResponseBean add(@RequestBody DriverManage driverManage) {
         int count = driverManageService.add(driverManage);
         if (count > 0) {
@@ -75,6 +77,7 @@ public class DriverManageController {
      * @return 修改结果
      */
     @PutMapping("/update")
+    @Log(operation = "Update DriverManage", detail = "Update one item of driver-manage.")
     public ResponseBean update(@RequestBody DriverManage driverManage) {
         int count = driverManageService.update(driverManage);
         if (count > 0) {
@@ -90,6 +93,7 @@ public class DriverManageController {
      * @return 删除结果
      */
     @DeleteMapping("/delete")
+    @Log(operation = "Delete DriverManage", detail = "Delete items of driver-manage by id arr.")
     public ResponseBean deleteByIds(String ids) {
         int count = driverManageService.deleteByIds(ids);
         if (count > 0) {
@@ -137,6 +141,7 @@ public class DriverManageController {
      * @return ResponseBean
      */
     @PostMapping("/excel/upload")
+    @Log(operation = "Import DriverManage", detail = "Upload file and import data to driver-manage.")
     public ResponseBean upload(@RequestParam(value = "file") MultipartFile file) {
         return driverManageService.uploadDriverFactoryExcel(file);
     }
@@ -146,8 +151,8 @@ public class DriverManageController {
      *
      * @return ResponseBean
      */
-    @Log(operation = "export driverManage", detail = "export all driver manager data")
     @GetMapping("/export")
+    @Log(operation = "Export DriverManage", detail = "Export all driver-manage data.")
     public ResponseBean exportAllData() {
         return ResponseBean.success(driverManageService.exportAllData());
     }

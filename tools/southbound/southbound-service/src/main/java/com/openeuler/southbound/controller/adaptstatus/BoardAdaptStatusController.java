@@ -40,8 +40,8 @@ public class BoardAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/chip-factory")
-    @Log(operation = "query board adaptation",
-            detail = "query the adaptation status according to the server-factory")
+    @Log(operation = "Query Board Adaptation",
+            detail = "Query the adaptation status according to the server-factory.")
     public ResponseBean chipFactory(String versionName) {
         if (versionName == null) {
             return ResponseBean.error(ResCode.HTTP_400_BAD_REQUEST.value(), "versionName is null!");
@@ -56,8 +56,8 @@ public class BoardAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/chip-model")
-    @Log(operation = "query board adaptation",
-            detail = "query the adaptation status according to the chip-model")
+    @Log(operation = "Query Board Adaptation",
+            detail = "Query the adaptation status according to the chip-model.")
     public ResponseBean cpuFactory(String versionName) {
         return ResponseBean.success(boardAdaptStatusService.getStatisticFromChipModel(versionName));
     }
@@ -69,8 +69,8 @@ public class BoardAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/board-type")
-    @Log(operation = "query board adaptation",
-            detail = "query the adaptation status according to the board-type")
+    @Log(operation = "Query Board Adaptation",
+            detail = "Query the adaptation status according to the board-type.")
     public ResponseBean cpuModel(String versionName) {
         return ResponseBean.success(boardAdaptStatusService.getStatisticFromBoardType(versionName));
     }
@@ -81,8 +81,8 @@ public class BoardAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/os-version")
-    @Log(operation = "query board adaptation",
-            detail = "query the adaptation status according to the os-version")
+    @Log(operation = "Query Board Adaptation",
+            detail = "Query the adaptation status according to the os-version.")
     public ResponseBean osVersion() {
         return ResponseBean.success(boardAdaptStatusService.getStatisticFromOsVersion());
     }
@@ -94,8 +94,8 @@ public class BoardAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/architecture")
-    @Log(operation = "query board adaptation",
-            detail = "query the adaptation status according to the architecture")
+    @Log(operation = "Query Board Adaptation",
+            detail = "Query the adaptation status according to the architecture.")
     public ResponseBean architecture(String versionName) {
         return ResponseBean.success(boardAdaptStatusService.getStatisticFromOsArch(versionName));
     }

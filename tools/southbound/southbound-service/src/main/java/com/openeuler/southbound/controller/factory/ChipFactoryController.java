@@ -18,6 +18,7 @@ import com.openeuler.southbound.model.ResponseBean;
 import com.openeuler.southbound.model.factory.ChipFactory;
 import com.openeuler.southbound.model.overall.BoardOverall;
 import com.openeuler.southbound.service.factory.ChipFactoryService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,6 +50,7 @@ public class ChipFactoryController {
      * @return 查询结果
      */
     @GetMapping("/queryAll")
+    @Log(operation = "QueryAllChipFactory", detail = "QueryAll data of chip-factory.")
     public ResponseBean queryAll(ChipFactory chipFactory) {
         return ResponseBean.success(chipFactoryService.queryAll(chipFactory));
     }
@@ -60,6 +62,7 @@ public class ChipFactoryController {
      * @return 新增结果
      */
     @PostMapping("/add")
+    @Log(operation = "Add ChipFactory", detail = "Add one item of chip-factory.")
     public ResponseBean add(@RequestBody ChipFactory chipFactory) {
         int count = chipFactoryService.add(chipFactory);
         if (count > 0) {
@@ -75,6 +78,7 @@ public class ChipFactoryController {
      * @return 修改结果
      */
     @PutMapping("/update")
+    @Log(operation = "Update ChipFactory", detail = "Update one item of chip-factory.")
     public ResponseBean update(@RequestBody ChipFactory chipFactory) {
         int count = chipFactoryService.update(chipFactory);
         if (count > 0) {
@@ -90,6 +94,7 @@ public class ChipFactoryController {
      * @return 删除结果
      */
     @DeleteMapping("/delete")
+    @Log(operation = "Delete ChipFactory", detail = "Delete items of chip-factory by id arr.")
     public ResponseBean deleteByIds(String ids) {
         int count = chipFactoryService.deleteByIds(ids);
         if (count > 0) {
@@ -147,6 +152,7 @@ public class ChipFactoryController {
      * @return ResponseBean
      */
     @PostMapping("/excel/upload")
+    @Log(operation = "Import ChipFactory", detail = "Upload file and import data to chip-factory.")
     public ResponseBean upload(@RequestParam(value = "file") MultipartFile file) {
         return chipFactoryService.uploadChipFactoryExcel(file);
     }
@@ -156,8 +162,8 @@ public class ChipFactoryController {
      *
      * @return ResponseBean
      */
-    @Log(operation = "export chipFactory", detail = "export all chip factory data")
     @GetMapping("/export")
+    @Log(operation = "Export ChipFactory", detail = "Export all chip-factory data.")
     public ResponseBean exportAllData() {
         return ResponseBean.success(chipFactoryService.exportAllData());
     }

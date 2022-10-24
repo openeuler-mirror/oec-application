@@ -12,10 +12,9 @@
 
 package com.openeuler.southbound.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.openeuler.southbound.common.content.MessageContent;
 import com.openeuler.southbound.model.ResponseBean;
-import com.openeuler.southbound.model.community.CommunityBoardBean;
-import com.openeuler.southbound.model.community.CommunityWholeMachineBean;
 import com.openeuler.southbound.service.impl.CommunityBoardDataServiceImpl;
 import com.openeuler.southbound.service.impl.CommunityWholeDataServiceImpl;
 
@@ -43,14 +42,14 @@ public class CommunityStatisticController {
      * 从整机统计兼容性清单中认证日期查询
      *
      * @param startTime 开始时间
-     * @param endTime 结束时间
-     * @return  List
+     * @param endTime   结束时间
+     * @return List
      */
     @GetMapping("/whole")
     public ResponseBean statisticByWhole(String startTime, String endTime) {
-        CommunityWholeMachineBean list = communityWholeDataService.queryData(startTime, endTime);
-        if (list != null) {
-            return ResponseBean.success(list);
+        JSONObject jsonObject = communityWholeDataService.queryData(startTime, endTime);
+        if (jsonObject != null) {
+            return ResponseBean.success(jsonObject);
         }
         return ResponseBean.success(MessageContent.SUCCESS_QUERY);
     }
@@ -59,14 +58,14 @@ public class CommunityStatisticController {
      * 从板卡统计兼容性清单中认证日期查询
      *
      * @param startTime 开始时间
-     * @param endTime 结束时间
-     * @return  List
+     * @param endTime   结束时间
+     * @return List
      */
     @GetMapping("/board")
     public ResponseBean statisticByBoard(String startTime, String endTime) {
-        CommunityBoardBean list = communityBoardDataService.queryData(startTime, endTime);
-        if (list != null) {
-            return ResponseBean.success(list);
+        JSONObject jsonObject = communityBoardDataService.queryData(startTime, endTime);
+        if (jsonObject != null) {
+            return ResponseBean.success(jsonObject);
         }
         return ResponseBean.success(MessageContent.SUCCESS_QUERY);
     }

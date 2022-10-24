@@ -49,7 +49,7 @@ public class BoardFactoryController {
      * @return 查询结果
      */
     @GetMapping("/queryAll")
-    @Log(operation = "QueryAll BoardFactory", detail = "QueryAll data of board-factory")
+    @Log(operation = "QueryAll BoardFactory", detail = "QueryAll data of board-factory.")
     public ResponseBean queryAll(BoardFactory boardFactory) {
         return ResponseBean.success(boardFactoryService.queryAll(boardFactory));
     }
@@ -61,7 +61,7 @@ public class BoardFactoryController {
      * @return 新增结果
      */
     @PostMapping("/add")
-    @Log(operation = "Add BoardFactory", detail = "add one item of board-factory")
+    @Log(operation = "Add BoardFactory", detail = "Add one item of board-factory.")
     public ResponseBean add(@RequestBody BoardFactory boardFactory) {
         int count = boardFactoryService.add(boardFactory);
         if (count > 0) {
@@ -77,7 +77,7 @@ public class BoardFactoryController {
      * @return 修改结果
      */
     @PutMapping("/update")
-    @Log(operation = "Update BoardFactory", detail = "update one item of board-factory")
+    @Log(operation = "Update BoardFactory", detail = "Update one item of board-factory.")
     public ResponseBean update(@RequestBody BoardFactory boardFactory) {
         int count = boardFactoryService.update(boardFactory);
         if (count > 0) {
@@ -93,7 +93,7 @@ public class BoardFactoryController {
      * @return 删除结果
      */
     @DeleteMapping("/delete")
-    @Log(operation = "Delete BoardFactory", detail = "delete items of board-factory by id arr")
+    @Log(operation = "Delete BoardFactory", detail = "Delete items of board-factory by id arr.")
     public ResponseBean deleteByIds(String ids) {
         int count = boardFactoryService.deleteByIds(ids);
         if (count > 0) {
@@ -109,7 +109,7 @@ public class BoardFactoryController {
      * @return 查询结果
      */
     @GetMapping("/queryModels")
-    @Log(operation = "Query In BoardFactory", detail = "query typical and extend models of board-factory")
+    @Log(operation = "Query In BoardFactory", detail = "Query typical and extend models of board-factory.")
     public ResponseBean queryModelList(BoardFactory boardFactory) {
         return ResponseBean.success(boardFactoryService.queryModelList(boardFactory));
     }
@@ -120,7 +120,7 @@ public class BoardFactoryController {
      * @return ResponseBean
      */
     @GetMapping("/queryChipFactory")
-    @Log(operation = "Query In BoardFactory", detail = "query chip factory of board-factory")
+    @Log(operation = "Query In BoardFactory", detail = "Query chip factory of board-factory.")
     public ResponseBean queryChipFactory() {
         return ResponseBean.success(boardFactoryService.queryChipFactory());
     }
@@ -133,7 +133,7 @@ public class BoardFactoryController {
      * @return ResponseBean
      */
     @GetMapping("/queryChipModel")
-    @Log(operation = "Query In BoardFactory", detail = "query chip model of board-factory")
+    @Log(operation = "Query In BoardFactory", detail = "Query chip model of board-factory.")
     public ResponseBean queryChipModel(String chipFactory, String boardType) {
         return ResponseBean.success(boardFactoryService.queryChipModel(chipFactory, boardType));
     }
@@ -145,7 +145,7 @@ public class BoardFactoryController {
      * @return ResponseBean
      */
     @GetMapping("/queryBoardType")
-    @Log(operation = "Query In BoardFactory", detail = "query board type of board-factory")
+    @Log(operation = "Query In BoardFactory", detail = "Query board type of board-factory.")
     public ResponseBean queryBoardType(BoardFactory boardFactory) {
         return ResponseBean.success(boardFactoryService.queryBoardType(boardFactory));
     }
@@ -157,7 +157,7 @@ public class BoardFactoryController {
      * @return ResponseBean
      */
     @PostMapping("/excel/upload")
-    @Log(operation = "Import BoardFactory", detail = "upload file and import data to board-factory")
+    @Log(operation = "Import BoardFactory", detail = "Upload file and import data to board-factory.")
     public ResponseBean upload(@RequestParam(value = "file") MultipartFile file) {
         return boardFactoryService.uploadBoardFactoryExcel(file);
     }
@@ -167,8 +167,8 @@ public class BoardFactoryController {
      *
      * @return ResponseBean
      */
-    @Log(operation = "export boardFactory", detail = "export all board factory data")
     @GetMapping("/export")
+    @Log(operation = "Export BoardFactory", detail = "Export all board-factory data.")
     public ResponseBean exportAllData() {
         return ResponseBean.success(boardFactoryService.exportAllData());
     }
