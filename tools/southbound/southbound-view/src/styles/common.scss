@@ -1,231 +1,230 @@
 .ma-10 {
-    margin: 10px;
+  margin: 10px;
 }
 
 .ma-20 {
-    margin: 20px;
+  margin: 20px;
 }
 
 .mt-10 {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .mt-20 {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .mb-10 {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .mb-20 {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .ml-10 {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .ml-20 {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .mr-10 {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .mr-20 {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 .d-flex {
-    display: flex;
+  display: flex;
 }
 
 .flex-column {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .align-items-center {
-    align-items: center;
+  align-items: center;
 }
 
 .align-items-start {
-    align-items: flex-start;
+  align-items: flex-start;
 }
 
 .align-items-end {
-    align-items: flex-end;
+  align-items: flex-end;
 }
 
 // 页面中头部的样式
 .filter-area {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 
-    .filter-area-right,
-    .filter-area-left {
-        display: flex;
-    }
+  .filter-area-right,
+  .filter-area-left {
+    display: flex;
+  }
 }
 
 // 删除确认提示框中的 icon 图表颜色
 .el-message-box__status.el-message-box-icon--info {
-    color: #409eff !important;
+  color: #409eff !important;
 }
 
 // 限制表格的高度
 .card-warpper {
-    height: calc(100% - 56px);
+  height: calc(100% - 56px);
 
-    .el-card {
-        height: 100%;
-    }
+  .el-card {
+    height: 100%;
+  }
 
-    .el-card__body {
-        height: calc(100% - 40px);
-    }
+  .el-card__body {
+    height: calc(100% - 40px);
+  }
 
-    .table-main {
-        height: calc(100% - 90px);
-    }
+  .table-main {
+    height: calc(100% - 90px);
+  }
 }
 
 .pagination-block {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-// 文本不换行，超出省略号显示
+// 文本不换号，超出省略号显示
 .noWarp {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 // 自定义 popover 样式
 .el-popper.is-dark {
-    color: #606266 !important;
+  color: #606266 !important;
+  background: #fff !important;
+  border-color: #e4e7ed !important;
+
+  .el-popper__arrow::before {
     background: #fff !important;
     border-color: #e4e7ed !important;
-
-    .el-popper__arrow::before {
-        background: #fff !important;
-        border-color: #e4e7ed !important;
-    }
+  }
 }
 
 // 自定义操作按钮popover样式
 .customBounced {
-    width: 60px !important;
+  width: 60px !important;
 
-    .el-button {
-        margin-left: 0;
-        margin-bottom: 10px;
-    }
+  .el-button {
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
 
-    .el-button:last-of-type {
-        margin-bottom: 0;
-    }
+  .el-button:last-of-type {
+    margin-bottom: 0;
+  }
 }
 
 .el-popper {
-    min-width: 0 !important;
+  min-width: 0 !important;
 }
 
 .text-red {
-    color: red;
+  color: red;
 }
 
 .text-blue {
-    text-decoration: underline;
-    color: blue;
-    cursor: pointer;
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
 }
 
 // 重写富文本的样式
 .rich-wrapper {
-    p {
-        margin: 15px 0;
-    }
+  p {
+    margin: 15px 0;
+  }
 
-    a {
-        text-decoration: underline;
-        color: -webkit-link;
-    }
+  a {
+    text-decoration: underline;
+    color: -webkit-link;
+  }
 
-    ul,
-    ol {
-        padding-left: 20px;
-    }
+  ul,
+  ol {
+    padding-left: 20px;
+  }
 
-    li {
-        margin: 10px 0;
-    }
+  li {
+    margin: 10px 0;
+  }
 
-    table th {
-        background-color: #f5f2f0;
-        font-weight: 700;
-        text-align: center;
-        border: 1px solid #ccc;
-        line-height: 1.5;
-        min-width: 30px;
-        padding: 3px 5px;
-    }
+  table th {
+    background-color: #f5f2f0;
+    font-weight: 700;
+    text-align: center;
+    border: 1px solid #ccc;
+    line-height: 1.5;
+    min-width: 30px;
+    padding: 3px 5px;
+  }
 
-    table td {
-        border: 1px solid #ccc;
-        line-height: 1.5;
-        min-width: 30px;
-        padding: 3px 5px;
-    }
+  table td {
+    border: 1px solid #ccc;
+    line-height: 1.5;
+    min-width: 30px;
+    padding: 3px 5px;
+  }
 }
 
 .el-button--success {
-    background-color: #67c23a !important;
-    border-color: #67c23a !important;
+  background-color: #67c23a !important;
+  border-color: #67c23a !important;
 }
 
 .el-button--success:hover {
-    background-color: #95d475 !important;
-    border-color: #95d475 !important;
+  background-color: #95d475 !important;
+  border-color: #95d475 !important;
 }
 
 .el-button--danger:not(.is-disabled) {
-    background-color: #f56c6c !important;
-    border-color: #f56c6c !important;
+  background-color: #f56c6c !important;
+  border-color: #f56c6c !important;
 }
 
 .el-button--danger:not(.is-disabled):hover {
-    background-color: #f89898 !important;
-    border-color: #f89898 !important;
+  background-color: #f89898 !important;
+  border-color: #f89898 !important;
 }
 
-
 .el-button--primary {
-    background-color: #409eff !important;
-    border-color: #409eff !important;
+  background-color: #409eff !important;
+  border-color: #409eff !important;
 }
 
 .el-button--primary:hover {
-    background-color: #79bbff !important;
-    border-color: #79bbff !important;
+  background-color: #79bbff !important;
+  border-color: #79bbff !important;
 }
 
 .el-button--info {
-    background-color: #909399 !important;
-    border-color: #909399 !important;
+  background-color: #909399 !important;
+  border-color: #909399 !important;
 }
 
 .custom-btn {
-    background-color: #7030a0 !important;
-    border-color: #7030a0 !important;
+  background-color: #7030a0 !important;
+  border-color: #7030a0 !important;
 }
 
 .custom-btn:hover {
-    background-color: #8968a3 !important;
-    border-color: #8968a3 !important;
+  background-color: #8968a3 !important;
+  border-color: #8968a3 !important;
 }

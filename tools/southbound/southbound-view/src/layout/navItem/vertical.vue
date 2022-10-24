@@ -1,7 +1,6 @@
 <template>
   <div class="menu-container">
-    <el-menu router active-text-color="rgb(97, 112, 204)" background-color="#fff"
-      :default-active="defaultActive" text-color="#777">
+    <el-menu router active-text-color="rgb(97, 112, 204)" background-color="#fff" :default-active="defaultActive" text-color="#777">
       <div v-for="val in filterMenu.values" :key="val.path">
         <el-sub-menu v-if="val.children" :index="val.path">
           <template #title>
@@ -33,12 +32,12 @@ import { useRoute } from 'vue-router';
 export default defineComponent({
   name: 'myVertical',
   props: ['menuShow'],
-  setup(props) {
+  setup (props) {
     let defaultActive = ref('/home');
     const route = useRoute();
     watch(() => route.path, (newVal) => {
       defaultActive.value = newVal;
-    }, {immediate:true});
+    }, { immediate: true });
     const propsData = reactive(props);
     const menu = propsData.menuShow;
     const filterMenu = reactive([]);
@@ -67,16 +66,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.menu-container {
-  width: 200px;
-}
-.el-menu-item:hover {
-  background-color: rgb(233, 237, 250);
-}
-.el-menu-item {
-  padding-left: 35px!important;
-}
-.index {
-  margin-left: -14px!important;
-}
+  .menu-container {
+    width: 200px;
+  }
+  .el-menu-item:hover {
+    background-color: rgb(233, 237, 250);
+  }
+  .el-menu-item {
+    padding-left: 35px !important;
+  }
+  .index {
+    margin-left: -14px !important;
+  }
 </style>
