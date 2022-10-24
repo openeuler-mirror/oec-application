@@ -14,10 +14,11 @@ package com.openeuler.southbound.controller.factory;
 
 import com.openeuler.southbound.common.content.MessageContent;
 import com.openeuler.southbound.config.aop.Log;
-import com.openeuler.southbound.model.ResponseBean;
 import com.openeuler.southbound.model.factory.CpuFactory;
 import com.openeuler.southbound.model.overall.WholeOverall;
+import com.openeuler.southbound.model.ResponseBean;
 import com.openeuler.southbound.service.factory.CpuFactoryService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -50,6 +51,7 @@ public class CpuFactoryController {
      * @return 查询结果
      */
     @GetMapping("/queryAll")
+    @Log(operation = "QueryAll CpuFactory", detail = "QueryAll data of cpu-factory.")
     public ResponseBean queryAll(CpuFactory cpuFactory) {
         return ResponseBean.success(cpuFactoryService.queryAll(cpuFactory));
     }
@@ -61,6 +63,7 @@ public class CpuFactoryController {
      * @return 新增结果
      */
     @PostMapping("/add")
+    @Log(operation = "Add CpuFactory", detail = "Add one item of cpu-factory.")
     public ResponseBean add(@RequestBody CpuFactory cpuFactory) {
         int addCount = cpuFactoryService.add(cpuFactory);
         if (addCount > 0) {
@@ -76,6 +79,7 @@ public class CpuFactoryController {
      * @return 修改结果
      */
     @PutMapping("/update")
+    @Log(operation = "Update CpuFactory", detail = "Update one item of cpu-factory.")
     public ResponseBean update(@RequestBody CpuFactory cpuFactory) {
         if (StringUtils.isEmpty(cpuFactory.getVersionIds())) {
             return ResponseBean.error("versionIds not be null");
@@ -94,6 +98,7 @@ public class CpuFactoryController {
      * @return 删除结果
      */
     @DeleteMapping("/delete")
+    @Log(operation = "Delete CpuFactory", detail = "Delete items of cpu-factory by id arr.")
     public ResponseBean deleteByIds(String ids) {
         int deleteCount = cpuFactoryService.deleteByIds(ids);
         if (deleteCount > 0) {
@@ -161,6 +166,7 @@ public class CpuFactoryController {
      * @return ResponseBean
      */
     @PostMapping("/excel/upload")
+    @Log(operation = "Import CpuFactory", detail = "Upload file and import data to cpu-factory.")
     public ResponseBean upload(@RequestParam(value = "file") MultipartFile file) {
         return cpuFactoryService.uploadCpuFactoryExcel(file);
     }
@@ -170,8 +176,8 @@ public class CpuFactoryController {
      *
      * @return ResponseBean
      */
-    @Log(operation = "export cpuFactory", detail = "export all cpu factory data")
     @GetMapping("/export")
+    @Log(operation = "Export CpuFactory", detail = "Export all cpu factory data.")
     public ResponseBean exportAllData() {
         return ResponseBean.success(cpuFactoryService.exportAllData());
     }

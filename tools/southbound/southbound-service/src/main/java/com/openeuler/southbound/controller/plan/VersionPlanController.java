@@ -17,6 +17,7 @@ import com.openeuler.southbound.config.aop.Log;
 import com.openeuler.southbound.model.ResponseBean;
 import com.openeuler.southbound.model.plan.VersionPlan;
 import com.openeuler.southbound.service.plan.VersionPlanService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,7 +47,7 @@ public class VersionPlanController {
      * @return ResponseBean ResponseBean
      */
     @GetMapping("/queryAll")
-    @Log(operation = "query versionPlan", detail = "query all data of version plan")
+    @Log(operation = "Query VersionPlan", detail = "Query all data of version-plan.")
     public ResponseBean queryAll(VersionPlan releasePlan) {
         return ResponseBean.success(releasePlanService.queryAll(releasePlan));
     }
@@ -58,7 +59,7 @@ public class VersionPlanController {
      * @return ResponseBean ResponseBean
      */
     @PostMapping("/add")
-    @Log(operation = "add versionPlan", detail = "add data of version plan")
+    @Log(operation = "Add VersionPlan", detail = "Add data of version-plan.")
     public ResponseBean add(@RequestBody VersionPlan releasePlan) {
         int addCount = releasePlanService.add(releasePlan);
         if (addCount > 0) {
@@ -74,7 +75,7 @@ public class VersionPlanController {
      * @return ResponseBean ResponseBean
      */
     @PutMapping("/update")
-    @Log(operation = "update versionPlan", detail = "update data of version plan")
+    @Log(operation = "Update VersionPlan", detail = "Update data of version-plan.")
     public ResponseBean update(@RequestBody VersionPlan releasePlan) {
         int updateCount = releasePlanService.update(releasePlan);
         if (updateCount > 0) {
@@ -90,7 +91,7 @@ public class VersionPlanController {
      * @return ResponseBean ResponseBean
      */
     @DeleteMapping("/delete")
-    @Log(operation = "delete versionPlan", detail = "delete data of version plan")
+    @Log(operation = "Delete VersionPlan", detail = "Delete data of version-plan.")
     public ResponseBean deleteById(String versionId) {
         int deleteCount = releasePlanService.deleteById(versionId);
         if (deleteCount > 0) {

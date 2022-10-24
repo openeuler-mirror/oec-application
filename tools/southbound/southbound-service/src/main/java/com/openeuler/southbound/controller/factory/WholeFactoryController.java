@@ -49,6 +49,7 @@ public class WholeFactoryController {
      * @return 查询结果
      */
     @GetMapping("/queryAll")
+    @Log(operation = "QueryAll CpuFactory", detail = "QueryAll data of whole-factory.")
     public ResponseBean queryAll(WholeFactory wholeFactory) {
         return ResponseBean.success(wholeFactoryService.queryAll(wholeFactory));
     }
@@ -60,6 +61,7 @@ public class WholeFactoryController {
      * @return 新增结果
      */
     @PostMapping("/add")
+    @Log(operation = "Add Whole[Factory", detail = "Add one item of whole-factory.")
     public ResponseBean add(@RequestBody WholeFactory wholeFactory) {
         int count = wholeFactoryService.add(wholeFactory);
         if (count > 0) {
@@ -75,6 +77,7 @@ public class WholeFactoryController {
      * @return 修改结果
      */
     @PutMapping("/update")
+    @Log(operation = "Update WholeFactory", detail = "Update one item of whole-factory.")
     public ResponseBean update(@RequestBody WholeFactory wholeFactory) {
         int count = wholeFactoryService.update(wholeFactory);
         if (count > 0) {
@@ -86,10 +89,11 @@ public class WholeFactoryController {
     /**
      * 批量删除
      *
-     * @param ids id 数组字符串，用‘，’隔开，前后没有中括号
+     * @param ids id数组
      * @return 删除结果
      */
     @DeleteMapping("/delete")
+    @Log(operation = "Delete WholeFactory", detail = "Delete items of whole-factory by id arr.")
     public ResponseBean batchDeleteByIds(String ids) {
         int count = wholeFactoryService.deleteByIds(ids);
         if (count > 0) {
@@ -149,6 +153,7 @@ public class WholeFactoryController {
      * @return ResponseBean
      */
     @PostMapping("/excel/upload")
+    @Log(operation = "Import WholeFactory", detail = "Upload file and import data to whole-factory.")
     public ResponseBean upload(@RequestParam(value = "file") MultipartFile file) {
         return wholeFactoryService.uploadWholeFactoryExcel(file);
     }
@@ -158,8 +163,8 @@ public class WholeFactoryController {
      *
      * @return ResponseBean
      */
-    @Log(operation = "export wholeFactory", detail = "export all whole factory data")
     @GetMapping("/export")
+    @Log(operation = "Export WholeFactory", detail = "Export all whole-factory data.")
     public ResponseBean exportAllData() {
         return ResponseBean.success(wholeFactoryService.exportAllData());
     }

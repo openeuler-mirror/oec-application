@@ -41,8 +41,8 @@ public class WholeAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/whole-factory")
-    @Log(operation = "query wholeMachine adaptation",
-            detail = "query the adaptation status according to the server-manufacturer")
+    @Log(operation = "Query WholeMachine Adaptation",
+            detail = "Query the adaptation status according to the server-manufacturer.")
     public ResponseBean wholeFactory(String versionName) {
         List<WholeAdaptStatusResp> statisticFromWholeFactory =
                 wholeAdaptStatusService.getStatisticFromWholeFactory(versionName);
@@ -56,8 +56,8 @@ public class WholeAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/cpu-factory")
-    @Log(operation = "query wholeMachine adaptation",
-            detail = "query the adaptation status according to the cpu-manufacturer")
+    @Log(operation = "Query WholeMachine Adaptation",
+            detail = "Query the adaptation status according to the cpu-manufacturer.")
     public ResponseBean cpuFactory(String versionName) {
         return ResponseBean.success(wholeAdaptStatusService.getStatisticFromCpuFactory(versionName));
     }
@@ -69,8 +69,8 @@ public class WholeAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/cpu-model")
-    @Log(operation = "query wholeMachine adaptation",
-            detail = "query the adaptation status according to the cpu-model")
+    @Log(operation = "Query WholeMachine Adaptation",
+            detail = "Query the adaptation status according to the cpu-model.")
     public ResponseBean cpuModel(String versionName) {
         return ResponseBean.success(wholeAdaptStatusService.getStatisticFromCpuModel(versionName));
     }
@@ -81,8 +81,8 @@ public class WholeAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/os-version")
-    @Log(operation = "query wholeMachine adaptation",
-            detail = "query the adaptation status according to the os-version")
+    @Log(operation = "Query WholeMachine Adaptation",
+            detail = "Query the adaptation status according to the os-version.")
     public ResponseBean osVersion() {
         return ResponseBean.success(wholeAdaptStatusService.getStatisticFromOsVersion());
     }
@@ -94,8 +94,8 @@ public class WholeAdaptStatusController {
      * @return ResponseBean
      */
     @GetMapping("/architecture")
-    @Log(operation = "query wholeMachine adaptation",
-            detail = "query the adaptation status according to the architecture")
+    @Log(operation = "Query WholeMachine Adaptation",
+            detail = "Query the adaptation status according to the architecture.")
     public ResponseBean architecture(String versionName) {
         return ResponseBean.success(wholeAdaptStatusService.getStatisticFromOsArch(versionName));
     }
