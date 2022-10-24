@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.plan.BoardPlanMapper">
+    <resultMap id="BaseResultMap" type="com.openeuler.southbound.model.plan.BoardPlan">
+        <id property="id" column="id"/>
+        <result property="chipFactory" column="chip_factory"/>
+        <result property="driverName" column="driver_name"/>
+        <result property="driverVersion" column="driver_version"/>
+        <result property="architecture" column="architecture"/>
+        <result property="betaList" column="beta_list"/>
+        <result property="releaseList" column="release_list"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="versionId" column="version_id"/>
+        <result property="versionName" column="version_name"/>
+    </resultMap>
+
+    <!-- 查询板卡计划列表 -->
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT bp.*, vp.version_id,vp.version_name FROM board_plan bp
+        LEFT JOIN version_plan vp
+        ON bp.version_id = vp.version_id
+        <where>
+            1 = 1
+            <!-- 根据操作系统查找,操作系统可能传递多个 -->
+            <if test="versionId != null and versionId != ''">
+                and bp.version_id IN
+                <foreach collection="versionId.split(',')" item="item" index="index" open="(" separator="," close=")">
+                    #{item,jdbcType=VARCHAR}
+                </foreach>
+            </if>
+            <!-- 根据关键字keyword查找 -->
+            <if test="keyword != null and keyword != ''">
+                and (bp.chip_factory like concat('%', #{keyword}, '%')
+                or LOCATE(#{keyword},bp.beta_list)
+                or LOCATE(#{keyword},bp.release_list))
+            </if>
+            order by bp.create_time desc
+        </where>
+    </select>
+
+    <!-- 增加板卡计划 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.openeuler.southbound.model.plan.BoardPlan">
+        insert into `board_plan` (
+        chip_factory,version_id,beta_list, release_list, remark, create_time) values
+        (#{chipFactory},#{versionId},#{betaList}, #{releaseList}, #{remark}, now())
+    </insert>
+
+    <!-- 修改板卡计划 -->
+    <update id="update" parameterType="com.openeuler.southbound.model.plan.BoardPlan">
+        update `board_plan`
+        <set>
+            <if test="chipFactory != null">
+                `chip_factory` = #{chipFactory,jdbcType=VARCHAR},
+            </if>
+            <if test="versionId != null">
+                `version_id` = #{versionId,jdbcType=VARCHAR},
+            </if>
+            <if test="betaList != null">
+                `beta_list` = #{betaList,jdbcType=VARCHAR},
+            </if>
+            <if test="releaseList != null">
+                `release_list` = #{releaseList,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                `remark` = #{remark,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 批量删除板卡计划 -->
+    <delete id="deleteByIds">
+        DELETE FROM `board_plan` WHERE id IN
+        <foreach collection="ids.split(',')" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 查询型号X86适配数量 -->
+    <select id="queryModelListCountByX86" resultType="Integer">
+        SELECT COUNT(*) count FROM (
+        SELECT * FROM `board_community`
+        <where>
+            1 = 1
+            <if test="chipFactory != null and chipFactory != ''">
+                AND chip_vendor = #{chipFactory}
+            </if>
+            <if test="chipModel != null and chipModel != ''">
+                AND chip_model = #{chipModel}
+            </if>
+            and FIND_IN_SET(board_model ,#{modelList})
+            and `os` = #{versionName,jdbcType=VARCHAR}
+
+        </where>
+        ) temp WHERE temp.architecture ='x86_64' GROUP BY board_model
+    </select>
+
+    <!-- 查询型号aarch64适配数量 -->
+    <select id="queryModelListCountByArm64" resultType="Integer">
+        SELECT COUNT(*) count FROM (
+        SELECT * FROM `board_community`
+        <where>
+            1 = 1
+            <if test="chipFactory != null and chipFactory != ''">
+                AND chip_vendor = #{chipFactory}
+            </if>
+            <if test="chipModel != null and chipModel != ''">
+                AND chip_model = #{chipModel}
+            </if>
+            and FIND_IN_SET(board_model ,#{modelList})
+            and `os` = #{versionName,jdbcType=VARCHAR}
+        </where>
+        ) temp WHERE temp.architecture ='aarch64' GROUP BY board_model
+    </select>
+
+    <!-- 查询板卡计划适配表格 -->
+    <select id="queryModelTables"
+            resultMap="com.openeuler.southbound.mapper.factory.BoardFactoryMapper.BaseResultMap">
+        SELECT bf.*,cf.chip_factory,cf.chip_model FROM board_factory bf
+        LEFT JOIN chip_factory cf ON bf.chip_id = cf.chip_id
+        LEFT JOIN chip_version cv ON bf.chip_id=cv.chip_id
+        LEFT JOIN version_plan vp ON vp.version_id =cv.version_id
+        WHERE cf.chip_factory=#{chipFactory}
+        AND vp.version_name = #{versionName}
+        AND (FIND_IN_SET(#{model},bf.typical_board_model) OR FIND_IN_SET(#{model},bf.extend_board_model))
+    </select>
+
+    <!-- 根据版本名称查询beta、release阶段机型 -->
+    <select id="queryBetaModelList" resultType="java.lang.String">
+        SELECT DISTINCT(bp.beta_list) AS beta_list
+        FROM `board_plan` bp LEFT JOIN `version_plan` vp ON bp.version_id = vp.version_id
+        where vp.version_name = #{versionName}
+    </select>
+    <select id="queryReleaseModelList" resultType="java.lang.String">
+        SELECT DISTINCT(bp.release_list) AS release_list
+        FROM `board_plan` bp LEFT JOIN `version_plan` vp ON bp.version_id = vp.version_id
+        where vp.version_name = #{versionName}
+    </select>
+
+    <select id="queryBoardPlanList" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM `board_plan`
+        <where>
+            1 = 1
+            <if test="chipFactory != null and chipFactory != ''">
+                AND chip_factory = #{chipFactory}
+            </if>
+            <if test="driverName != null and driverName != ''">
+                AND driver_name = #{driverName}
+            </if>
+            <if test="driverVersion != null and driverVersion != ''">
+                AND driver_version = #{driverVersion}
+            </if>
+            <if test="versionName != null and versionName != ''">
+                AND version_name = #{versionName}
+            </if>
+            order by create_time desc
+        </where>
+    </select>
+
+    <select id="queryVersionModelList"
+            resultType="com.openeuler.southbound.model.plan.BoardPlan">
+        SELECT GROUP_CONCAT(DISTINCT(bp.beta_list)) AS beta_list,
+        GROUP_CONCAT(DISTINCT(bp.release_list)) AS release_list,vp.version_name
+        FROM `board_plan` bp LEFT JOIN `version_plan` vp
+        ON bp.version_id = vp.version_id
+        <where>
+            <if test="versionId != null">
+                FIND_IN_SET(vp.version_id, #{versionId})
+            </if>
+            <if test="versionName != null and versionId == null">
+                FIND_IN_SET(vp.version_name, #{versionName})
+            </if>
+        </where>
+        GROUP BY vp.version_name
+    </select>
+
+    <select id="exportAllData" resultMap="BaseResultMap">
+        SELECT bp.*, vp.version_id,vp.version_name
+        FROM board_plan bp
+        LEFT JOIN version_plan vp ON bp.version_id = vp.version_id
+        ORDER BY bp.create_time DESC
+    </select>
+</mapper>
