@@ -153,12 +153,12 @@ export default {
     const queryCommunityWholeData = async (startTime, endTime) => {
       let res = await Promise.all([getCommunityWholeData(), getCommunityWholeData(startTime, endTime)]);
       if (res[0].code === 200) {
-        total.cpuModelCount = handleStr(res[0].data.cpu).length;
-        total.wholeModelCount = handleStr(res[0].data.hardwareModel).length;
+        total.cpuModelCount = res[0].data.cpu.length;
+        total.wholeModelCount = res[0].data.hardwareModel.length;
       }
       if (res[1].code === 200) {
-        totalList.cpuModel = handleStr(res[1].data.cpu);
-        totalList.wholeModel = handleStr(res[1].data.hardwareModel);
+        totalList.cpuModel = res[1].data.cpu;
+        totalList.wholeModel = res[1].data.hardwareModel;
         cardObj.cpuModelCount = totalList.cpuModel.length;
         cardObj.wholeModelCount = totalList.wholeModel.length;
       }
@@ -166,22 +166,16 @@ export default {
     const queryCommunityBoardData = async (startTime, endTime) => {
       let res = await Promise.all([getCommunityBoardData(), getCommunityBoardData(startTime, endTime)]);
       if (res[0].code === 200) {
-        total.boardModelCount = handleStr(res[0].data.boardModel).length;
-        total.chipModelCount = handleStr(res[0].data.chipModel).length;
+        total.boardModelCount = res[0].data.boardModel.length;
+        total.chipModelCount = res[0].data.chipModel.length;
       }
       if (res[1].code === 200) {
-        totalList.boardModel = handleStr(res[1].data.boardModel);
-        totalList.chipModel = handleStr(res[1].data.chipModel);
+        totalList.boardModel = res[1].data.boardModel;
+        totalList.chipModel = res[1].data.chipModel;
         cardObj.boardModelCount = totalList.boardModel.length;
         cardObj.chipModelCount = totalList.chipModel.length;
       }
       loading.value = false;
-    };
-    const handleStr = (modelStr) => {
-      if (!modelStr) {
-        return [];
-      }
-      return modelStr.split(',').filter(item => item);
     };
     let pieChart = null;
     let chartRef = ref();

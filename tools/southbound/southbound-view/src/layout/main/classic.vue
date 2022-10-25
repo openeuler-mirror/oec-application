@@ -7,7 +7,7 @@
       <el-container>
         <elAside />
         <el-container class="main-wrapper">
-          <TagsView/>
+          <TagsView />
           <el-main class="layout-main">
             <elMain />
           </el-main>
@@ -26,26 +26,26 @@ import NavHeader from '@/layout/navBars/header.vue';
 export default defineComponent({
   name: 'layoutClassic',
   components: { elAside, elMain, TagsView, NavHeader },
-  setup() {
+  setup () {
     return {};
   }
 });
 </script>
 
 <style lang="scss" scoped>
-.layout-container {
-  width: 100%;
-  height: 100%;
-  background-color: #f8f8f8;
-}
-.main-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 60px);
-  padding: 10px;
-  box-sizing: border-box;
-}
-.layout-main {
-  height: calc(100% - 56px);
-}
+  .layout-container {
+    width: 100%;
+    height: 100%;
+    background-color: #f8f8f8;
+  }
+  .main-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  .layout-main {
+    height: calc(100% - 56px);
+  }
 </style>

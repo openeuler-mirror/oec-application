@@ -17,41 +17,37 @@
         </template>
       </el-dropdown>
     </div>
-    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :before-close="closeHandle"
-      draggable title="修改密码" width="40vw">
+    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :before-close="closeHandle" draggable title="修改密码" width="40vw">
       <el-form ref="formRef" :model="formData" :rules="rules" label-width="145px" status-icon>
         <el-form-item label="用户名" prop="username" style="width: 80%">
-          <el-input type="text" v-model="formData.username" disabled placeholder="请输入用户名"/>
+          <el-input type="text" v-model="formData.username" disabled placeholder="请输入用户名" />
         </el-form-item>
         <el-form-item label="旧密码" prop="oldPassword" style="width: 80%">
-          <el-input :type="isShowOldPassword ? 'text' : 'password'" v-model="formData.oldPassword"
-            a autocomplete="password" placeholder="请输入旧密码">
+          <el-input :type="isShowOldPassword ? 'text' : 'password'" v-model="formData.oldPassword" a autocomplete="password" placeholder="请输入旧密码">
             <template #suffix>
               <el-icon @click="isShowOldPassword = !isShowOldPassword">
-                <View v-if="isShowOldPassword"/>
-                <Hide v-else/>
+                <View v-if="isShowOldPassword" />
+                <Hide v-else />
               </el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="newPassword" style="width: 80%">
-          <el-input :type="isShowNewPassword ? 'text' : 'password'" v-model="formData.newPassword"
-            placeholder="请输入新密码">
+          <el-input :type="isShowNewPassword ? 'text' : 'password'" v-model="formData.newPassword" placeholder="请输入新密码">
             <template #suffix>
               <el-icon @click="isShowNewPassword = !isShowNewPassword">
-                <View v-if="isShowNewPassword"/>
-                <Hide v-else/>
+                <View v-if="isShowNewPassword" />
+                <Hide v-else />
               </el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label="确认新密码" prop="reNewPassword" style="width: 80%">
-          <el-input :type="isShowReNewPassword ? 'text' : 'password'" v-model="formData.reNewPassword"
-            placeholder="请再次输入新密码">
+          <el-input :type="isShowReNewPassword ? 'text' : 'password'" v-model="formData.reNewPassword" placeholder="请再次输入新密码">
             <template #suffix>
               <el-icon @click="isShowReNewPassword = !isShowReNewPassword">
-                <View v-if="isShowReNewPassword"/>
-                <Hide v-else/>
+                <View v-if="isShowReNewPassword" />
+                <Hide v-else />
               </el-icon>
             </template>
           </el-input>
@@ -69,14 +65,14 @@
 
 <script>
 import { ref, markRaw, reactive, toRefs } from 'vue';
-import { useStore }  from 'vuex';
-import { ElMessageBox, ElMessage }  from 'element-plus';
+import { useStore } from 'vuex';
+import { ElMessageBox, ElMessage } from 'element-plus';
 import { WarningFilled } from '@element-plus/icons-vue';
-import { modifyPassword, logout} from '@/common/api/login'; 
+import { modifyPassword, logout } from '@/common/api/login';
 import router from '../../router';
 export default {
   name: 'navHeader',
-  setup() {
+  setup () {
     const store = useStore();
     const formData = ref({});
     const initForm = () => {
@@ -178,38 +174,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header {
-  position: absolute;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 60px;
-  padding: 0 50px;
-  background-color: rgb(51, 56, 84);
-  color: #fff;
-  .panel-name {
-    font-size: 20px;
-    letter-spacing: 2px;
-  }
-  .el-dropdown-link {
-    color: #fff;
-    cursor: pointer;
+  .header {
+    position: absolute;
+    left: 0;
+    right: 0;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    & > span {
-      margin-right: 3px;
+    height: 60px;
+    padding: 0 50px;
+    background-color: rgb(51, 56, 84);
+    color: #fff;
+    .panel-name {
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+    .el-dropdown-link {
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      & > span {
+        margin-right: 3px;
+      }
+    }
+    .dropdown-link {
+      position: relative;
+      top: 2px;
     }
   }
-  .dropdown-link {
-    position: relative;
-    top: 2px;
+  .form-btn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
   }
-}
-.form-btn {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
 </style>

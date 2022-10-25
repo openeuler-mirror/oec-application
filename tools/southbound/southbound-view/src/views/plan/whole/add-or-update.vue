@@ -81,10 +81,8 @@ export default {
     let dialogVisible = ref(false);
     let type = ref('add');
     const formRef = ref();
-
     let wholeFactoryOptions = ref([]);
     let versionOptions = ref([]);
-
     // 查询整机厂商
     const quertWholeFactoryOptions = async () => {
       let res = await queryFactoryNames();
@@ -116,7 +114,6 @@ export default {
         return;
       }
       queryVersionOptionsByFactory(formData.value.wholeFactory);
-
     };
     const versionChange = (versionId) => {
       formData.value.betaList = [];
@@ -158,9 +155,7 @@ export default {
       if (type === 'factoryChanage') {
         typeFilterOptions.value.betaOptions = [
           { label: '典型机型', options: hardwareModelList },
-          {
-            label: '扩展机型', options: extendModelList
-          }
+          { label: '扩展机型', options: extendModelList }
         ];
         typeFilterOptions.value.releaseOptions = [
           { label: '典型机型', options: hardwareModelList },

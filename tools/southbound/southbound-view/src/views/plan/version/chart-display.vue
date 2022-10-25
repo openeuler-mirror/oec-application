@@ -66,9 +66,7 @@ export default {
             itemStyle: {
               borderRadius: 5
             },
-            data: [
-
-            ]
+            data: []
           }
         ]
       };
