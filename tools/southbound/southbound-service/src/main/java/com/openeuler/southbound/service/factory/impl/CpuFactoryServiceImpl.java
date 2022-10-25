@@ -106,7 +106,7 @@ public class CpuFactoryServiceImpl implements CpuFactoryService {
 
     @Override
     public List<String> queryArchitectureList() {
-        return cpuFactoryMapper.selectArchitecture();
+        return cpuFactoryMapper.queryArchitectureList();
     }
 
 

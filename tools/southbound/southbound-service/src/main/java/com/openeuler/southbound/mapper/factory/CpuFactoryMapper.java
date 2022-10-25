@@ -101,7 +101,7 @@ public interface CpuFactoryMapper {
      *
      * @return 架构
      */
-    List<String> selectArchitecture();
+    List<String> queryArchitectureList();
 
     /**
      * 查看版本是否支持

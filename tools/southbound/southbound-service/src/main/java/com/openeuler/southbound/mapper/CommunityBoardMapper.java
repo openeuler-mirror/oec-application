@@ -48,11 +48,20 @@ public interface CommunityBoardMapper {
     List<CommunityBoardBean> selectAll();
 
     /**
-     * 查询认证时间数据
+     * 查询认证时间板卡型号数据
      *
      * @param startTime 开始时间
      * @param endTime   结束时间
      * @return List
      */
-    CommunityBoardBean selectAllByData(@Param("startTime") String startTime, @Param("endTime") String endTime);
+    List<String> selectAllBoardByData(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    /**
+     * 查询认证时间芯片型号数据
+     *
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return List
+     */
+    List<String> selectAllChipByData(@Param("startTime") String startTime, @Param("endTime") String endTime);
 }

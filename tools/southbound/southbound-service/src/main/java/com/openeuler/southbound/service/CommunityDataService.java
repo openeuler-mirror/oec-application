@@ -12,6 +12,8 @@
 
 package com.openeuler.southbound.service;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +43,5 @@ public interface CommunityDataService<T> {
      * @param endTime   结束时间
      * @return 数组
      */
-    T queryData(String startTime, String endTime);
+    JSONObject queryData(String startTime, String endTime);
 }
