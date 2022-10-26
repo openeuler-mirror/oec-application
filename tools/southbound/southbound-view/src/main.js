@@ -4,12 +4,11 @@ import App from './App.vue';
 import store from './store/index';
 import router from './router/index';
 import installElementPlus from './plugins/element';
-import i18n from '@/i18n/index';
 import './styles/index.scss';
 import '@wangeditor/editor/dist/css/style.css';
 
 const app = createApp(App);
-app.use(store).use(router).use(i18n);
+app.use(store).use(router);
 installElementPlus(app);
 app.config.globalProperties.$hasAuth = (e) => {
   let role = store.state.userInfoModule.userInfo.role;
