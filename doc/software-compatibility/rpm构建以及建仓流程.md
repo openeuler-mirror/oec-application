@@ -70,10 +70,10 @@ type: public
 
 PR合入之后会在合入的commit下面给出构建测试结果，以及安装测试结果，以及软件包上传到目标内部测试仓库**testing_repo**中,如果测试结果成功，第二天会更新至**oepkgs_reop**中(注：oepkgs仓库每日零点定时更新，测试结果中只是给出预计要存放的oepkgs仓库地址)：
 
-![输入图片说明](commit1image.png)
-![输入图片说明](commit2image.png)
-![输入图片说明](testrtimage.png)
-![输入图片说明](testrt2image.png)
+![输入图片说明](./dist/commit1image.png)
+![输入图片说明](./dist/commit2image.png)
+![输入图片说明](./dist/testrtimage.png)
+![输入图片说明](./dist/testrt2image.png)
 
 -------------------------------------------
 **接下来的动作都是基于compass-ci构建系统自动完成，属于原理解析，无需用户操作，但如果你想更加清楚的了解软件包构建进展，可继续阅读。**
