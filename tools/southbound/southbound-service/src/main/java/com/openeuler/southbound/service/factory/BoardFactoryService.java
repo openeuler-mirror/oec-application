@@ -68,7 +68,7 @@ public interface BoardFactoryService {
      * @param boardFactory 板卡厂商
      * @return 查询结果
      */
-    Map<String, String> queryModelList(BoardFactory boardFactory);
+    Map<String, List<String>> queryModelList(BoardFactory boardFactory);
 
     /**
      * 查询板卡厂商表中芯片厂商列表

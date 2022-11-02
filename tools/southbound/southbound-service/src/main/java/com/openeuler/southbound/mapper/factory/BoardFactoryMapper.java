@@ -64,7 +64,15 @@ public interface BoardFactoryMapper {
      * @param boardFactory 板卡厂商
      * @return int
      */
-    BoardFactory queryModelList(BoardFactory boardFactory);
+    List<String> queryTypicalModelList(BoardFactory boardFactory);
+
+    /**
+     * 查询板卡型号
+     *
+     * @param boardFactory 板卡厂商
+     * @return int
+     */
+    List<String> queryExtendModelList(BoardFactory boardFactory);
 
     /**
      * 查询芯片厂商

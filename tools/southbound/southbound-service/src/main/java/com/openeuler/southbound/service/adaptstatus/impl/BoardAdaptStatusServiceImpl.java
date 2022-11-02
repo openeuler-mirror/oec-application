@@ -21,6 +21,7 @@ import com.openeuler.southbound.service.adaptstatus.BoardAdaptStatusService;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,8 +59,7 @@ public class BoardAdaptStatusServiceImpl implements BoardAdaptStatusService {
         // 根据厂商筛选，获得统计数据
         factoryNames.forEach(factoryNameItem -> {
             // 所有芯片厂商为 factoryNameItem 的板卡
-            List<BoardFactory> boards = adaptStatusMapper.selectByChipFactory(factoryNameItem);
-            boards.forEach(item -> item.setVersionName(versionName));
+            List<BoardFactory> boards = adaptStatusMapper.selectByChipFactory(factoryNameItem, versionName);
             BoardAdaptStatusResp resp = statisticHandle(boards);
             resp.setChipFactory(factoryNameItem);
             resultList.add(resp);
@@ -201,8 +201,7 @@ public class BoardAdaptStatusServiceImpl implements BoardAdaptStatusService {
         // 根据芯片型号筛选，获得统计数据
         chipModels.forEach(chipModelItem -> {
             // 所有芯片型号为chipModelItem的板卡
-            List<BoardFactory> boards = adaptStatusMapper.selectByChipModel(chipModelItem);
-            boards.forEach(item -> item.setVersionName(versionName));
+            List<BoardFactory> boards = adaptStatusMapper.selectByChipModel(chipModelItem, versionName);
             BoardAdaptStatusResp resp = statisticHandle(boards);
             resp.setChipModel(chipModelItem);
             resultList.add(resp);
@@ -218,8 +217,7 @@ public class BoardAdaptStatusServiceImpl implements BoardAdaptStatusService {
         // 根据板卡类型筛选,获得统计数据
         allBoardType.forEach(boardTypeItem -> {
             // 所有板卡类型为boardTypeItem的板卡
-            List<BoardFactory> boards = adaptStatusMapper.selectByBoardType(boardTypeItem);
-            boards.forEach(item -> item.setVersionName(versionName));
+            List<BoardFactory> boards = adaptStatusMapper.selectByBoardType(boardTypeItem, versionName);
             BoardAdaptStatusResp resp = statisticHandle(boards);
             resp.setBoardType(boardTypeItem);
             resultList.add(resp);
@@ -235,8 +233,7 @@ public class BoardAdaptStatusServiceImpl implements BoardAdaptStatusService {
         // 根据系统版本筛选，获得统计数据
         allVersionName.forEach(versionItem -> {
             // 所有系统版本为 versionItem 的板卡
-            List<BoardFactory> boards = adaptStatusMapper.selectAllBoardFromBoardFactory();
-            boards.forEach(item -> item.setVersionName(versionItem));
+            List<BoardFactory> boards = adaptStatusMapper.selectAllBoardFromBoardFactory(versionItem);
             BoardAdaptStatusResp resp = statisticHandle(boards);
             resp.setOsVersion(versionItem);
             resultList.add(resp);
@@ -251,10 +248,9 @@ public class BoardAdaptStatusServiceImpl implements BoardAdaptStatusService {
         List<String> allArch = cpuFactoryMapper.queryArchitectureList();
         // 根据架构筛选，获得统计数据
         allArch.forEach(architecture -> {
-            List<BoardFactory> boards = adaptStatusMapper.selectAllBoardFromBoardFactory();
+            List<BoardFactory> boards = adaptStatusMapper.selectAllBoardFromBoardFactory(versionName);
             boards.forEach(item -> {
                 item.setArchitecture(architecture);
-                item.setVersionName(versionName);
             });
             BoardAdaptStatusResp resp = statisticHandle(boards);
             resp.setOsArch(architecture);
