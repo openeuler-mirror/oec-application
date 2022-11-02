@@ -12,11 +12,12 @@
 
 package com.openeuler.southbound.mapper.factory;
 
-import com.openeuler.southbound.model.factory.ChipFactory;
 import com.openeuler.southbound.model.overall.BoardOverall;
-import org.apache.ibatis.annotations.Mapper;
+import com.openeuler.southbound.model.factory.ChipFactory;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 芯片厂商表的操作接口

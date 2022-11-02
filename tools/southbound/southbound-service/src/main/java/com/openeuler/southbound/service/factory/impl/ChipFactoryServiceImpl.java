@@ -12,16 +12,22 @@
 
 package com.openeuler.southbound.service.factory.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.openeuler.southbound.common.content.MessageContent;
 import com.openeuler.southbound.mapper.factory.ChipFactoryMapper;
 import com.openeuler.southbound.mapper.plan.VersionPlanMapper;
 import com.openeuler.southbound.model.ResponseBean;
-import com.openeuler.southbound.model.factory.ChipFactory;
 import com.openeuler.southbound.model.overall.BoardOverall;
+import com.openeuler.southbound.model.factory.ChipFactory;
 import com.openeuler.southbound.service.factory.ChipFactoryService;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -33,10 +39,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * 芯片厂商service 实现类

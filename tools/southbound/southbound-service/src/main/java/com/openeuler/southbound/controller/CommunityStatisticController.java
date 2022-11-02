@@ -14,7 +14,11 @@ package com.openeuler.southbound.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.openeuler.southbound.common.content.MessageContent;
+import com.openeuler.southbound.common.enums.ResCode;
+import com.openeuler.southbound.common.utils.I18NServer;
 import com.openeuler.southbound.model.ResponseBean;
+import com.openeuler.southbound.model.SouthBoundUser;
+import com.openeuler.southbound.service.UserService;
 import com.openeuler.southbound.service.impl.CommunityBoardDataServiceImpl;
 import com.openeuler.southbound.service.impl.CommunityWholeDataServiceImpl;
 
@@ -37,6 +41,8 @@ public class CommunityStatisticController {
     private CommunityWholeDataServiceImpl communityWholeDataService;
     @Autowired
     private CommunityBoardDataServiceImpl communityBoardDataService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 从整机统计兼容性清单中认证日期查询
@@ -68,6 +74,35 @@ public class CommunityStatisticController {
             return ResponseBean.success(jsonObject);
         }
         return ResponseBean.success(MessageContent.SUCCESS_QUERY);
+    }
+
+    /**
+     * 同步社区数据
+     *
+     * @param username username
+     * @param password password
+     * @return 执行结果
+     */
+    @GetMapping("/sync")
+    public ResponseBean syncCommunityData(String username, String password) {
+        ResponseBean responseBean = new ResponseBean<>();
+        // 校验用户是否存在
+        SouthBoundUser user = userService.findByUserName(username);
+        if (user == null) {
+            responseBean = ResponseBean.error(ResCode.HTTP_401_UNAUTHORIZED.value(),
+                    I18NServer.get("southbound_user_undefined"));
+        } else {
+            // 检验用户密码是否正确
+            if (!user.getPassword().equals(password)) {
+                responseBean = ResponseBean.error(ResCode.HTTP_403_FORBIDDEN.value(),
+                        I18NServer.get("southbound_user_error_password"));
+            } else {
+                communityWholeDataService.syncDataFromCommunity();
+                communityBoardDataService.syncDataFromCommunity();
+                responseBean = ResponseBean.success(MessageContent.RESP_SUCCESS);
+            }
+        }
+        return responseBean;
     }
 }
 

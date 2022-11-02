@@ -12,14 +12,15 @@
 
 package com.openeuler.southbound.service.factory;
 
-import com.github.pagehelper.PageInfo;
 import com.openeuler.southbound.model.ResponseBean;
-import com.openeuler.southbound.model.factory.ChipFactory;
 import com.openeuler.southbound.model.overall.BoardOverall;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import com.openeuler.southbound.model.factory.ChipFactory;
+
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 芯片厂商service

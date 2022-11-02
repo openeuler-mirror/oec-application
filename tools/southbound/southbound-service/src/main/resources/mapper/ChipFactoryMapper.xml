@@ -100,8 +100,8 @@
     <!--查询版本是否支持-->
     <select id="queryVersionSupport" resultType="int">
         SELECT COUNT(*) FROM `chip_factory` cf
-        INNER JOIN `chip_version` cv ON cv.chip_id = cf.chip_id
-        INNER JOIN `version_plan` vp ON vp.version_id = cv.version_id
+        LEFT JOIN `chip_version` cv ON cv.chip_id = cf.chip_id
+        LEFT JOIN `version_plan` vp ON vp.version_id = cv.version_id
         <where>
             <if test="chipModel != null">
                 cf.chip_model = #{chipModel}

@@ -26,7 +26,7 @@
     <select id="queryAll" resultMap="BaseResultMap">
         SELECT dm.*, vp.version_id, vp.version_name
         FROM `driver_manage` dm
-        INNER JOIN `version_plan` vp ON vp.version_id = dm.version_id
+        LEFT JOIN `version_plan` vp ON vp.version_id = dm.version_id
         <where>
             <if test="chipFactory != null and chipFactory != ''">
                 and dm.chip_factory = #{chipFactory}
@@ -141,7 +141,7 @@
     <select id="exportAllData" resultMap="BaseResultMap">
         SELECT dm.*, vp.version_name
         FROM `driver_manage` dm
-        INNER JOIN `version_plan` vp ON vp.version_id = dm.version_id
+        LEFT JOIN `version_plan` vp ON vp.version_id = dm.version_id
         ORDER BY dm.create_time DESC
     </select>
 </mapper>
