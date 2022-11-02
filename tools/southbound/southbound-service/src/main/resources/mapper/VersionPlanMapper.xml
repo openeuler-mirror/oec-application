@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.plan.VersionPlanMapper">
+    <resultMap id="BaseResultMap" type="com.openeuler.southbound.model.plan.VersionPlan">
+        <id property="versionId" column="version_id"/>
+        <result property="versionName" column="version_name"/>
+        <result property="alphaStartDate" column="alpha_start_date"/>
+        <result property="alphaEndDate" column="alpha_end_date"/>
+        <result property="alphaDetail" column="alpha_detail"/>
+        <result property="betaStartDate" column="beta_start_date"/>
+        <result property="betaEndDate" column="beta_end_date"/>
+        <result property="releaseStartDate" column="release_start_date"/>
+        <result property="releaseEndDate" column="release_end_date"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <resultMap id="versionMap" type="com.openeuler.southbound.model.plan.VersionPlan">
+        <id property="versionId" column="version_id"/>
+        <result property="versionName" column="version_name"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        version_id, version_name, alpha_start_date, alpha_end_date,alpha_detail, beta_start_date, beta_end_date,
+        release_start_date, release_end_date, create_time
+    </sql>
+    <!-- 查询版本计划列表 -->
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `version_plan`
+        <where>
+            1 = 1
+            <!-- 根据关键字workKey查找 -->
+            <if test="versionName != null and versionName != ''">
+                AND version_name = #{versionName}
+            </if>
+            ORDER BY alpha_start_date DESC
+        </where>
+    </select>
+
+    <!-- 增加版本计划 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="versionId"
+            parameterType="com.openeuler.southbound.model.plan.VersionPlan">
+        insert into `version_plan` (version_name, alpha_start_date, alpha_end_date,alpha_detail,
+        beta_start_date, beta_end_date, release_start_date, release_end_date, create_time) values
+        (#{versionName}, #{alphaStartDate}, #{alphaEndDate},#{alphaDetail}, #{betaStartDate}, #{betaEndDate},
+        #{releaseStartDate}, #{releaseEndDate}, now())
+    </insert>
+
+    <!-- 修改版本计划 -->
+    <update id="update" parameterType="com.openeuler.southbound.model.plan.VersionPlan">
+        update `version_plan`
+        <set>
+            <if test="versionName != null">
+                `version_name` = #{versionName,jdbcType=VARCHAR},
+            </if>
+            <if test="alphaStartDate != null">
+                `alpha_start_date` = #{alphaStartDate,jdbcType=VARCHAR},
+            </if>
+            <if test="alphaEndDate != null">
+                `alpha_end_date` = #{alphaEndDate,jdbcType=VARCHAR},
+            </if>
+            <if test="alphaDetail != null">
+                `alpha_detail` = #{alphaDetail,jdbcType=VARCHAR},
+            </if>
+            <if test="betaStartDate != null">
+                `beta_start_date` = #{betaStartDate,jdbcType=VARCHAR},
+            </if>
+            <if test="betaEndDate != null">
+                `beta_end_date` = #{betaEndDate,jdbcType=VARCHAR},
+            </if>
+            <if test="releaseStartDate != null">
+                `release_start_date` = #{releaseStartDate,jdbcType=VARCHAR},
+            </if>
+            <if test="releaseEndDate != null">
+                `release_end_date` = #{releaseEndDate,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where version_id = #{versionId,jdbcType=INTEGER}
+    </update>
+
+    <!-- 删除版本计划 -->
+    <delete id="deleteById">
+        DELETE FROM `version_plan` WHERE version_id = #{versionId}
+    </delete>
+
+    <!-- 查询版本名称列表 -->
+    <select id="queryVersionList" resultMap="versionMap">
+        SELECT version_id, version_name FROM `version_plan` ORDER BY version_name DESC
+    </select>
+
+    <!-- 查询版本名称查询 -->
+    <select id="queryByReleaseName" resultType="com.openeuler.southbound.model.plan.VersionPlan">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `version_plan` where version_name = #{versionName}
+    </select>
+
+    <select id="queryIdsByVersionName" resultType="hashmap">
+        SELECT GROUP_CONCAT(version_id) versionId FROM `version_plan`
+        WHERE version_name IN
+        <foreach collection="versionNames.split('\n')" item="versionName" open="(" close=")" separator=",">
+            #{versionName}
+        </foreach>
+    </select>
+
+    <!-- 根据整机厂商名称查询支持的版本 -->
+    <select id="queryVersionListByWholeFactory" resultMap="versionMap">
+        SELECT vp.* FROM whole_factory wf
+        LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN cpu_version cv ON cf.cpu_id = cv.cpu_id
+        LEFT JOIN version_plan vp ON cv.version_id = vp.version_id
+        WHERE wf.whole_factory = #{wholeFactory}
+        GROUP BY version_id
+    </select>
+
+    <!-- 根据芯片厂商名称查询支持的版本 -->
+    <select id="queryVersionListByChipFactory" resultMap="versionMap">
+        SELECT vp.* FROM board_factory bf
+        LEFT JOIN chip_factory cf ON bf.chip_id = cf.chip_id
+        LEFT JOIN chip_version cv ON cf.chip_id = cv.chip_id
+        LEFT JOIN version_plan vp ON cv.version_id = vp.version_id
+        WHERE cf.chip_factory = #{chipFactory}
+        GROUP BY version_id
+    </select>
+</mapper>

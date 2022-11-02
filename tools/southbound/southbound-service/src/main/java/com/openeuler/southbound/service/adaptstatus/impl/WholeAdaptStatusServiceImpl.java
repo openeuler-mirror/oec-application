@@ -21,6 +21,7 @@ import com.openeuler.southbound.service.adaptstatus.WholeAdaptStatusService;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +58,8 @@ public class WholeAdaptStatusServiceImpl implements WholeAdaptStatusService {
         factoryNames.forEach(wholeFactoryNameItem -> {
             WholeAdaptStatusResp resp = new WholeAdaptStatusResp(wholeFactoryNameItem);
             // 所有整机厂商为 wholeFactoryNameItem 的整机
-            List<WholeFactory> oneWholeFactoryList = adaptStatusMapper.queryWholeByFactory(wholeFactoryNameItem);
+            List<WholeFactory> oneWholeFactoryList =
+                    adaptStatusMapper.queryWholeByFactory(wholeFactoryNameItem, versionName);
             statisticHandle(resp, oneWholeFactoryList, versionName);
             resultList.add(resp);
         });
@@ -116,11 +118,11 @@ public class WholeAdaptStatusServiceImpl implements WholeAdaptStatusService {
     /**
      * 统计典型机型数据
      *
-     * @param hardwareModelAdaptList 已适配列表
+     * @param hardwareModelAdaptList     已适配列表
      * @param hardwareModelPlanAdaptList 适配中列表
-     * @param hardwareModelNotAdaptList 未适配列表
-     * @param wholeItem 整机信息
-     * @param versionName 版本名称
+     * @param hardwareModelNotAdaptList  未适配列表
+     * @param wholeItem                  整机信息
+     * @param versionName                版本名称
      */
     private void statisticTypicalModel(
             List<String> hardwareModelAdaptList, List<String> hardwareModelPlanAdaptList,
@@ -149,11 +151,11 @@ public class WholeAdaptStatusServiceImpl implements WholeAdaptStatusService {
     /**
      * 统计扩展机型
      *
-     * @param extendModelAdaptList 已适配列表
+     * @param extendModelAdaptList     已适配列表
      * @param extendModelPlanAdaptList 适配中列表
-     * @param extendModelNotAdaptList 未适配列表
-     * @param wholeItem 整机信息
-     * @param versionName 版本名称
+     * @param extendModelNotAdaptList  未适配列表
+     * @param wholeItem                整机信息
+     * @param versionName              版本名称
      */
     private void statisticExtendModel(
             List<String> extendModelAdaptList, List<String> extendModelPlanAdaptList,
@@ -202,8 +204,8 @@ public class WholeAdaptStatusServiceImpl implements WholeAdaptStatusService {
             WholeAdaptStatusResp resp = new WholeAdaptStatusResp();
             resp.setCpuFactory(factoryNameItem);
             // 所有CPU厂商为 factoryNameItem 的整机
-            List<WholeFactory> oneWholeFactoryList = adaptStatusMapper.queryWholeByCpuFactory(factoryNameItem);
-
+            List<WholeFactory> oneWholeFactoryList =
+                    adaptStatusMapper.queryWholeByCpuFactory(factoryNameItem, versionName);
             statisticHandle(resp, oneWholeFactoryList, versionName);
             resultList.add(resp);
         });
@@ -220,7 +222,7 @@ public class WholeAdaptStatusServiceImpl implements WholeAdaptStatusService {
             WholeAdaptStatusResp resp = new WholeAdaptStatusResp();
             resp.setCpuModel(cpuModelItem);
             // 所有 CPU型号 为 cpuModelItem 的整机
-            List<WholeFactory> wholeFactories = adaptStatusMapper.queryWholeByCpuModel(cpuModelItem);
+            List<WholeFactory> wholeFactories = adaptStatusMapper.queryWholeByCpuModel(cpuModelItem, versionName);
             statisticHandle(resp, wholeFactories, versionName);
             resultList.add(resp);
         });
@@ -237,7 +239,8 @@ public class WholeAdaptStatusServiceImpl implements WholeAdaptStatusService {
             WholeAdaptStatusResp resp = new WholeAdaptStatusResp();
             resp.setOsVersion(versionNameItem);
             // 所有操作系统名称为 versionNameItem 的整机
-            List<WholeFactory> oneWholeFactoryList = adaptStatusMapper.queryAllWholeMachineInWholeFactory();
+            List<WholeFactory> oneWholeFactoryList =
+                    adaptStatusMapper.queryAllWholeMachineInWholeFactory(null, versionNameItem);
             statisticHandle(resp, oneWholeFactoryList, versionNameItem);
             resultList.add(resp);
         });
@@ -254,8 +257,8 @@ public class WholeAdaptStatusServiceImpl implements WholeAdaptStatusService {
             WholeAdaptStatusResp resp = new WholeAdaptStatusResp();
             resp.setArchitecture(archItem);
             // 所有架构为 cpuModelItem 的整机
-            List<WholeFactory> oneWholeFactoryList = adaptStatusMapper.queryAllWholeMachineInWholeFactory();
-            oneWholeFactoryList.forEach(item -> item.setArchitecture(archItem));
+            List<WholeFactory> oneWholeFactoryList =
+                    adaptStatusMapper.queryAllWholeMachineInWholeFactory(archItem, versionName);
             statisticHandle(resp, oneWholeFactoryList, versionName);
             resultList.add(resp);
         });

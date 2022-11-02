@@ -27,6 +27,11 @@ import com.openeuler.southbound.model.factory.WholeFactory;
 import com.openeuler.southbound.model.plan.BoardPlan;
 import com.openeuler.southbound.model.plan.WholePlan;
 import com.openeuler.southbound.service.MainHomeService;
+import com.openeuler.southbound.service.factory.impl.BoardFactoryServiceImpl;
+import com.openeuler.southbound.service.factory.impl.WholeFactoryServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,9 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 /**
  * 首页serviceImp
@@ -49,6 +51,11 @@ public class MainHomeServiceImpl implements MainHomeService {
     private WholeFactoryMapper wholeFactoryMapper;
     @Autowired
     private BoardFactoryMapper boardFactoryMapper;
+
+    @Autowired
+    private WholeFactoryServiceImpl wholeFactoryServiceImpl;
+    @Autowired
+    private BoardFactoryServiceImpl boardFactoryServiceImpl;
 
     @Autowired
     private ChipFactoryMapper chipFactoryMapper;
@@ -68,20 +75,20 @@ public class MainHomeServiceImpl implements MainHomeService {
         jsonObject.put("wholeFactoryCount", wholeFactoryList.size());
         List<String> chipFactoryList = chipFactoryMapper.queryNameList();
         jsonObject.put("chipFactoryCount", chipFactoryList.size());
-        WholeFactory wholeFactory = wholeFactoryMapper.queryModelList(null);
+        Map<String, List<String>> wholeModelListMap = wholeFactoryServiceImpl.queryModelList(null);
         Set<String> wholeFactoryModelList = new HashSet<>();
-        if (wholeFactory != null && !StringUtils.isEmpty(wholeFactory.getHardwareModel())) {
-            wholeFactoryModelList.addAll(StringFormatUtil.str2ListUtil(wholeFactory.getHardwareModel()));
-            wholeFactoryModelList.addAll(StringFormatUtil.str2ListUtil(wholeFactory.getExtendModel()));
+        if (wholeModelListMap.size() > 0) {
+            wholeFactoryModelList.addAll(wholeModelListMap.get("hardwareModelList"));
+            wholeFactoryModelList.addAll(wholeModelListMap.get("extendModelList"));
         }
         int wholeModelCount = wholeFactoryModelList.contains("") ? wholeFactoryModelList.size() - 1
                 : wholeFactoryModelList.size();
         jsonObject.put("wholeModelCount", wholeModelCount);
-        BoardFactory boardFactory = boardFactoryMapper.queryModelList(null);
+        Map<String, List<String>> boardModelListMap = boardFactoryServiceImpl.queryModelList(null);
         Set<String> boardFactoryModelList = new HashSet<>();
-        if (boardFactory != null && !StringUtils.isEmpty(boardFactory.getTypicalBoardModel())) {
-            boardFactoryModelList.addAll(StringFormatUtil.str2ListUtil(boardFactory.getTypicalBoardModel()));
-            boardFactoryModelList.addAll(StringFormatUtil.str2ListUtil(boardFactory.getExtendBoardModel()));
+        if (boardModelListMap.size() > 0) {
+            boardFactoryModelList.addAll(boardModelListMap.get("typicalModelList"));
+            boardFactoryModelList.addAll(boardModelListMap.get("extendBoardModelList"));
         }
         int boardModelCount = boardFactoryModelList.contains("") ? boardFactoryModelList.size() - 1
                 : boardFactoryModelList.size();
