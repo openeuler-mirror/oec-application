@@ -92,6 +92,7 @@ export default {
         if (index === 0) {
           sums[index] = '总计';
         }
+        let supportSum = 0;
         let sum = 0;
         if (index === 1) {
           sum = 0;
@@ -101,9 +102,12 @@ export default {
         }
         if (index === 2) {
           sum = 0;
-          sum = Number(data[0].process) || 0;
-          sum += Number(data[1].process) || 0;
-          sums[index] = (sum / 2).toFixed(2) + '%';
+          supportSum = 0;
+          supportSum = data[0].adaptedList.length || 0;
+          supportSum += data[1].adaptedList.length || 0;
+          sum = data[0].total || 0;
+          sum += data[1].total || 0;
+          sums[index] = sum === 0 ? '/' : ((supportSum / sum) * 100).toFixed(2)+ '%';
         }
         if (index === 3) {
           sums[index] = '';
