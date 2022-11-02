@@ -12,14 +12,16 @@
 
 package com.openeuler.southbound.service.factory;
 
-import com.github.pagehelper.PageInfo;
 import com.openeuler.southbound.model.ResponseBean;
 import com.openeuler.southbound.model.factory.WholeFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 整机厂商service
@@ -73,7 +75,7 @@ public interface WholeFactoryService {
      * @param wholeFactory 整机厂商
      * @return 查询结果
      */
-    Map<String, String> queryModelList(WholeFactory wholeFactory);
+    Map<String, List<String>> queryModelList(WholeFactory wholeFactory);
 
     /**
      * 查询CPU厂商

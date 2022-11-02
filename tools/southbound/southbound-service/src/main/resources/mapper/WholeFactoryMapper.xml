@@ -89,10 +89,28 @@
         SELECT DISTINCT(whole_factory) FROM `whole_factory`
     </select>
 
-    <!-- 查询整机厂商名称列表 -->
-    <select id="queryModelList" resultMap="BaseResultMap">
-        SELECT GROUP_CONCAT(DISTINCT(hardware_model)) AS hardware_model,GROUP_CONCAT(DISTINCT(extend_model))
-        AS extend_model
+    <!-- 查询典型机型&扩展名称列表 -->
+    <select id="queryTypicalModelList" resultType="java.lang.String">
+        SELECT DISTINCT(hardware_model) AS hardware_model
+        FROM `whole_factory` wf
+        LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN cpu_version cv ON cf.cpu_id=cv.cpu_id
+        LEFT JOIN version_plan vp ON vp.version_id =cv.version_id
+        <where>
+            1=1
+            <if test="wholeFactory != null and wholeFactory != ''">
+                AND wf.whole_factory = #{wholeFactory}
+            </if>
+            <if test="versionName != null and versionName != ''">
+                AND vp.version_name = #{versionName}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                AND vp.version_id = #{versionId}
+            </if>
+        </where>
+    </select>
+    <select id="queryExtendModelList" resultType="java.lang.String">
+        SELECT DISTINCT(extend_model) AS extend_model
         FROM `whole_factory` wf
         LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
         LEFT JOIN cpu_version cv ON cf.cpu_id=cv.cpu_id
@@ -114,14 +132,14 @@
     <!--根据整机厂商名称获取CPU厂商名称列表-->
     <select id="queryCpuFactory" resultType="string">
         SELECT DISTINCT(cf.cpu_factory) FROM `whole_factory` wf
-        INNER JOIN `cpu_factory` cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN `cpu_factory` cf ON wf.cpu_id = cf.cpu_id
         WHERE wf.whole_factory = #{wholeFactory}
     </select>
 
     <!--根据更具整机厂商、CPU厂商名称获取CPU代次名称列表-->
     <select id="queryCpuModel" resultType="string">
         SELECT DISTINCT(cpu_model) FROM `whole_factory` wf
-        INNER JOIN `cpu_factory` cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN `cpu_factory` cf ON wf.cpu_id = cf.cpu_id
         WHERE wf.whole_factory = #{wholeFactory}
         AND cf.cpu_factory = #{cpuFactory}
     </select>

@@ -107,7 +107,7 @@ public interface WholePlanMapper {
      * @param versionName   versionName
      * @return List
      */
-    List<WholeFactory> queryModelStatus(String hardwareModel, String versionName);
+    List<Integer> queryModelListCount(String hardwareModel, String versionName);
 
     /**
      * 查询版本

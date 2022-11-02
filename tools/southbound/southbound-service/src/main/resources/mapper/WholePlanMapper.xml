@@ -125,14 +125,14 @@
     </select>
 
     <!-- 根据版本查询整机计划适配情况 -->
-    <select id="queryModelStatus"
-            resultMap="com.openeuler.southbound.mapper.factory.WholeFactoryMapper.BaseResultMap">
-        SELECT CASE WHEN (a.hardware_model IS NULL ) THEN '0' ELSE '1' END modelStatus
-        ,b.* FROM ( SELECT * FROM `whole_community` WHERE
-        hardware_model = #{hardwareModel} AND os_version = #{versionName} ) a RIGHT JOIN
-        (SELECT * FROM whole_factory WHERE
-        hardware_model LIKE "%"#{hardwareModel}"%" OR extend_model LIKE "%"#{hardwareModel}"%") b
-        ON a.hardware_factory = b.whole_factory
+    <select id="queryModelListCount" resultType="Integer">
+        SELECT COUNT(*) count FROM (
+        SELECT * FROM `whole_community`
+        <where>
+            hardware_model = #{hardwareModel}
+            and `os_version` = #{versionName,jdbcType=VARCHAR}
+        </where>
+        ) temp  GROUP BY hardware_model
     </select>
 
     <select id="queryVersionModelList"
