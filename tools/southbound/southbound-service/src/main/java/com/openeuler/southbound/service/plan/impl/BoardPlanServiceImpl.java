@@ -29,6 +29,7 @@ import com.github.pagehelper.PageInfo;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -205,10 +206,14 @@ public class BoardPlanServiceImpl implements BoardPlanService {
      */
     Map<String, List<String>> queryModelList(String versionName) {
         Map<String, List<String>> modelMap = new HashMap<>();
-        List betaModelList = boardPlanMapper.queryBetaModelList(versionName);
-        List releaseModelList = boardPlanMapper.queryReleaseModelList(versionName);
-        modelMap.put("betaModelList", betaModelList);
-        modelMap.put("releaseModelList", releaseModelList);
+        List<String> betaModelList = boardPlanMapper.queryBetaModelList(versionName);
+        List<String> betaModels = new ArrayList<>();
+        betaModelList.forEach(betaItem -> Collections.addAll(betaModels, betaItem.split(",")));
+        List<String> releaseModelList = boardPlanMapper.queryReleaseModelList(versionName);
+        List<String> releaseModels = new ArrayList<>();
+        releaseModelList.forEach(releaseItem -> Collections.addAll(releaseModels, releaseItem.split(",")));
+        modelMap.put("betaModelList", betaModels);
+        modelMap.put("releaseModelList", releaseModels);
         return modelMap;
     }
 

@@ -12,21 +12,21 @@
 
 package com.openeuler.southbound.service.factory.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.openeuler.southbound.common.content.MessageContent;
 import com.openeuler.southbound.mapper.factory.BoardFactoryMapper;
 import com.openeuler.southbound.model.ResponseBean;
 import com.openeuler.southbound.model.factory.BoardFactory;
 import com.openeuler.southbound.service.factory.BoardFactoryService;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -76,14 +76,14 @@ public class BoardFactoryServiceImpl implements BoardFactoryService {
     }
 
     @Override
-    public Map<String, String> queryModelList(BoardFactory boardFactory) {
-        BoardFactory resp = boardFactoryMapper.queryModelList(boardFactory);
-        Map<String, String> respMap = new HashMap<>();
-        if (resp == null) {
-            return respMap;
-        }
-        respMap.put("typicalModelList", resp.getTypicalBoardModel());
-        respMap.put("extendBoardModelList", resp.getExtendBoardModel());
+    public Map<String, List<String>> queryModelList(BoardFactory boardFactory) {
+        List<String> typicalModelList = boardFactoryMapper.queryTypicalModelList(boardFactory);
+        List<String> extendBoardModelList = boardFactoryMapper.queryExtendModelList(boardFactory);
+        List<String> extendModels = new ArrayList<>();
+        extendBoardModelList.forEach(item -> Collections.addAll(extendModels, item.split(",")));
+        Map<String, List<String>> respMap = new HashMap<>();
+        respMap.put("typicalModelList", typicalModelList);
+        respMap.put("extendBoardModelList", extendModels);
         return respMap;
     }
 

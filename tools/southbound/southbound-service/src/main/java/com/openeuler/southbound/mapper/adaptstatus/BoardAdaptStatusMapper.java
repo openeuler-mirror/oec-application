@@ -15,6 +15,7 @@ package com.openeuler.southbound.mapper.adaptstatus;
 import com.openeuler.southbound.model.factory.BoardFactory;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,9 +37,10 @@ public interface BoardAdaptStatusMapper {
      * 通过芯片厂商查询板卡厂商
      *
      * @param chipFactory 芯片厂商
+     * @param versionName versionName
      * @return 整机厂商列表
      */
-    List<BoardFactory> selectByChipFactory(String chipFactory);
+    List<BoardFactory> selectByChipFactory(String chipFactory, String versionName);
 
     /**
      * 查询所有芯片型号
@@ -50,10 +52,11 @@ public interface BoardAdaptStatusMapper {
     /**
      * 查询 芯片型号 对应的板卡
      *
-     * @param chipModel 芯片型号
+     * @param chipModel   芯片型号
+     * @param versionName versionName
      * @return 板卡厂商列表
      */
-    List<BoardFactory> selectByChipModel(String chipModel);
+    List<BoardFactory> selectByChipModel(String chipModel, String versionName);
 
     /**
      * 查询所有板卡类型
@@ -65,10 +68,11 @@ public interface BoardAdaptStatusMapper {
     /**
      * 通过板卡类型查询板卡厂商
      *
-     * @param boardType 板卡类型
+     * @param boardType   板卡类型
+     * @param versionName versionName
      * @return 板卡厂商列表
      */
-    List<BoardFactory> selectByBoardType(String boardType);
+    List<BoardFactory> selectByBoardType(String boardType, String versionName);
 
     /**
      * 查询所有 操作系统名称（操作系统版本）
@@ -80,9 +84,10 @@ public interface BoardAdaptStatusMapper {
     /**
      * 查询  所有 板卡
      *
+     * @param versionName versionName
      * @return 板卡厂商列表
      */
-    List<BoardFactory> selectAllBoardFromBoardFactory();
+    List<BoardFactory> selectAllBoardFromBoardFactory(String versionName);
 
     /**
      * 查询当前芯片是否支持该版本
