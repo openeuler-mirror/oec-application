@@ -104,7 +104,7 @@ export default {
             resObj.adapting.length
           ];
         }
-        boardData[1].risk = res.data.betaTableStatus ? true : false;
+        boardData[0].risk = res.data.betaTableStatus ? true : false;
         if (Array.isArray(res.data.releaseTables)) {
           let resObj = handleData(res.data.releaseTables);
           Object.assign(boardData[1], resObj);
@@ -141,8 +141,7 @@ export default {
       }
       if (adaptedList.length) {
         obj.process = (
-          (adaptedList.length / (adaptedList.length + adapting.length)) *
-          100
+          (adaptedList.length / (adaptedList.length + adapting.length)) * 100
         ).toFixed(2);
       } else {
         obj.process = '0';

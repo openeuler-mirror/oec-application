@@ -127,16 +127,15 @@ export default {
     const queryModelByFactory = async (wholeFactory, versionName) => {
       let res = await queryModels(wholeFactory, versionName);
       if (res.code === 200) {
-        hardwareModelList = res.data.hardwareModelList ? res.data.hardwareModelList.split(/,|、/) : [];
-        extendModelList = res.data.extendModelList ? res.data.extendModelList.split(/,|、/) : [];
+        hardwareModelList = res.data.hardwareModelList ? res.data.hardwareModelList : [];
+        extendModelList = res.data.extendModelList ? res.data.extendModelList : [];
       }
       handleListChange([], 'factoryChanage');
     };
     onMounted(async () => {
       quertWholeFactoryOptions();
     });
-    const typeFilterOptions = ref({
-    });
+    const typeFilterOptions = ref({});
     const initModelOptions = () => {
       typeFilterOptions.value = {
         betaOptions: [
@@ -150,7 +149,6 @@ export default {
       };
     };
     initModelOptions();
-
     const handleListChange = (e, type) => {
       if (type === 'factoryChanage') {
         typeFilterOptions.value.betaOptions = [

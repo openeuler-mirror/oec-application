@@ -186,8 +186,8 @@ export default {
     const queryModelByFactory = async (chipFactory, versionId) => {
       let res = await queryModels(chipFactory, versionId);
       if (res.code === 200) {
-        hardwareModelList = res.data.typicalModelList ? res.data.typicalModelList.split(/,|、/) : [];
-        extendModelList = res.data.extendBoardModelList ? res.data.extendBoardModelList.split(/,|、/) : [];
+        hardwareModelList = res.data.typicalModelList ? res.data.typicalModelList : [];
+        extendModelList = res.data.extendBoardModelList ? res.data.extendBoardModelList : [];
       }
       handleListChange([], 'factoryChanage');
     };

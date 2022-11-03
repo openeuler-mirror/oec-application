@@ -108,7 +108,6 @@ export default {
         if (Array.isArray(res.data.releaseTables)) {
           let resObj = handleData(res.data.releaseTables);
           Object.assign(wholeData[1], resObj);
-
           whole.value.release = [
             resObj.adaptedList.length,
             resObj.adapting.length
@@ -125,7 +124,7 @@ export default {
         adapting = [];
       dataList.forEach(item => {
         if (item.model) {
-          if (item.status === '1') {
+          if (item.status === 1) {
             adaptedList.push(item.model);
           } else {
             adapting.push(item.model);

@@ -229,10 +229,33 @@ export default defineComponent({
           data: ['全部', '版本发布前', '版本发布后']
         },
         xAxis: {
-          data: xData,
-          axisTick: {
-            show: false
-          }
+          type: 'category',
+          axisLabel:
+            {
+              interval: 0,
+              show: true,
+              formatter: function (params) {
+                // 设置一行显示几个字
+                const splitNumber = 20;
+                let respStr = '';
+                let nameLength = params.length;
+                let rowNumber = Math.ceil(nameLength / splitNumber);
+                if (nameLength > splitNumber) {
+                  for (let p = 0; p < rowNumber; p++) {
+                    let tempStr = '';
+                    let start = p * splitNumber;
+                    let end = start + splitNumber;
+                    tempStr = (p === rowNumber - 1) ? params.substring(start, nameLength):
+                      params.substring(start, end) + '\n';
+                    respStr += tempStr;
+                  }
+                } else {
+                  respStr = params;
+                }
+                return respStr;
+              }
+            },
+          data: xData
         },
         grid: {
           top: 70
@@ -308,9 +331,16 @@ export default defineComponent({
               info: infos || []
             });
           });
+          let set = new Set();
           data1.forEach(item => {
-            total = total + item.hardwareModel.split(',').length;
+            let hardwareModelArray = item.hardwareModel.split(',');
+            hardwareModelArray.forEach(arrItem => {
+              if(arrItem !== '') {
+                set.add(arrItem);
+              }
+            });
           });
+          total = set.size;
           drawPie(seriesData, total);
         } else {
           leftLoading.value = false;
@@ -320,6 +350,7 @@ export default defineComponent({
         const { code: code1, data: data1 } = await queryBoardModels();
         const { code: code2, data: data2 } = await queryBoardModelSupports();
         if (code1 === 200 && code2 === 200 && data1.length > 0) {
+          let set = new Set();
           data1.forEach(item => {
             let values = Object.values(data2[item.chipFactory]);
             let value = 0;
@@ -332,16 +363,20 @@ export default defineComponent({
                 value++;
               }
             });
+            let typicalBoardModelArray = item.typicalBoardModel?.split(',');
+            typicalBoardModelArray.forEach(arrItem => {
+              if(arrItem !== '') {
+                set.add(arrItem);
+              }
+            });
             seriesData.push({
               name: item.chipFactory,
               value: value,
-              total: item.typicalBoardModel.split(',').length,
+              total: total,
               info: infos || []
             });
           });
-          data1.forEach(item => {
-            total = total + item.typicalBoardModel.split(',').length;
-          });
+          total = set.size;
           drawPie(seriesData, total);
         } else {
           leftLoading.value = false;
