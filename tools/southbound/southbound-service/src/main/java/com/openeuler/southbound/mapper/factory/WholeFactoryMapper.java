@@ -14,9 +14,10 @@ package com.openeuler.southbound.mapper.factory;
 
 import com.openeuler.southbound.model.community.CommunityWholeMachineBean;
 import com.openeuler.southbound.model.factory.WholeFactory;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 整机厂商表的操作接口
@@ -65,12 +66,20 @@ public interface WholeFactoryMapper {
     List<String> queryNameList();
 
     /**
-     * 查询整机机型-典型及扩展
+     * 查询整机机型-典型
      *
      * @param wholeFactory 整机厂商
      * @return WholeFactory
      */
-    WholeFactory queryModelList(WholeFactory wholeFactory);
+    List<String> queryTypicalModelList(WholeFactory wholeFactory);
+
+    /**
+     * 查询整机机型-扩展
+     *
+     * @param wholeFactory 整机厂商
+     * @return WholeFactory
+     */
+    List<String> queryExtendModelList(WholeFactory wholeFactory);
 
     /**
      * 查询cpu厂商

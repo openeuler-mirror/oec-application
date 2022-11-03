@@ -27,6 +27,7 @@ import com.openeuler.southbound.service.plan.WholePlanService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -201,19 +202,16 @@ public class WholePlanServiceImpl implements WholePlanService {
         AtomicInteger stageNotSupportCount = new AtomicInteger();
         try {
             Date endTime = format.parse(endDate);
-            modelList.forEach(releaseModel -> {
-                if (!releaseModel.isEmpty()) {
-                    List<WholeFactory> wfList = wholePlanMapper.queryModelStatus(releaseModel, versionName);
-                    wfList.forEach(wf -> {
-                        JSONObject json = new JSONObject();
-                        json.put("model", releaseModel);
-                        json.put("status", wf.getModelStatus());
-                        json.put("wholeFactory", wf.getWholeFactory());
-                        if (date.getTime() > endTime.getTime() && wf.getModelStatus().equals("0")) {
-                            stageNotSupportCount.getAndIncrement();
-                        }
-                        stageTableObject.add(json);
-                    });
+            modelList.forEach(model -> {
+                if (!model.isEmpty()) {
+                    List<Integer> wfList = wholePlanMapper.queryModelListCount(model, versionName);
+                    JSONObject json = new JSONObject();
+                    json.put("model", model);
+                    json.put("status", wfList.size());
+                    if (date.getTime() > endTime.getTime() && wfList.size() == 0) {
+                        stageNotSupportCount.getAndIncrement();
+                    }
+                    stageTableObject.add(json);
                 }
             });
         } catch (ParseException pe) {
@@ -233,10 +231,14 @@ public class WholePlanServiceImpl implements WholePlanService {
      */
     Map<String, List<String>> queryModelList(String versionName) {
         Map<String, List<String>> modelMap = new HashMap<>();
-        List betaModelList = wholePlanMapper.queryBetaModelList(versionName);
-        List releaseModelList = wholePlanMapper.queryReleaseModelList(versionName);
-        modelMap.put("betaModelList", betaModelList);
-        modelMap.put("releaseModelList", releaseModelList);
+        List<String> betaModelList = wholePlanMapper.queryBetaModelList(versionName);
+        List<String> betaModels = new ArrayList<>();
+        betaModelList.forEach(betaItem -> Collections.addAll(betaModels, betaItem.split(",")));
+        List<String> releaseModelList = wholePlanMapper.queryReleaseModelList(versionName);
+        List<String> releaseModels = new ArrayList<>();
+        releaseModelList.forEach(releaseItem -> Collections.addAll(releaseModels, releaseItem.split(",")));
+        modelMap.put("betaModelList", betaModels);
+        modelMap.put("releaseModelList", releaseModels);
         return modelMap;
     }
 

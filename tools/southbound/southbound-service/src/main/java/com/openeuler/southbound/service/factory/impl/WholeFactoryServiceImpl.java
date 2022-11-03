@@ -20,6 +20,13 @@ import com.openeuler.southbound.mapper.factory.WholeFactoryMapper;
 import com.openeuler.southbound.model.ResponseBean;
 import com.openeuler.southbound.model.factory.WholeFactory;
 import com.openeuler.southbound.service.factory.WholeFactoryService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -31,11 +38,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 整机厂商service 实现类
@@ -79,14 +81,14 @@ public class WholeFactoryServiceImpl implements WholeFactoryService {
     }
 
     @Override
-    public Map<String, String> queryModelList(WholeFactory wholeFactory) {
-        WholeFactory resp = wholeFactoryMapper.queryModelList(wholeFactory);
-        Map<String, String> respMap = new HashMap<>();
-        if (resp == null) {
-            return respMap;
-        }
-        respMap.put("hardwareModelList", resp.getHardwareModel());
-        respMap.put("extendModelList", resp.getExtendModel());
+    public Map<String, List<String>> queryModelList(WholeFactory wholeFactory) {
+        List<String> typicalModelList = wholeFactoryMapper.queryTypicalModelList(wholeFactory);
+        List<String> extendBoardModelList = wholeFactoryMapper.queryExtendModelList(wholeFactory);
+        List<String> extendModels = new ArrayList<>();
+        extendBoardModelList.forEach(item -> Collections.addAll(extendModels, item.split(",")));
+        Map<String, List<String>> respMap = new HashMap<>();
+        respMap.put("hardwareModelList", typicalModelList);
+        respMap.put("extendModelList", extendModels);
         return respMap;
     }
 
