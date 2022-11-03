@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.factory.CpuFactoryMapper">
+    <resultMap id="BaseResultMap" type="com.openeuler.southbound.model.factory.CpuFactory">
+        <id property="cpuId" column="cpu_id"/>
+        <result property="cpuFactory" column="cpu_factory"/>
+        <result property="cpuModel" column="cpu_model"/>
+        <result property="architecture" column="architecture"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="versionIds" column="versionIds"/>
+        <result property="versionNames" column="versionNames"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        cpu_id, cpu_factory, cpu_model, architecture, support_version, release_time, create_time
+    </sql>
+    <!-- 查询CPU厂商列表 -->
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT c.cpu_id, c.cpu_factory, c.cpu_model, c.architecture, c.release_time, c.create_time,
+        GROUP_CONCAT(v.version_id) versionIds,
+        GROUP_CONCAT(v.version_name) versionNames
+        FROM cpu_factory c
+        LEFT JOIN cpu_version cv ON c.cpu_id = cv.cpu_id
+        LEFT JOIN version_plan v ON v.version_id = cv.version_id
+        <where>
+            1=1
+            <if test="cpuId != null and cpuId != ''">
+                and c.cpu_id = #{cpuId}
+            </if>
+            <if test="cpuFactory != null and cpuFactory != ''">
+                and c.cpu_factory = #{cpuFactory}
+            </if>
+            <if test="architecture != null and architecture != ''">
+                and c.architecture = #{architecture}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (c.cpu_model like concat('%', #{keyword}, '%')
+                OR v.version_name like concat('%', #{keyword}, '%'))
+            </if>
+        </where>
+        GROUP BY c.cpu_id
+        ORDER BY c.create_time DESC
+    </select>
+
+    <!-- 增加CPU厂商 -->
+    <insert id="add" useGeneratedKeys="true" keyProperty="cpuId"
+            parameterType="com.openeuler.southbound.model.factory.CpuFactory">
+        insert into cpu_factory (cpu_factory, cpu_model, architecture,release_time, create_time)
+        values(#{cpuFactory}, #{cpuModel}, #{architecture}, #{releaseTime}, now())
+    </insert>
+    <!-- 往CPU厂商与版本关联表添加数据 -->
+    <insert id="addCpuVersion" parameterType="com.openeuler.southbound.model.factory.CpuFactory">
+        insert into cpu_version (cpu_id, version_id) values
+        <foreach collection="versionIds.split(',')" item="item" index="index" separator=",">
+            (#{cpuId}, #{item})
+        </foreach>
+    </insert>
+
+    <!-- 修改CPU厂商 -->
+    <update id="update" parameterType="com.openeuler.southbound.model.factory.CpuFactory">
+        update cpu_factory
+        <set>
+            <if test="cpuFactory != null">
+                `cpu_factory` = #{cpuFactory,jdbcType=VARCHAR},
+            </if>
+            <if test="cpuModel != null">
+                `cpu_model` = #{cpuModel,jdbcType=VARCHAR},
+            </if>
+            <if test="architecture != null">
+                `architecture` = #{architecture,jdbcType=VARCHAR},
+            </if>
+            <if test="releaseTime != null">
+                `release_time` = #{releaseTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where cpu_id = #{cpuId,jdbcType=INTEGER}
+    </update>
+
+    <!-- 删除CPU厂商 -->
+    <delete id="deleteByIds">
+        DELETE FROM cpu_factory WHERE cpu_id in
+        <foreach collection="ids.split(',')" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteCpuVersion">
+        DELETE FROM cpu_version WHERE cpu_id in
+        <foreach collection="ids.split(',')" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 查询CPU厂商名称列表 -->
+    <select id="queryNameList" resultType="String">
+        SELECT DISTINCT(cpu_factory) FROM `cpu_factory`
+    </select>
+
+    <!-- 根据CPU厂商名称查询CPU代次 -->
+    <select id="queryCpuModelNames" resultType="string">
+        SELECT DISTINCT(cpu_model) FROM `cpu_factory`
+        WHERE cpu_factory = #{cpuFactory}
+    </select>
+
+    <!-- 根据CPU厂商查询CPU型号名称列表 -->
+    <select id="queryModelList" resultType="String">
+        SELECT DISTINCT(cpu_model) FROM `cpu_factory`
+    </select>
+
+    <!-- 查询架构 -->
+    <select id="queryArchitectureList" resultType="string">
+        SELECT DISTINCT(architecture) architecture FROM `cpu_factory`
+    </select>
+
+    <!--根据CPU代次获取支持版本信息-->
+    <select id="selectSupportVersion" resultType="int">
+        SELECT COUNT(*) FROM
+        (
+        SELECT cf.*,GROUP_CONCAT(vp.version_id) AS version_id
+        FROM `cpu_factory` cf
+        LEFT JOIN `cpu_version` cv ON cf.cpu_id = cv.cpu_id
+        LEFT JOIN `version_plan` vp ON vp.version_id = cv.version_id
+        GROUP BY cf.cpu_id
+        ) new_cpu_factory
+        WHERE new_cpu_factory.cpu_model = #{cpuModel}
+        AND FIND_IN_SET(#{versionId}, version_id)
+    </select>
+
+    <!-- 查询CPU厂商名称列表 -->
+    <select id="selectArchitectureByCpuModel" resultType="string">
+        SELECT architecture FROM `cpu_factory`
+        WHERE cpu_model = #{cpuModel}
+    </select>
+
+    <!-- 导出所有CPU厂商数据 -->
+    <select id="exportAllData" resultMap="BaseResultMap">
+        SELECT c.cpu_id, c.cpu_factory, c.cpu_model, c.architecture, c.release_time, c.create_time,
+        GROUP_CONCAT(v.version_id) versionIds,
+        GROUP_CONCAT(v.version_name) versionNames
+        FROM cpu_factory c
+        LEFT JOIN cpu_version cv ON c.cpu_id = cv.cpu_id
+        LEFT JOIN version_plan v ON v.version_id = cv.version_id
+        GROUP BY c.cpu_id
+        ORDER BY c.create_time DESC
+    </select>
+</mapper>
