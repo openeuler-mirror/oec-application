@@ -13,11 +13,11 @@
 package com.openeuler.southbound.mapper.plan;
 
 import com.openeuler.southbound.model.plan.VersionPlan;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 操作系统版本mapper

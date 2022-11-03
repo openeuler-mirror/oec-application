@@ -15,6 +15,7 @@ package com.openeuler.southbound.mapper.adaptstatus;
 import com.openeuler.southbound.model.factory.WholeFactory;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -35,10 +36,11 @@ public interface WholeAdaptStatusMapper {
     /**
      * 查询整机厂商列表
      *
-     * @param hardwareFactory 整机厂商
+     * @param wholeFactory 整机厂商
+     * @param versionName  versionName
      * @return 整机厂商列表
      */
-    List<WholeFactory> queryWholeByFactory(String hardwareFactory);
+    List<WholeFactory> queryWholeByFactory(String wholeFactory, String versionName);
 
     /**
      * 查询指定的整机【典型机型】在计划表中匹配的对象
@@ -93,10 +95,11 @@ public interface WholeAdaptStatusMapper {
     /**
      * 查询 cpu厂商对应的整机
      *
-     * @param cpuFactory cpu厂商
+     * @param cpuFactory  cpu厂商
+     * @param versionName versionName
      * @return 整机列表
      */
-    List<WholeFactory> queryWholeByCpuFactory(String cpuFactory);
+    List<WholeFactory> queryWholeByCpuFactory(String cpuFactory, String versionName);
 
     /**
      * 查询所有CPU型号
@@ -108,10 +111,11 @@ public interface WholeAdaptStatusMapper {
     /**
      * 查询 CPU型号对应的整机
      *
-     * @param cpuModel CPU型号
+     * @param cpuModel    CPU型号
+     * @param versionName versionName
      * @return 整机列表
      */
-    List<WholeFactory> queryWholeByCpuModel(String cpuModel);
+    List<WholeFactory> queryWholeByCpuModel(String cpuModel, String versionName);
 
     /**
      * 查询所有 操作系统名称（操作系统版本）
@@ -121,16 +125,11 @@ public interface WholeAdaptStatusMapper {
     List<String> queryVersionName();
 
     /**
-     * 查询所有 架构
-     *
-     * @return 架构列表
-     */
-    List<String> queryArchitectures();
-
-    /**
      * 查询所有的整机
      *
+     * @param architecture architecture
+     * @param versionName  versionName
      * @return 整机列表
      */
-    List<WholeFactory> queryAllWholeMachineInWholeFactory();
+    List<WholeFactory> queryAllWholeMachineInWholeFactory(String architecture, String versionName);
 }

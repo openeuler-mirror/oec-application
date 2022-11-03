@@ -5,22 +5,19 @@
         select distinct(whole_factory) from `whole_factory`
     </select>
 
-    <select id="queryWholeByFactory" parameterType="com.openeuler.southbound.model.factory.WholeFactory"
-            resultType="com.openeuler.southbound.model.factory.WholeFactory">
-        SELECT
-        whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
-        FROM
-        `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+    <select id="queryWholeByFactory" resultType="com.openeuler.southbound.model.factory.WholeFactory">
+        SELECT whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
+        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
         <where>
-            whole_factory = #{wholeFactory}
+            whole_factory = #{wholeFactory} and version_name = #{versionName}
         </where>
     </select>
 
     <!-- 查询是否在适配计划中-->
     <select id="queryWholeMachineModelStatusFromPlan" resultType="int">
-        SELECT COUNT(*)
-        FROM
-        `whole_plan` wp LEFT JOIN version_plan vp ON wp.version_id= vp.version_id
+        SELECT COUNT(*) FROM `whole_plan` wp LEFT JOIN version_plan vp ON wp.version_id= vp.version_id
         <where>
             whole_factory = #{hardwareFactory}
             and version_name=#{versionName}
@@ -32,8 +29,7 @@
 
     <!-- 查询机型是否匹配 -->
     <select id="queryWholeMachineModelStatusFromCommunity" resultType="int">
-        SELECT COUNT(*)
-        FROM `whole_community`
+        SELECT COUNT(*) FROM `whole_community`
         <where>
             and hardware_factory = #{hardwareFactory}
             and hardware_model = #{hardwareModel}
@@ -46,10 +42,9 @@
     </select>
 
     <!--查询整机版本是否支持 - CPU厂商 -->
-    <select id="queryCpuSupportOfCpuFactory" parameterType="string" resultType="java.lang.Integer">
-        SELECT COUNT(*)
-        FROM
-        ( cpu_factory cf LEFT JOIN cpu_version cv ON cf.cpu_id = cv.cpu_id )
+    <select id="queryCpuSupportOfCpuFactory" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM
+        cpu_factory cf LEFT JOIN cpu_version cv ON cf.cpu_id = cv.cpu_id
         LEFT JOIN version_plan vp ON cv.version_id = vp.version_id
         <where>
             cf.cpu_factory = #{cpuFactory}
@@ -62,12 +57,12 @@
         select distinct(cpu_factory) from `cpu_factory`
     </select>
     <select id="queryWholeByCpuFactory" resultType="com.openeuler.southbound.model.factory.WholeFactory">
-        SELECT
-        whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
-        FROM
-        `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        SELECT whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
+        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
         <where>
-            cpu_factory = #{cpuFactory}
+            cpu_factory = #{cpuFactory} and version_name = #{versionName}
         </where>
     </select>
 
@@ -76,12 +71,12 @@
         select distinct(cpu_model) from `cpu_factory`
     </select>
     <select id="queryWholeByCpuModel" resultType="com.openeuler.southbound.model.factory.WholeFactory">
-        SELECT
-        whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
-        FROM
-        `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        SELECT whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
+        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
         <where>
-            cpu_model = #{cpuModel}
+            cpu_model = #{cpuModel} and version_name = #{versionName}
         </where>
     </select>
 
@@ -90,17 +85,21 @@
         select distinct(version_name) from version_plan
     </select>
 
-    <!--架构-->
-    <select id="queryArchitectures" resultType="java.lang.String">
-        select distinct(architecture) from whole_machine
-    </select>
-
     <!-- 查询所有的整机-->
     <select id="queryAllWholeMachineInWholeFactory"
             resultType="com.openeuler.southbound.model.factory.WholeFactory">
-        SELECT
-        whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
-        FROM
-        `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        SELECT whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
+        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
+        <where>
+            1 = 1
+            <if test="architecture!=null and architecture!=''">
+                and architecture = #{architecture}
+            </if>
+            <if test="versionName!=null and versionName!=''">
+                and version_name = #{versionName}
+            </if>
+        </where>
     </select>
 </mapper>
