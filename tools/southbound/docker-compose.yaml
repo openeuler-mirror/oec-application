@@ -1,0 +1,65 @@
+# 第三代语法来构建 docker-compose.yaml 文件
+version: '3'
+# 定义服务，用来表示 compose 需要启动的服务
+services:
+    # 二级标签,服务名称,用户自己定义
+    nginx:
+        # 服务名称
+        container_name: southbound-nginx
+        # 指定上下文目录以及docker配置文件的相对路径
+        build: ./southbound-view
+        # 自动重启，如果服务启动不成功会一直尝试。
+        restart: always
+        # 对外开放的端口。这里主机的端口映射到nginx容器端口，和expose的区别是，expose不会将端口暴露给主机。
+        ports:
+            # 绑定容器的80端口到主机的9527端口。前面的9527是主机端口，后面的80是容器的端口,需要防止端口被占用
+            - 9527:80
+        # 加载本地目录下的配置文件到容器目标地址下
+        volumes:
+            # 将主机的.southbound-view/nginx.conf文件映射到容器内的/etc/nginx/nginx.conf文件
+            - ./southbound-view/nginx.conf:/etc/nginx/nginx.conf
+            # 将主机的southbound-view前台资源文件映射到容器内
+            # - /opt/southbound-view:/usr/share/nginx/html
+        privileged: true
+
+    mysql:
+        container_name: southbound-mysql
+        # 指定服务镜像的名称或ID，如果本地镜像不存在，Compose将会尝试拉取这个镜像
+        image: mysql/mysql-server:5.7
+        restart: always
+        ports:
+            - 3309:3306
+        environment:
+            # 创建名为south_dash_board的库
+            MYSQL_DATABASE: south_dash_board
+            # 设置root用户的密码
+            MYSQL_ROOT_PASSWORD: huawei123
+            MYSQL_ROOT_HOST: '%'
+        # mysql基础配置
+        command:
+            --default-authentication-plugin=mysql_native_password
+            --character-set-server=utf8mb4
+            --collation-server=utf8mb4_general_ci
+            --explicit_defaults_for_timestamp=true
+            --lower_case_table_names=1
+            --max_allowed_packet=128M;
+
+    app:
+        container_name: southbound-server
+        build: ./southbound-service
+        restart: always
+        #设置工作目录为容器内的app文件夹
+        working_dir: /app
+        volumes:
+            - ./southbound-service:/app
+            - ~/.m2:/root/.m2
+        # expose暴露容器给link到当前容器的容器。和port的区别是，expose不会将端口暴露给主机。
+        # 这里将当前容器的端口8099映射到宿主机。
+        ports:
+            - 8888:8099
+        # 先启动 depends_on 下面的服务后，再启动本服务。依赖于nginx，mysql容器，被依赖容器启动后app容器才启动。
+        depends_on:
+            - nginx
+            - mysql
+            # 使用该命令启动项目，使用 application-prod.properties配置文件
+        command: mvn clean spring-boot:run -Dspring-boot.run.profiles=prod
