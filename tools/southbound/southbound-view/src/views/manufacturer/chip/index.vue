@@ -116,7 +116,7 @@ export default defineComponent({
         baseTabUrl: '/driver-manage/queryAll',
         label: '驱动管理',
         placeholderName: '驱动名称、驱动版本',
-        addQueryItem: { chipFactory: '', versionId: '1' }
+        addQueryItem: { chipFactory: '', versionId: '' }
       }
     ]);
     // 选中的Tab组件，默认第一个选中

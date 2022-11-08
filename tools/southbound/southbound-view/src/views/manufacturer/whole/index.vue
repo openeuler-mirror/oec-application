@@ -55,7 +55,7 @@
                 </el-table-column>
                 <el-table-column label="型号" width="400">
                   <template #default="scope">
-                    <el-popover v-if="scope.row.extendModel.length && scope.row.extendModel.length > 40" placement="top" :width="400" trigger="hover" :content="scope.row.extendModel" popper-class="customPopover">
+                    <el-popover v-if="scope.row.extendModel && scope.row.extendModel.length > 40" placement="top" :width="400" trigger="hover" :content="scope.row.extendModel" popper-class="customPopover">
                       <template #reference>
                         <div class="noWarp">{{scope.row.extendModel}}</div>
                       </template>
