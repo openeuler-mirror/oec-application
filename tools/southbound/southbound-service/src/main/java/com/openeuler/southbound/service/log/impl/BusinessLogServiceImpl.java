@@ -26,7 +26,6 @@ import com.openeuler.southbound.model.log.BusinessLog;
 import com.openeuler.southbound.service.log.SystemLogService;
 
 import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -46,14 +45,6 @@ import org.springframework.util.Assert;
 public class BusinessLogServiceImpl implements SystemLogService {
     private static final int POSITION_ROW = 0;
     private static final int POSITION_COL = 0;
-    private static final String[] COLUMNS = new String[]{
-            I18NServer.get("southbound_excel_export_file_log_column_username"), // 用户名
-            I18NServer.get("southbound_excel_export_file_log_column_host"), // 操作IP
-            I18NServer.get("southbound_excel_export_file_log_column_operation"), // 操作名称
-            I18NServer.get("southbound_excel_export_file_log_column_result"), // 操作结果
-            I18NServer.get("southbound_excel_export_file_log_column_datetime"), // 操作时间
-            I18NServer.get("southbound_excel_export_file_log_column_detail"), // 操作详情
-    };
 
     @Autowired
     private BusinessLogMapper businessLogMapper;
@@ -104,9 +95,10 @@ public class BusinessLogServiceImpl implements SystemLogService {
         // 表头
         Row head = sheet.createRow(rows++);
         int cols = POSITION_COL;
-        for (int i = 0; i < COLUMNS.length; ++i) {
+        String[] columns = new String[]{"用户名", "操作IP", "操作名称", "操作结果", "操作时间", "操作详情"};
+        for (int i = 0; i < columns.length; ++i) {
             sheet.setColumnWidth(cols, colWidths[i]);
-            addCellWithStyle(head, cols++, headStyle).setCellValue(COLUMNS[i]);
+            addCellWithStyle(head, cols++, headStyle).setCellValue(columns[i]);
         }
 
         // 表内容

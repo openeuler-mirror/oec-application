@@ -85,7 +85,11 @@ public class WholeFactoryServiceImpl implements WholeFactoryService {
         List<String> typicalModelList = wholeFactoryMapper.queryTypicalModelList(wholeFactory);
         List<String> extendBoardModelList = wholeFactoryMapper.queryExtendModelList(wholeFactory);
         List<String> extendModels = new ArrayList<>();
-        extendBoardModelList.forEach(item -> Collections.addAll(extendModels, item.split(",")));
+        extendBoardModelList.forEach(item -> {
+            if (item != null) {
+                Collections.addAll(extendModels, item.split(","));
+            }
+        });
         Map<String, List<String>> respMap = new HashMap<>();
         respMap.put("hardwareModelList", typicalModelList);
         respMap.put("extendModelList", extendModels);

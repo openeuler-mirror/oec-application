@@ -80,7 +80,11 @@ public class BoardFactoryServiceImpl implements BoardFactoryService {
         List<String> typicalModelList = boardFactoryMapper.queryTypicalModelList(boardFactory);
         List<String> extendBoardModelList = boardFactoryMapper.queryExtendModelList(boardFactory);
         List<String> extendModels = new ArrayList<>();
-        extendBoardModelList.forEach(item -> Collections.addAll(extendModels, item.split(",")));
+        extendBoardModelList.forEach(item -> {
+            if (item != null) {
+                Collections.addAll(extendModels, item.split(","));
+            }
+        });
         Map<String, List<String>> respMap = new HashMap<>();
         respMap.put("typicalModelList", typicalModelList);
         respMap.put("extendBoardModelList", extendModels);
