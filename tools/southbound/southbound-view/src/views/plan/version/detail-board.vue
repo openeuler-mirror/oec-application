@@ -125,7 +125,7 @@ export default {
         adapting = [];
       dataList.forEach(item => {
         if (item.model) {
-          if (item.x86Count > 0 && item.arm64Count > 0) {
+          if (item.x86Count > 0 || item.arm64Count > 0) {
             adaptedList.push(item.model);
           } else {
             adapting.push(item.model);

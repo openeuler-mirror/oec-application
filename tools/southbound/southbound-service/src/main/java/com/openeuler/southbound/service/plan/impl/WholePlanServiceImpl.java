@@ -134,12 +134,12 @@ public class WholePlanServiceImpl implements WholePlanService {
         AtomicInteger fitCount = new AtomicInteger();
         AtomicInteger sum = new AtomicInteger();
         models.forEach(item -> {
-            JSONObject json = new JSONObject();
             List<WholeFactory> wfList = wholePlanMapper.queryModelTables(wholeFactory, item, versionName);
             if (wfList.size() == 0) {
                 return;
             }
             wfList.forEach(wf -> {
+                JSONObject json = new JSONObject();
                 json.put("model", item);
                 json.put("cpuFactory", wf.getCpuFactory());
                 json.put("cpuModel", wf.getCpuModel());
