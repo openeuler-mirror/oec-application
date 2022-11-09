@@ -19,9 +19,8 @@
         SELECT wf.whole_factory, cf.cpu_factory, cf.cpu_model, wf.hardware_model, wf.extend_model,
         cf.architecture, vp.version_name, vp.version_id, wf.create_time
         FROM `whole_factory` wf
-        LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
-        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
-        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
+        INNER JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id,
+        `version_plan` vp
         <where>
             <if test="versionId != null and versionId != ''">
                 vp.version_id IN
@@ -72,7 +71,7 @@
     <!-- 查询全景整机列表版本是否在适配计划中 -->
     <select id="queryHardwareModelStatusForPlan" resultType="int">
         SELECT COUNT(*) FROM `whole_plan` wp
-        LEFT JOIN `version_plan` vp ON wp.version_id = vp.version_id
+        INNER JOIN `version_plan` vp ON wp.version_id = vp.version_id
         WHERE wp.whole_factory = #{hardwareFactory}
         AND vp.version_name = #{versionName}
         AND (FIND_IN_SET(#{hardwareModel}, wp.beta_list)
@@ -84,9 +83,8 @@
         SELECT wf.whole_factory, cf.cpu_factory, cf.cpu_model, wf.hardware_model, wf.extend_model,
         cf.architecture, vp.version_name, vp.version_id, wf.create_time
         FROM `whole_factory` wf
-        LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
-        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
-        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
+        INNER JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id,
+        `version_plan` vp
         ORDER BY wf.create_time DESC
     </select>
 </mapper>

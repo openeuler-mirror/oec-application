@@ -184,7 +184,7 @@ public class BoardPlanServiceImpl implements BoardPlanService {
                 json.put("x86Count", releaseX86Count.size());
                 json.put("arm64Count", releaseArm64Count.size());
                 if (date.getTime() > releaseEndTime.getTime() && (releaseX86Count.size() == 0
-                        || releaseArm64Count.size() == 0)) {
+                        && releaseArm64Count.size() == 0)) {
                     stageNotSupportCount.getAndIncrement();
                 }
                 stageTableObject.add(json);

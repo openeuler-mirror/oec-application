@@ -14,11 +14,11 @@
 
     <!--查询板卡-->
     <select id="queryAll" resultMap="FilterResultMap">
-        SELECT cf.chip_factory, bf.board_type, cf.chip_model, bf.typical_board_model,
-        bf.extend_board_model, vp.version_name, bf.create_time FROM `board_factory` bf
-        left JOIN `chip_factory` cf ON cf.chip_id = bf.chip_id
-        left join chip_version cv on cf.chip_id = cv.chip_id
-        left join version_plan vp on vp.version_id = cv.version_id
+        SELECT cf.chip_factory, bf.board_type, cf.chip_model, bf.typical_board_model, bf.extend_board_model,
+        vp.version_name, bf.create_time
+        FROM `board_factory` bf
+        INNER JOIN `chip_factory` cf ON cf.chip_id = bf.chip_id,
+        `version_plan` vp
         <where>
             <if test="versionId != null and versionId != ''">
                 vp.version_id IN
@@ -64,7 +64,7 @@
     <!--板卡计划查找 （典型x86）-->
     <select id="queryTypicalModelStatusX86FromPlan" resultType="int">
         SELECT COUNT(*) FROM `board_plan` bp
-        LEFT JOIN `version_plan` vp ON bp.version_id = vp.version_id
+        INNER JOIN `version_plan` vp ON bp.version_id = vp.version_id
         WHERE bp.chip_factory = #{chipFactory}
         AND vp.version_name = #{versionName}
         AND (FIND_IN_SET(#{typicalBoardModel}, bp.beta_list)
@@ -113,11 +113,11 @@
 
     <!--导出所有板卡数据-->
     <select id="exportAllData" resultMap="FilterResultMap">
-        SELECT cf.chip_factory, bf.board_type, cf.chip_model, bf.typical_board_model,
-        bf.extend_board_model, vp.version_name, bf.create_time FROM `board_factory` bf
-        LEFT JOIN `chip_factory` cf ON cf.chip_id = bf.chip_id
-        LEFT JOIN chip_version cv on cf.chip_id = cv.chip_id
-        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
+        SELECT cf.chip_factory, bf.board_type, cf.chip_model, bf.typical_board_model, bf.extend_board_model,
+        vp.version_name, bf.create_time
+        FROM `board_factory` bf
+        INNER JOIN `chip_factory` cf ON cf.chip_id = bf.chip_id,
+        `version_plan` vp
         ORDER BY bf.create_time DESC
     </select>
 </mapper>
