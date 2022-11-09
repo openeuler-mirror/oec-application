@@ -13,4 +13,4 @@ else
   echo "$1 not running"
 fi
 echo "****** start project*******"
-nohup java -jar ${jar_name}  --server.port=8181
+nohup java -jar ${jar_name}  --server.port=8099 &

@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.openeuler.southbound.common.content.MessageContent;
 import com.openeuler.southbound.common.enums.ResCode;
 import com.openeuler.southbound.common.utils.I18NServer;
+import com.openeuler.southbound.common.utils.Sha256Util;
 import com.openeuler.southbound.common.utils.TokenCacheUtil;
 import com.openeuler.southbound.common.utils.TokenUtil;
 import com.openeuler.southbound.config.aop.Log;
@@ -25,7 +26,6 @@ import com.openeuler.southbound.service.UserService;
 
 import java.util.Date;
 import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,7 +67,8 @@ public class UserController {
     @PostMapping("/addAdmin")
     @Log(operation = "Admin First Login", detail = "Admin first login and set password.")
     public ResponseBean addAdmin(String password) {
-        return ResponseBean.success(userService.addAdmin(password));
+        String decryptPwd = Sha256Util.getSHA256StrJava(password);
+        return ResponseBean.success(userService.addAdmin(decryptPwd));
     }
 
     /**
@@ -88,10 +89,7 @@ public class UserController {
                     I18NServer.get("southbound_user_undefined"));
         } else {
             // 检验用户密码是否正确
-            if (!user.getPassword().equals(password)) {
-                responseBean = ResponseBean.error(ResCode.HTTP_403_FORBIDDEN.value(),
-                        I18NServer.get("southbound_user_error_password"));
-            } else {
+            if (user.getPassword().equals(Sha256Util.getSHA256StrJava(password))) {
                 // 登录成功返回用户详情及token信息
                 JSONObject data = new JSONObject();
                 String token = TokenUtil.sign(user);
@@ -102,6 +100,9 @@ public class UserController {
                 // 将token放到缓存的数据之中
                 TokenCacheUtil.setTokenCache(token, new Date().getTime());
                 responseBean = ResponseBean.success(data);
+            } else {
+                responseBean = ResponseBean.error(ResCode.HTTP_403_FORBIDDEN.value(),
+                        I18NServer.get("southbound_user_error_password"));
             }
         }
         return responseBean;
@@ -136,12 +137,14 @@ public class UserController {
     public ResponseBean password(String oldPassword, String newPassword) {
         String token = Objects.requireNonNull(TokenUtil.getRequest()).getHeader("token");
         String username = TokenUtil.getUserNameByToken(token);
+        String encoderOldPwd = Sha256Util.getSHA256StrJava(oldPassword);
+        String encoderNewPwd = Sha256Util.getSHA256StrJava(newPassword);
         // 先校验用户密码是否正确
         SouthBoundUser user = userService.findByUserName(username);
-        if (!user.getPassword().equals(oldPassword)) {
+        if (!user.getPassword().equals(encoderOldPwd)) {
             return ResponseBean.error(I18NServer.get("southbound_user_error_verify_password"));
         }
-        int updateCount = userService.password(username, oldPassword, newPassword);
+        int updateCount = userService.password(username, encoderOldPwd, encoderNewPwd);
         if (updateCount > 0) {
             return ResponseBean.success(MessageContent.RESP_SUCCESS);
         }
@@ -169,6 +172,8 @@ public class UserController {
     @PostMapping("/add")
     @Log(operation = "User Add", detail = "Admin Add add user.")
     public ResponseBean add(@RequestBody SouthBoundUser user) {
+        String decryptPwd = Sha256Util.getSHA256StrJava(user.getPassword());
+        user.setPassword(decryptPwd);
         int addCount = userService.addUser(user);
         if (addCount > 0) {
             return ResponseBean.success(MessageContent.RESP_SUCCESS);
