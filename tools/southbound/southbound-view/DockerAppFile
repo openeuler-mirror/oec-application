@@ -13,9 +13,8 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY --from=Builder /app/dist /app
 RUN chmod -R 755 /app
-# 这里nginx配置复制过去
-ADD nginx.template /etc/nginx/conf.d
+COPY --from=Builder /app/nginx.conf /etc/nginx/conf.d/
+ENV RUN_USER nginx
+ENV RUN_GROUP nginx
 EXPOSE 80
-EXPOSE 443
-WORKDIR /etc/nginx/conf.d
-ENTRYPOINT envsubst '$URL'  < nginx.template > default.conf && cat default.conf && nginx -g 'daemon off;'
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
