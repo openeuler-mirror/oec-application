@@ -359,6 +359,10 @@ export default defineComponent({
     const refreshList = () => {
       getVersionList();
       getChipFactoryList();
+      Object.assign(
+        tabInfo.value[activeTab.value - 1].addQueryItem,
+        queryForm.value
+      );
       init(url.value, tabInfo.value[activeTab.value - 1].addQueryItem);
     };
 
