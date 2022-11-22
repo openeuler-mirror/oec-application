@@ -190,6 +190,8 @@ public class UserController {
     @PutMapping("/update")
     @Log(operation = "User Update", detail = "Admin update user.")
     public ResponseBean update(@RequestBody SouthBoundUser user) {
+        String encoderOldPwd = Sha256Util.getSHA256StrJava(user.getPassword());
+        user.setPassword(encoderOldPwd);
         int updateCount = userService.updateUser(user);
         if (updateCount > 0) {
             return ResponseBean.success(MessageContent.RESP_SUCCESS);
