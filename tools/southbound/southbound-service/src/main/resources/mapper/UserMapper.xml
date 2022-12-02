@@ -24,7 +24,7 @@
     </select>
     <!-- 查询所有用户-->
     <select id="queryAll" resultMap="BaseResultMap">
-        SELECT * FROM `south_user`
+        SELECT id,username,role,create_time FROM `south_user`
         <where>
             <if test="role != null and role != ''">
                 role = #{role}

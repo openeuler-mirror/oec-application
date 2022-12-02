@@ -7,7 +7,7 @@ services:
         # 服务名称
         container_name: southbound-nginx
         # 指定上下文目录以及docker配置文件的相对路径
-        build: ./southbound-view
+        build: ./southbound-view/DockerAppFile
         # 自动重启，如果服务启动不成功会一直尝试。
         restart: always
         # 对外开放的端口。这里主机的端口映射到nginx容器端口，和expose的区别是，expose不会将端口暴露给主机。
@@ -46,7 +46,7 @@ services:
 
     app:
         container_name: southbound-server
-        build: ./southbound-service
+        build: ./southbound-service/DockerAppFile
         restart: always
         #设置工作目录为容器内的app文件夹
         working_dir: /app
@@ -60,8 +60,8 @@ services:
         # 先启动 depends_on 下面的服务后，再启动本服务。依赖于nginx，mysql容器，被依赖容器启动后app容器才启动。
         depends_on:
             - nginx
-            #- mysql
+            - mysql
             # 使用该命令启动项目，使用 application-prod.properties配置文件
         command: bash -c "mvn clean package -Dfile.encoding=UTF-8 -DskipTests=true
-            && java -Djasypt.encryptor.password=sla -jar /app/target/SouthboundDashBoard-0.0.1-SNAPSHOT.jar"
+            && java -jar /app/target/SouthboundDashBoard-0.0.1-SNAPSHOT.jar"
 
