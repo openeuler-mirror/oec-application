@@ -11,7 +11,7 @@
         </el-col>
         <el-col :span="11">
           <el-form-item label="操作系统" prop="versionId" label-width="100px">
-            <el-select v-model="formData.versionId" placeholder="请选择操作系统" @change="versionChange" clearable>
+            <el-select v-model="formData.versionId" placeholder="请选择操作系统" clearable>
               <el-option v-for="item in versionOptions" :key="item.versionId" :label="item.versionName" :value="(item.versionId + '')" />
             </el-select>
           </el-form-item>
@@ -92,8 +92,8 @@ export default {
     };
 
     // 查询操作系统列表  
-    const queryVersionOptionsByFactory = async (wholeFactory) => {
-      let res = await queryVersionListByWholeFactory(wholeFactory);
+    const queryVersionOptionsByFactory = async () => {
+      let res = await queryVersionListByWholeFactory();
       if (res.code === 200) {
         let data = [];
         res.data.forEach(item => {
@@ -107,25 +107,16 @@ export default {
     let hardwareModelList = [];
     let extendModelList = [];
     const wholeFactoryChange = (value) => {
-      formData.value.versionId = '';
-      versionOptions.value = [];
-      versionChange();
-      if (!value) {
-        return;
-      }
-      queryVersionOptionsByFactory(formData.value.wholeFactory);
-    };
-    const versionChange = (versionId) => {
       formData.value.betaList = [];
       formData.value.releaseList = [];
-      if (!versionId) {
+      if (!value) {
         initModelOptions();
         return;
       }
-      queryModelByFactory(formData.value.wholeFactory, versionId);
+      queryModelByFactory(formData.value.wholeFactory);
     };
-    const queryModelByFactory = async (wholeFactory, versionName) => {
-      let res = await queryModels(wholeFactory, versionName);
+    const queryModelByFactory = async (wholeFactory) => {
+      let res = await queryModels(wholeFactory);
       if (res.code === 200) {
         hardwareModelList = res.data.hardwareModelList ? res.data.hardwareModelList : [];
         extendModelList = res.data.extendModelList ? res.data.extendModelList : [];
@@ -181,9 +172,9 @@ export default {
         versionOptions.value = [];
       } else {
         formData.value = rowdata;
-        queryVersionOptionsByFactory(rowdata.wholeFactory);
-        queryModelByFactory(rowdata.wholeFactory, rowdata.versionId);
+        queryModelByFactory(rowdata.wholeFactory);
       }
+      queryVersionOptionsByFactory();
       dialogVisible.value = true;
     };
     const close = () => {
@@ -194,7 +185,6 @@ export default {
       formRef.value.resetFields();
       initForm();
     };
-
     const submitForm = async (formEl) => {
       await formEl.validate((valid) => {
         if (valid) {
@@ -247,7 +237,6 @@ export default {
       handleListChange,
       versionOptions,
       wholeFactoryChange,
-      versionChange,
       queryModelByFactory
     };
   }
