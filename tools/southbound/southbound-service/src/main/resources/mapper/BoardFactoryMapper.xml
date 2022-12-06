@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.factory.BoardFactoryMapper">
+    <resultMap id="BaseResultMap" type="com.openeuler.southbound.model.factory.BoardFactory">
+        <id property="boardId" column="board_id"/>
+        <result property="chipFactory" column="chip_factory"/>
+        <result property="chipModel" column="chip_model"/>
+        <result property="boardType" column="board_type"/>
+        <result property="typicalBoardModel" column="typical_board_model"/>
+        <result property="boardItem" column="board_item"/>
+        <result property="extendBoardModel" column="extend_board_model"/>
+        <result property="extendBoardModelItem" column="extend_board_model_item"/>
+        <result property="x86Priority" column="x86_priority"/>
+        <result property="armPriority" column="arm_priority"/>
+        <result property="demandSource" column="demand_source"/>
+        <result property="interfacePerson" column="interface_person"/>
+        <result property="contact" column="contact"/>
+        <result property="middleman" column="middleman"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <!-- 查询板卡厂商列表 -->
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT b.board_id,b.board_type,b.typical_board_model,b.board_item,b.extend_board_model,
+        b.extend_board_model_item,b.x86_priority,b.arm_priority,b.demand_source,
+        b.interface_person,b.contact,b.middleman,b.create_time,c.chip_factory,c.chip_model
+        FROM board_factory b LEFT JOIN chip_factory c
+        ON b.chip_id = c.chip_id
+        <where>
+            <if test="boardId != null and boardId != ''">
+                b.board_id = #{boardId}
+            </if>
+            <if test="chipFactory != null and chipFactory != ''">
+                AND c.chip_factory = #{chipFactory}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (b.board_type like concat('%', #{keyword}, '%')
+                OR c.chip_model like concat('%', #{keyword}, '%')
+                OR b.extend_board_model like concat('%', #{keyword}, '%')
+                OR b.typical_board_model like concat('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY b.create_time DESC
+    </select>
+
+    <!-- 增加板卡厂商 -->
+    <insert id="add" parameterType="com.openeuler.southbound.model.factory.BoardFactory">
+        insert into `board_factory` (board_type, typical_board_model, board_item,
+        extend_board_model, extend_board_model_item, x86_priority, arm_priority,
+        demand_source,interface_person, contact, middleman, create_time ,chip_id)
+        values(#{boardType}, #{typicalBoardModel}, #{boardItem},
+        #{extendBoardModel}, #{extendBoardModelItem}, #{x86Priority}, #{armPriority},
+        #{demandSource}, #{interfacePerson}, #{contact}, #{middleman}, now(),
+        (select chip_id from chip_factory where chip_factory = #{chipFactory} and chip_model = #{chipModel}))
+    </insert>
+
+    <!-- 修改板卡厂商 -->
+    <update id="update" parameterType="com.openeuler.southbound.model.factory.BoardFactory">
+        update `board_factory`
+        <set>
+            <if test="boardType != null">
+                `board_type` = #{boardType,jdbcType=VARCHAR},
+            </if>
+            <if test="typicalBoardModel != null">
+                `typical_board_model` = #{typicalBoardModel,jdbcType=VARCHAR},
+            </if>
+            <if test="boardItem != null">
+                `board_item` = #{boardItem,jdbcType=VARCHAR},
+            </if>
+            <if test="extendBoardModel != null">
+                `extend_board_model` = #{extendBoardModel,jdbcType=VARCHAR},
+            </if>
+            <if test="extendBoardModelItem != null">
+                `extend_board_model_item` = #{extendBoardModelItem,jdbcType=VARCHAR},
+            </if>
+            <if test="x86Priority != null">
+                `x86_priority` = #{x86Priority,jdbcType=VARCHAR},
+            </if>
+            <if test="armPriority != null">
+                `arm_priority` = #{armPriority,jdbcType=VARCHAR},
+            </if>
+            <if test="demandSource != null">
+                `demand_source` = #{demandSource,jdbcType=VARCHAR},
+            </if>
+            <if test="interfacePerson != null">
+                `interface_person` = #{interfacePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                `contact` = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="middleman != null">
+                `middleman` = #{middleman,jdbcType=VARCHAR},
+            </if>
+            <if test="chipFactory != null or chipModel != null">
+                `chip_id` = (select chip_id from chip_factory where chip_factory = #{chipFactory} and chip_model =
+                #{chipModel})
+            </if>
+        </set>
+        where board_id = #{boardId,jdbcType=INTEGER}
+    </update>
+
+    <!-- 删除板卡厂商 -->
+    <delete id="deleteByIds">
+        DELETE FROM `board_factory` WHERE board_id in
+        <foreach collection="ids.split(',')" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 查询典型机型&扩展名称列表 -->
+    <select id="queryTypicalModelList" resultType="java.lang.String">
+        SELECT DISTINCT(typical_board_model) typical_board_model FROM board_factory bf
+        LEFT JOIN chip_factory cf ON bf.chip_id = cf.chip_id
+        LEFT JOIN chip_version cv ON bf.chip_id=cv.chip_id
+        LEFT JOIN version_plan vp ON vp.version_id =cv.version_id
+        <where>
+            1=1
+            <if test="chipFactory != null and chipFactory != ''">
+                AND cf.chip_factory = #{chipFactory}
+            </if>
+            <if test="versionName != null and versionName != ''">
+                AND vp.version_name = #{versionName}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                AND vp.version_id = #{versionId}
+            </if>
+        </where>
+    </select>
+    <select id="queryExtendModelList" resultType="java.lang.String">
+        SELECT DISTINCT(extend_board_model) extend_board_model FROM board_factory bf
+        LEFT JOIN chip_factory cf ON bf.chip_id = cf.chip_id
+        LEFT JOIN chip_version cv ON bf.chip_id=cv.chip_id
+        LEFT JOIN version_plan vp ON vp.version_id =cv.version_id
+        <where>
+            1=1
+            <if test="chipFactory != null and chipFactory != ''">
+                AND cf.chip_factory = #{chipFactory}
+            </if>
+            <if test="versionName != null and versionName != ''">
+                AND vp.version_name = #{versionName}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                AND vp.version_id = #{versionId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询板卡表芯片厂商列表 -->
+    <select id="queryChipFactory" resultType="string">
+        SELECT DISTINCT(cf.chip_factory) FROM board_factory bf LEFT JOIN chip_factory cf ON cf.chip_id = bf.chip_id
+    </select>
+
+    <!-- 根据芯片厂商、板卡类型查询芯片型号 -->
+    <select id="queryChipModel" resultType="string">
+        SELECT DISTINCT(cf.chip_model) FROM `board_factory` bf
+        LEFT JOIN `chip_factory` cf ON bf.chip_id = cf.chip_id
+        <where>
+            <if test="chipFactory != null || chipFactory !=''">
+                cf.chip_factory = #{chipFactory}
+            </if>
+            <if test="boardType != null || chipFactory !=''">
+                AND bf.board_type = #{boardType}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询板卡类型列表 -->
+    <select id="queryBoardType" resultType="string">
+        SELECT DISTINCT(bf.board_type) FROM `board_factory` bf
+        LEFT JOIN `chip_factory` cf ON bf.chip_id = cf.chip_id
+        <where>
+            <!--芯片厂商-->
+            <if test="chipFactory != null and chipFactory != ''">
+                cf.chip_factory = #{chipFactory}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBoardModelList" resultMap="BaseResultMap">
+        SELECT CONCAT_WS(',',GROUP_CONCAT(DISTINCT(bf.typical_board_model)),
+        GROUP_CONCAT(DISTINCT(bf.extend_board_model))) AS typical_board_model,cf.chip_factory
+        FROM `board_factory` bf LEFT JOIN `chip_factory` cf ON bf.chip_id = cf.chip_id
+        GROUP BY cf.chip_factory
+    </select>
+
+    <select id="queryModelIsSupport"
+            resultType="com.openeuler.southbound.model.community.CommunityBoardBean">
+        SELECT chip_vendor,chip_model,architecture,driver_name,version,os,type FROM `board_community`
+        <where>
+            1 = 1
+            <if test="chipFactory != null">
+                and chip_vendor = #{chipFactory,jdbcType=INTEGER}
+            </if>
+            <if test="boardModel != null">
+                and board_model = #{boardModel,jdbcType=INTEGER}
+            </if>
+            <if test="versionName != null">
+                and `os` = #{versionName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="exportAllData" resultMap="BaseResultMap">
+        SELECT b.board_id,b.board_type,b.typical_board_model,b.board_item,b.extend_board_model,
+        b.extend_board_model_item,b.x86_priority,b.arm_priority,b.demand_source,
+        b.interface_person,b.contact,b.middleman,b.create_time,c.chip_factory,c.chip_model
+        FROM board_factory b LEFT JOIN chip_factory c
+        ON b.chip_id = c.chip_id
+        ORDER BY b.create_time DESC
+    </select>
+
+    <select id="queryChipId" resultType="string">
+        SELECT chip_id FROM chip_factory
+        <where>
+            <if test="chipFactory != null and chipFactory != ''">
+                chip_factory = #{chipFactory}
+            </if>
+            <if test="chipModel != null and chipModel != ''">
+                AND chip_model = #{chipModel}
+            </if>
+        </where>
+    </select>
+</mapper>

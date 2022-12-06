@@ -1,0 +1,37 @@
+{
+    "os": "openeuler",
+    "os_arch": "aarch64",
+    "os_version": "22.03-LTS",
+    "card_info": [
+        {
+            "type": "raid",
+            "boardModel": "SR150-M",
+            "vendorID": "1000",
+            "deviceID": "0017",
+            "svID": "19e5",
+            "ssID": "d213",
+            "driverLink": "inbox"
+        },
+        {
+            "type": "fc",
+            "boardModel": "LPe31002-M6",
+            "vendorID": "10df",
+            "deviceID": "e300",
+            "svID": "10df",
+            "ssID": "e310",
+            "driverLink": "inbox",
+            "testbox": "taishan200-2280-2s64p-128g--a132"
+        },
+        {
+            "type": "ethernet",
+            "boardModel": "SP580",
+            "vendorID": "14e4",
+            "deviceID": "16d7",
+            "svID": "14e4",
+            "ssID": "1402",
+            "driverLink": "inbox",
+            "server": "taishan200-2280-2s64p-128g--a112",
+            "client": "taishan200-2280-2s64p-128g--a113"
+        }
+    ]
+}

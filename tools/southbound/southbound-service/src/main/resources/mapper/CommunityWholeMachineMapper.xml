@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.CommunityWholeMachineMapper">
+    <resultMap id="BaseResultMap"
+               type="com.openeuler.southbound.model.community.CommunityWholeMachineBean">
+        <result property="cpu" column="cpu"/>
+        <result property="hardwareModel" column="hardware_model"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        cpu, hardware_model
+    </sql>
+
+    <!--  查询-->
+    <select id="selectAll"
+            resultType="com.openeuler.southbound.model.community.CommunityWholeMachineBean">
+        select * from whole_community
+    </select>
+
+    <!--  按照日期查询cpu和整机机型-->
+    <select id="selectAllWholeByData" resultType="java.lang.String">
+        SELECT DISTINCT(hardware_model) AS hardware_model FROM whole_community
+        <where>
+            <if test="startTime  != null and startTime != '' and  endTime != ''and  endTime != null">
+                certification_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="selectAllCpuByData" resultType="java.lang.String">
+        SELECT DISTINCT(cpu) AS cpu FROM whole_community
+        <where>
+            <if test="startTime  != null and startTime != '' and  endTime != ''and  endTime != null">
+                certification_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+    <!--  增加-->
+    <insert id="insertBatch"
+            parameterType="com.openeuler.southbound.model.community.CommunityWholeMachineBean">
+        insert into whole_community
+        (id, architecture, bios_uefi,
+        hardware_factory,certification_addr,certification_time,commit_id,computer_type,cpu,date,friendly_link,hard_disk_drive,
+        hardware_model,host_bus_adapter,lang,mainboard_model,os_version,ports_bus_types,product_information,ram,video_adapter,
+        update_time,compatibility_configuration,board_cards)
+        values
+
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}, #{item.architecture}, #{item.biosUefi}, #{item.hardwareFactory},#{item.certificationAddr},
+            #{item.certificationTime},
+            #{item.commitID},
+            #{item.computerType}, #{item.cpu}, #{item.date},#{item.friendlyLink}, #{item.hardDiskDrive},
+            #{item.hardwareModel},
+            #{item.hostBusAdapter}, #{item.lang}, #{item.mainboardModel},#{item.osVersion}, #{item.portsBusTypes},
+            #{item.productInformation},
+            #{item.ram}, #{item.videoAdapter}, #{item.updateTime},#{item.compatibilityConfiguration}, #{item.boardCards}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteBatchAll">
+        DELETE FROM `whole_community`
+    </delete>
+</mapper>

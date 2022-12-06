@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.factory.WholeFactoryMapper">
+    <resultMap id="BaseResultMap" type="com.openeuler.southbound.model.factory.WholeFactory">
+        <id property="wholeId" column="whole_id"/>
+        <result property="wholeFactory" column="whole_factory"/>
+        <result property="cpuFactory" column="cpu_factory"/>
+        <result property="cpuModel" column="cpu_model"/>
+        <result property="architecture" column="architecture"/>
+        <result property="hardwareModel" column="hardware_model"/>
+        <result property="extendModel" column="extend_model"/>
+        <result property="interfacePerson" column="interface_person"/>
+        <result property="contact" column="contact"/>
+        <result property="middleman" column="middleman"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <!-- 查询整机厂商列表 -->
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT w.whole_id,w.whole_factory,w.hardware_model,w.extend_model,w.interface_person,w.contact,w.middleman,
+        w.create_time,c.cpu_factory,c.cpu_model,c.architecture
+        FROM whole_factory w LEFT JOIN cpu_factory c
+        ON w.cpu_id = c.cpu_id
+        <where>
+            <if test="wholeId != null and wholeId != ''">
+                w.whole_id = #{wholeId}
+            </if>
+            <if test="wholeFactory != null and wholeFactory != ''">
+                w.whole_factory = #{wholeFactory}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (c.cpu_factory like concat('%', #{keyword}, '%')
+                OR w.hardware_model like concat('%', #{keyword}, '%')
+                OR w.extend_model like concat('%', #{keyword}, '%')
+                OR c.cpu_model like concat('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY w.create_time DESC
+    </select>
+
+    <!-- 增加整机厂商 -->
+    <insert id="insert" parameterType="com.openeuler.southbound.model.factory.WholeFactory">
+        insert into whole_factory (whole_factory, hardware_model, extend_model, interface_person, contact,
+        middleman, create_time ,cpu_id)
+        values(#{wholeFactory}, #{hardwareModel}, #{extendModel}, #{interfacePerson}, #{contact}, #{middleman}, now()
+        ,(select cpu_id from cpu_factory where cpu_factory = #{cpuFactory} and cpu_model = #{cpuModel}))
+    </insert>
+
+    <!-- 修改整机厂商 -->
+    <update id="update" parameterType="com.openeuler.southbound.model.factory.WholeFactory">
+        update whole_factory
+        <set>
+            <if test="wholeFactory != null">
+                `whole_factory` = #{wholeFactory,jdbcType=VARCHAR},
+            </if>
+            <if test="hardwareModel != null">
+                `hardware_model` = #{hardwareModel,jdbcType=VARCHAR},
+            </if>
+            <if test="extendModel != null">
+                `extend_model` = #{extendModel,jdbcType=VARCHAR},
+            </if>
+            <if test="interfacePerson != null">
+                `interface_person` = #{interfacePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                `contact` = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="middleman != null">
+                `middleman` = #{middleman,jdbcType=VARCHAR},
+            </if>
+            <if test="cpuFactory != null or cpuModel != null">
+                `cpu_id` = (select cpu_id from cpu_factory where cpu_factory = #{cpuFactory}
+                and cpu_model = #{cpuModel})
+            </if>
+        </set>
+        where whole_id = #{wholeId,jdbcType=INTEGER}
+    </update>
+
+    <!-- 批量删除整机厂商 -->
+    <delete id="deleteByIds">
+        DELETE FROM whole_factory WHERE whole_id IN
+        <foreach collection="ids.split(',')" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 查询整机厂商名称列表 -->
+    <select id="queryNameList" resultType="String">
+        SELECT DISTINCT(whole_factory) FROM `whole_factory`
+    </select>
+
+    <!-- 查询典型机型&扩展名称列表 -->
+    <select id="queryTypicalModelList" resultType="java.lang.String">
+        SELECT DISTINCT(hardware_model) AS hardware_model
+        FROM `whole_factory` wf
+        LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN cpu_version cv ON cf.cpu_id=cv.cpu_id
+        LEFT JOIN version_plan vp ON vp.version_id =cv.version_id
+        <where>
+            1=1
+            <if test="wholeFactory != null and wholeFactory != ''">
+                AND wf.whole_factory = #{wholeFactory}
+            </if>
+            <if test="versionName != null and versionName != ''">
+                AND vp.version_name = #{versionName}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                AND vp.version_id = #{versionId}
+            </if>
+        </where>
+    </select>
+    <select id="queryExtendModelList" resultType="java.lang.String">
+        SELECT DISTINCT(extend_model) AS extend_model
+        FROM `whole_factory` wf
+        LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
+        LEFT JOIN cpu_version cv ON cf.cpu_id=cv.cpu_id
+        LEFT JOIN version_plan vp ON vp.version_id =cv.version_id
+        <where>
+            1=1
+            <if test="wholeFactory != null and wholeFactory != ''">
+                AND wf.whole_factory = #{wholeFactory}
+            </if>
+            <if test="versionName != null and versionName != ''">
+                AND vp.version_name = #{versionName}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                AND vp.version_id = #{versionId}
+            </if>
+        </where>
+    </select>
+
+    <!--根据整机厂商名称获取CPU厂商名称列表-->
+    <select id="queryCpuFactory" resultType="string">
+        SELECT DISTINCT(cf.cpu_factory) FROM `whole_factory` wf
+        LEFT JOIN `cpu_factory` cf ON wf.cpu_id = cf.cpu_id
+        WHERE wf.whole_factory = #{wholeFactory}
+    </select>
+
+    <!--根据更具整机厂商、CPU厂商名称获取CPU代次名称列表-->
+    <select id="queryCpuModel" resultType="string">
+        SELECT DISTINCT(cpu_model) FROM `whole_factory` wf
+        LEFT JOIN `cpu_factory` cf ON wf.cpu_id = cf.cpu_id
+        WHERE wf.whole_factory = #{wholeFactory}
+        AND cf.cpu_factory = #{cpuFactory}
+    </select>
+
+    <select id="queryWholeModelList" resultMap="BaseResultMap">
+        SELECT whole_factory, CONCAT_WS(',',GROUP_CONCAT(DISTINCT(hardware_model)),GROUP_CONCAT(DISTINCT(extend_model)))
+        AS hardware_model
+        FROM `whole_factory` GROUP BY whole_factory
+    </select>
+
+    <select id="queryModelIsSupport"
+            resultType="com.openeuler.southbound.model.community.CommunityWholeMachineBean">
+        SELECT os_version ,hardware_model,cpu ,architecture FROM
+        `whole_community`
+        <where>
+            1 = 1
+            <if test="hardwareFactory != null">
+                and hardware_factory = #{hardwareFactory,jdbcType=INTEGER}
+            </if>
+            <if test="hardwareModel != null">
+                and hardware_model = #{hardwareModel,jdbcType=INTEGER}
+            </if>
+            <if test="versionName != null">
+                and `os_version` = #{versionName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="exportAllData" resultMap="BaseResultMap">
+        SELECT w.whole_id,w.whole_factory,w.hardware_model,w.extend_model,w.interface_person,w.contact,w.middleman,
+        w.create_time,c.cpu_factory,c.cpu_model,c.architecture
+        FROM whole_factory w LEFT JOIN cpu_factory c
+        ON w.cpu_id = c.cpu_id
+        ORDER BY w.create_time DESC
+    </select>
+
+    <select id="queryCpuId" resultType="string">
+        SELECT cpu_id FROM cpu_factory
+        <where>
+            <if test="cpuFactory != null and cpuFactory != ''">
+                cpu_factory = #{cpuFactory}
+            </if>
+            <if test="cpuModel != null and cpuModel != ''">
+                AND cpu_model = #{cpuModel}
+            </if>
+        </where>
+    </select>
+</mapper>

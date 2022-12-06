@@ -9,7 +9,7 @@
 - 只有二进制商业软件，如nvidia驱动等
 - 无对应SIG组、社区无对应maintainer维护的软件
 
-![image-20211230032330124](./image-20211230032330124.png)
+![image-20211230032330124](./software-compatibility/dist/image-20211230032330124.png)
 
 # 开源软件随openEuler正式版本发布流程
 

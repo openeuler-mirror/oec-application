@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.CommunityBoardMapper">
+    <resultMap id="BaseResultMap"
+               type="com.openeuler.southbound.model.community.CommunityBoardBean">
+        <result property="boardModel" column="board_model"/>
+        <result property="chipModel" column="chip_model"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        board_model, chip_model
+    </sql>
+
+    <!-- 查询-->
+    <select id="selectAll"
+            resultType="com.openeuler.southbound.model.community.CommunityBoardBean">
+        select * from board_community
+    </select>
+
+    <!--  按照日期查询板卡型号和芯片型号-->
+    <select id="selectAllBoardByData" resultType="java.lang.String">
+        SELECT DISTINCT(board_model) AS hardware_model FROM board_community
+        <where>
+            <if test="startTime  != null and startTime != '' and  endTime != ''and  endTime != null">
+                driver_date BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="selectAllChipByData" resultType="java.lang.String">
+        SELECT DISTINCT(chip_model) AS chip_model FROM board_community
+        <where>
+            <if test="startTime  != null and startTime != '' and  endTime != ''and  endTime != null">
+                driver_date BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <!--  增加-->
+    <insert id="insertBatch" parameterType="com.openeuler.southbound.model.community.CommunityBoardBean">
+        insert into board_community
+        (architecture, board_model,
+        chip_model,chip_vendor,device_id,download_link,driver_date,driver_name,driver_size,item,lang,
+        os,sha256,ss_id,sv_id,type,vendor_id,version,update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.architecture}, #{item.boardModel}, #{item.chipModel},#{item.chipVendor},
+            #{item.deviceID},
+            #{item.downloadLink},
+            #{item.driverDate}, #{item.driverName}, #{item.driverSize},#{item.item}, #{item.lang},
+            #{item.os},
+            #{item.sha256}, #{item.ssID}, #{item.svID},#{item.type}, #{item.vendorID},
+            #{item.version},
+            #{item.updateTime} )
+        </foreach>
+    </insert>
+
+    <!-- 删除 -->
+    <delete id="deleteBatchAll">
+        DELETE FROM `board_community`
+    </delete>
+</mapper>

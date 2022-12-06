@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.overall.BoardOverallMapper">
+    <resultMap id="FilterResultMap" type="com.openeuler.southbound.model.overall.BoardOverall">
+        <id column="id" property="id"/>
+        <result column="chip_factory" property="chipFactory"/>
+        <result column="board_type" property="boardType"/>
+        <result column="chip_model" property="chipModel"/>
+        <result column="typical_board_model" property="typicalBoardModel"/>
+        <result column="extend_board_model" property="extendBoardModel"/>
+        <result column="version_name" property="versionName"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!--查询板卡-->
+    <select id="queryAll" resultMap="FilterResultMap">
+        SELECT cf.chip_factory, bf.board_type, cf.chip_model, bf.typical_board_model,
+        bf.extend_board_model, vp.version_name, bf.create_time FROM `board_factory` bf
+        left JOIN `chip_factory` cf ON cf.chip_id = bf.chip_id
+        left join chip_version cv on cf.chip_id = cv.chip_id
+        left join version_plan vp on vp.version_id = cv.version_id
+        <where>
+            <if test="versionId != null and versionId != ''">
+                vp.version_id IN
+                <foreach collection="versionId.split(',')" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="chipFactory != null and chipFactory != ''">
+                AND cf.chip_factory = #{chipFactory}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (cf.chip_model LIKE CONCAT('%', #{keyword}, '%')
+                OR bf.typical_board_model LIKE CONCAT('%', #{keyword}, '%')
+                OR bf.extend_board_model LIKE CONCAT('%', #{keyword}, '%')
+                OR bf.board_type LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY bf.create_time DESC
+    </select>
+
+    <!--芯片厂家 板卡类型 芯片型号 板卡型号 驱动名称 驱动版本 操作系统 架构 （典型x86）-->
+    <select id="queryTypicalModelStatusX86" resultType="int">
+        SELECT COUNT(*) FROM `board_community`
+        WHERE chip_vendor = #{chipFactory}
+        AND TYPE = #{boardType}
+        AND chip_model = #{chipModel}
+        AND os = #{versionName}
+        AND board_model = #{typicalBoardModel}
+        AND architecture = 'x86_64'
+    </select>
+
+    <!--芯片厂家 板卡类型 芯片型号 板卡型号 驱动名称 驱动版本 操作系统 架构 （典型arm）-->
+    <select id="queryTypicalModelStatusArm" resultType="int">
+        SELECT COUNT(*) FROM `board_community`
+        WHERE chip_vendor = #{chipFactory}
+        AND TYPE = #{boardType}
+        AND chip_model = #{chipModel}
+        AND os = #{versionName}
+        AND board_model = #{typicalBoardModel}
+        AND architecture = 'aarch64'
+    </select>
+
+    <!--板卡计划查找 （典型x86）-->
+    <select id="queryTypicalModelStatusX86FromPlan" resultType="int">
+        SELECT COUNT(*) FROM `board_plan` bp
+        LEFT JOIN `version_plan` vp ON bp.version_id = vp.version_id
+        WHERE bp.chip_factory = #{chipFactory}
+        AND vp.version_name = #{versionName}
+        AND (FIND_IN_SET(#{typicalBoardModel}, bp.beta_list)
+        OR FIND_IN_SET(#{typicalBoardModel}, bp.release_list))
+    </select>
+
+    <!--板卡计划查找 （典型arm）-->
+    <select id="queryTypicalModelStatusArmFromPlan" resultType="int">
+        SELECT COUNT(*) FROM `board_plan`
+        WHERE chip_factory = #{chipFactory}
+        AND version_name = #{versionName}
+        AND architecture = 'aarch64'
+        AND (FIND_IN_SET(#{typicalBoardModel}, beta_list)
+        OR FIND_IN_SET(#{typicalBoardModel}, release_list))
+    </select>
+
+    <!--扩展x86适配状态 （扩展x86）-->
+    <select id="queryExtendModelStatusX86" resultType="int">
+        SELECT COUNT(DISTINCT chip_vendor,TYPE,chip_model,os,board_model,architecture)
+        FROM `board_community`
+        WHERE chip_vendor = #{boardOverall.chipFactory}
+        AND TYPE = #{boardOverall.boardType}
+        AND chip_model = #{boardOverall.chipModel}
+        AND os = #{boardOverall.versionName}
+        AND board_model IN
+        <foreach collection="extendModelList" item="extendModel" open="(" close=")" separator=",">
+            #{extendModel}
+        </foreach>
+        AND architecture = 'x86_64'
+    </select>
+
+    <!--扩展arm适配状态 （扩展arm）-->
+    <select id="queryExtendModelStatusArm" resultType="int">
+        SELECT COUNT(DISTINCT chip_vendor,TYPE,chip_model,os,board_model,architecture)
+        FROM `board_community`
+        WHERE chip_vendor = #{boardOverall.chipFactory}
+        AND TYPE = #{boardOverall.boardType}
+        AND chip_model = #{boardOverall.chipModel}
+        AND os = #{boardOverall.versionName}
+        AND board_model IN
+        <foreach collection="extendModelList" item="extendModel" open="(" close=")" separator=",">
+            #{extendModel}
+        </foreach>
+        AND architecture = 'aarch64'
+    </select>
+
+    <!--导出所有板卡数据-->
+    <select id="exportAllData" resultMap="FilterResultMap">
+        SELECT cf.chip_factory, bf.board_type, cf.chip_model, bf.typical_board_model,
+        bf.extend_board_model, vp.version_name, bf.create_time FROM `board_factory` bf
+        LEFT JOIN `chip_factory` cf ON cf.chip_id = bf.chip_id
+        LEFT JOIN chip_version cv on cf.chip_id = cv.chip_id
+        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
+        ORDER BY bf.create_time DESC
+    </select>
+</mapper>

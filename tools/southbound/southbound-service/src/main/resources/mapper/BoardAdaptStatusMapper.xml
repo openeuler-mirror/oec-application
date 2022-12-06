@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openeuler.southbound.mapper.adaptstatus.BoardAdaptStatusMapper">
+    <!--芯片厂商-->
+    <select id="selectAllChipFactory" resultType="java.lang.String">
+        select distinct(chip_factory) from chip_factory
+    </select>
+    <select id="selectByChipFactory" resultType="com.openeuler.southbound.model.factory.BoardFactory">
+        SELECT * FROM
+        `board_factory` bf left join chip_factory cf on bf.chip_id = cf.chip_id
+        left join chip_version cv on cf.chip_id = cv.chip_id
+        left join version_plan vp on vp.version_id = cv.version_id
+        WHERE
+        chip_factory = #{chipFactory} and version_name = #{versionName}
+    </select>
+
+    <!-- 芯片型号 -->
+    <select id="selectAllChipModels" resultType="java.lang.String">
+        select distinct(chip_model) from `chip_factory`
+    </select>
+
+    <select id="selectByChipModel" resultType="com.openeuler.southbound.model.factory.BoardFactory">
+        SELECT * FROM
+        `board_factory` bf left join chip_factory cf on bf.chip_id = cf.chip_id
+        left join chip_version cv on cf.chip_id = cv.chip_id
+        left join version_plan vp on vp.version_id = cv.version_id
+        WHERE
+        chip_model=#{chipModel} and version_name = #{versionName}
+    </select>
+
+    <!-- 板卡类型 -->
+    <select id="selectAllBoardType" resultType="java.lang.String">
+        select distinct(board_type) from board_factory
+    </select>
+    <select id="selectByBoardType" resultType="com.openeuler.southbound.model.factory.BoardFactory">
+        SELECT * FROM
+        `board_factory` bf left join chip_factory cf on bf.chip_id = cf.chip_id
+        left join chip_version cv on cf.chip_id = cv.chip_id
+        left join version_plan vp on vp.version_id = cv.version_id
+        WHERE
+        board_type= #{boardType} and version_name = #{versionName}
+    </select>
+
+    <!--操作系统名称（操作系统版本）-->
+    <select id="selectAllVersionName" resultType="java.lang.String">
+        select distinct(version_name) from version_plan
+    </select>
+    <select id="selectAllBoardFromBoardFactory"
+            resultType="com.openeuler.southbound.model.factory.BoardFactory">
+        SELECT * FROM
+        `board_factory` bf left join chip_factory cf on bf.chip_id = cf.chip_id
+        left join chip_version cv on cf.chip_id = cv.chip_id
+        left join version_plan vp on vp.version_id = cv.version_id
+        where version_name = #{versionName}
+    </select>
+
+    <!-- 查询芯片和版本是否适配-->
+    <select id="selectOsSupportOfChip" resultType="java.lang.Integer">
+        SELECT count(*) FROM
+        (chip_factory cf LEFT JOIN chip_version cv on cf.chip_id = cv.chip_id)
+        LEFT JOIN version_plan vp ON cv.version_id = vp.version_id
+        <where>
+            cf.chip_factory = #{chipFactory}
+            AND cf.chip_model= #{chipModel}
+            AND vp.version_name = #{versionName}
+        </where>
+    </select>
+
+    <!-- 查询 社区表 中是否有匹配的板卡 -->
+    <select id="selectBoardStatusFromCommunity" resultType="int">
+        SELECT COUNT(*) FROM `board_community`
+        <where>
+            chip_vendor = #{chipFactory}
+            and chip_model = #{chipModel}
+            and `type` = #{boardType}
+            and board_model = #{typicalBoardModel}
+            <if test="architecture!=null and architecture!=''">
+                and architecture = #{architecture}
+            </if>
+            and os = #{versionName}
+        </where>
+    </select>
+
+    <!-- 查询在计划表中匹配的板卡对象-->
+    <select id="selectBoardStatusFromPlan" resultType="int">
+        SELECT COUNT(*) FROM
+        `board_plan` bp LEFT JOIN version_plan vp ON bp.version_id= vp.version_id
+        <where>
+            chip_factory = #{chipFactory}
+            and (
+            FIND_IN_SET( #{typicalBoardModel}, beta_list) OR FIND_IN_SET(#{typicalBoardModel}, release_list))
+            and version_name = #{versionName}
+        </where>
+    </select>
+</mapper>
