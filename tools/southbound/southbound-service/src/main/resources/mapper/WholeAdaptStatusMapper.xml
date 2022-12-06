@@ -6,12 +6,13 @@
     </select>
 
     <select id="queryWholeByFactory" resultType="com.openeuler.southbound.model.factory.WholeFactory">
-        SELECT whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
-        FROM `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
-        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
-        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
+        SELECT wf.whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM `whole_plan` wp
+        LEFT JOIN `whole_factory` wf ON wp.whole_factory = wf.whole_factory
+        LEFT JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id
+        LEFT JOIN `version_plan` vp ON wp.version_id = vp.version_id
         <where>
-            whole_factory = #{wholeFactory} and version_name = #{versionName}
+            wf.whole_factory = #{wholeFactory} and version_name = #{versionName}
         </where>
     </select>
 
@@ -57,10 +58,11 @@
         select distinct(cpu_factory) from `cpu_factory`
     </select>
     <select id="queryWholeByCpuFactory" resultType="com.openeuler.southbound.model.factory.WholeFactory">
-        SELECT whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
-        FROM `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
-        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
-        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
+        SELECT wf.whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM `whole_plan` wp
+        LEFT JOIN `whole_factory` wf ON wp.whole_factory = wf.whole_factory
+        LEFT JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id
+        LEFT JOIN `version_plan` vp ON wp.version_id = vp.version_id
         <where>
             cpu_factory = #{cpuFactory} and version_name = #{versionName}
         </where>
@@ -71,10 +73,11 @@
         select distinct(cpu_model) from `cpu_factory`
     </select>
     <select id="queryWholeByCpuModel" resultType="com.openeuler.southbound.model.factory.WholeFactory">
-        SELECT whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
-        FROM `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
-        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
-        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
+        SELECT wf.whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM `whole_plan` wp
+        LEFT JOIN `whole_factory` wf ON wp.whole_factory = wf.whole_factory
+        LEFT JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id
+        LEFT JOIN `version_plan` vp ON wp.version_id = vp.version_id
         <where>
             cpu_model = #{cpuModel} and version_name = #{versionName}
         </where>
@@ -88,10 +91,11 @@
     <!-- 查询所有的整机-->
     <select id="queryAllWholeMachineInWholeFactory"
             resultType="com.openeuler.southbound.model.factory.WholeFactory">
-        SELECT whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
-        FROM `whole_factory` wf LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
-        LEFT JOIN cpu_version cv on cf.cpu_id = cv.cpu_id
-        LEFT JOIN version_plan vp on vp.version_id = cv.version_id
+        SELECT wf.whole_factory, hardware_model, extend_model, cpu_factory, cpu_model, architecture
+        FROM `whole_plan` wp
+        LEFT JOIN `whole_factory` wf ON wp.whole_factory = wf.whole_factory
+        LEFT JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id
+        LEFT JOIN `version_plan` vp ON wp.version_id = vp.version_id
         <where>
             1 = 1
             <if test="architecture!=null and architecture!=''">

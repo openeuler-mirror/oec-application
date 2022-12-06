@@ -93,38 +93,19 @@
     <select id="queryTypicalModelList" resultType="java.lang.String">
         SELECT DISTINCT(hardware_model) AS hardware_model
         FROM `whole_factory` wf
-        LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
-        LEFT JOIN cpu_version cv ON cf.cpu_id=cv.cpu_id
-        LEFT JOIN version_plan vp ON vp.version_id =cv.version_id
         <where>
             1=1
             <if test="wholeFactory != null and wholeFactory != ''">
                 AND wf.whole_factory = #{wholeFactory}
-            </if>
-            <if test="versionName != null and versionName != ''">
-                AND vp.version_name = #{versionName}
-            </if>
-            <if test="versionId != null and versionId != ''">
-                AND vp.version_id = #{versionId}
             </if>
         </where>
     </select>
     <select id="queryExtendModelList" resultType="java.lang.String">
         SELECT DISTINCT(extend_model) AS extend_model
         FROM `whole_factory` wf
-        LEFT JOIN cpu_factory cf ON wf.cpu_id = cf.cpu_id
-        LEFT JOIN cpu_version cv ON cf.cpu_id=cv.cpu_id
-        LEFT JOIN version_plan vp ON vp.version_id =cv.version_id
         <where>
-            1=1
             <if test="wholeFactory != null and wholeFactory != ''">
                 AND wf.whole_factory = #{wholeFactory}
-            </if>
-            <if test="versionName != null and versionName != ''">
-                AND vp.version_name = #{versionName}
-            </if>
-            <if test="versionId != null and versionId != ''">
-                AND vp.version_id = #{versionId}
             </if>
         </where>
     </select>
