@@ -68,12 +68,9 @@ export function queryVersionModel(versionName) {
 }
 
 //根据芯片厂商查询支持的os版本
-export function queryVersionListByChipFactory(chipFactory) {
+export function queryVersionListByChipFactory() {
   return service ({
-    url: '/board-plan/queryVersionListByChipFactory',
-    method: 'get',
-    params: {
-      chipFactory
-    }
+    url: '/version-plan/queryVersionList',
+    method: 'get'
   });
 }

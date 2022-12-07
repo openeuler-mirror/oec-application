@@ -120,14 +120,14 @@ export default {
         { min: 0, max: 40, message: '请输入0-40个字符', trigger: 'blur' }
       ],
       interfacePerson: [
-        { min: 0, max: 10, message: '请输入0-10个字符', trigger: 'blur' }
+        { min: 0, max: 20, message: '请输入0-20个字符', trigger: 'blur' }
       ],
       contact: [
         { min: 0, max: 50, message: '请输入0-50个字符', trigger: 'blur' },
         { validator: validateContant, trigger: 'blur' }
       ],
       middleman: [
-        { min: 0, max: 10, message: '请输入0-10个字符', trigger: 'blur' }
+        { min: 0, max: 20, message: '请输入0-20个字符', trigger: 'blur' }
       ]
     };
     // 控制表单的显示与隐藏

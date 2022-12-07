@@ -53,13 +53,12 @@ export function queryFactoryNames() {
 }
 
 // 查询典型和扩展机型
-export function queryModels(wholeFactory, versionId) {
+export function queryModels(wholeFactory) {
   return service ({
     url: '/whole-factory/queryModels',
     method: 'get',
     params: {
-      wholeFactory,
-      versionId
+      wholeFactory
     }
   });
 }
@@ -76,12 +75,9 @@ export function queryVersionModel(versionName) {
 }
 
 // 根据整机厂商查询支持的OS版本
-export function queryVersionListByWholeFactory(wholeFactory) {
+export function queryVersionListByWholeFactory() {
   return service ({
-    url: '/whole-plan/queryVersionListByWholeFactory',
-    method: 'get',
-    params: {
-      wholeFactory
-    }
+    url: '/version-plan/queryVersionList',
+    method: 'get'
   });
 }

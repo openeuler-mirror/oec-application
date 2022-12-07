@@ -11,7 +11,7 @@
         </el-col>
         <el-col :span="11">
           <el-form-item label="操作系统" prop="versionId" label-width="100px">
-            <el-select v-model="formData.versionId" placeholder="请选择操作系统" @change="versionChange" clearable>
+            <el-select v-model="formData.versionId" placeholder="请选择操作系统" clearable>
               <el-option v-for="item in versionOptions" :key="item.versionId" :label="item.versionName" :value="item.versionId + ''" />
             </el-select>
           </el-form-item>
@@ -87,9 +87,9 @@ export default {
         versionOptions.value = [];
       } else {
         formData.value = rowdata;
-        queryVersionOptionsByFactory(rowdata.chipFactory);
-        queryModelByFactory(rowdata.chipFactory, rowdata.versionId);
+        queryModelByFactory(rowdata.chipFactory);
       }
+      queryVersionOptionsByFactory();
       dialogVisible.value = true;
     };
     const close = () => {
@@ -150,9 +150,9 @@ export default {
       }
     };
 
-    // 查询操作系统列表  
-    const queryVersionOptionsByFactory = async (chipFactory) => {
-      let res = await queryVersionListByChipFactory(chipFactory);
+    // 查询操作系统列表
+    const queryVersionOptionsByFactory = async () => {
+      let res = await queryVersionListByChipFactory();
       if (res.code === 200) {
         let data = [];
         res.data.forEach(item => {
@@ -183,8 +183,8 @@ export default {
     initModelOptions();
     let hardwareModelList = [];
     let extendModelList = [];
-    const queryModelByFactory = async (chipFactory, versionId) => {
-      let res = await queryModels(chipFactory, versionId);
+    const queryModelByFactory = async (chipFactory) => {
+      let res = await queryModels(chipFactory);
       if (res.code === 200) {
         hardwareModelList = res.data.typicalModelList ? res.data.typicalModelList : [];
         extendModelList = res.data.extendBoardModelList ? res.data.extendBoardModelList : [];
@@ -214,27 +214,15 @@ export default {
       } else if (type === 'release') {
         formData.value.betaList = formData.value.betaList.filter(item => !e.includes(item));
       }
-
     };
-
     const chipFactoryChange = (value) => {
-      formData.value.versionId = '';
-      versionOptions.value = [];
-      versionChange();
-      if (!value) {
-        return;
-      }
-      queryVersionOptionsByFactory(value);
-    };
-
-    const versionChange = (versionId) => {
       formData.value.betaList = [];
       formData.value.releaseList = [];
-      if (!versionId) {
+      if (!value) {
         initModelOptions();
         return;
       }
-      queryModelByFactory(formData.value.chipFactory, versionId);
+      queryModelByFactory(formData.value.chipFactory);
     };
 
     return {
@@ -254,8 +242,7 @@ export default {
       driverVersionOptions,
       typeFilterOptions,
       handleListChange,
-      chipFactoryChange,
-      versionChange
+      chipFactoryChange
     };
   }
 };
