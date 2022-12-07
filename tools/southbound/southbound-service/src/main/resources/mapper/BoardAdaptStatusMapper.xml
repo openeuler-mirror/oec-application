@@ -6,12 +6,12 @@
         select distinct(chip_factory) from chip_factory
     </select>
     <select id="selectByChipFactory" resultType="com.openeuler.southbound.model.factory.BoardFactory">
-        SELECT * FROM
-        `board_factory` bf left join chip_factory cf on bf.chip_id = cf.chip_id
-        left join chip_version cv on cf.chip_id = cv.chip_id
-        left join version_plan vp on vp.version_id = cv.version_id
+        SELECT * FROM `board_plan` bp
+        LEFT JOIN chip_factory cf ON bp.chip_factory = cf.chip_factory
+        LEFT JOIN `board_factory` bf ON cf.chip_id = bf.chip_id
+        LEFT JOIN version_plan vp ON bp.version_id = vp.version_id
         WHERE
-        chip_factory = #{chipFactory} and version_name = #{versionName}
+        cf.chip_factory = #{chipFactory} and version_name = #{versionName}
     </select>
 
     <!-- 芯片型号 -->
@@ -20,10 +20,10 @@
     </select>
 
     <select id="selectByChipModel" resultType="com.openeuler.southbound.model.factory.BoardFactory">
-        SELECT * FROM
-        `board_factory` bf left join chip_factory cf on bf.chip_id = cf.chip_id
-        left join chip_version cv on cf.chip_id = cv.chip_id
-        left join version_plan vp on vp.version_id = cv.version_id
+        SELECT * FROM `board_plan` bp
+        LEFT JOIN chip_factory cf ON bp.chip_factory = cf.chip_factory
+        LEFT JOIN `board_factory` bf ON cf.chip_id = bf.chip_id
+        LEFT JOIN version_plan vp ON bp.version_id = vp.version_id
         WHERE
         chip_model=#{chipModel} and version_name = #{versionName}
     </select>
@@ -33,10 +33,10 @@
         select distinct(board_type) from board_factory
     </select>
     <select id="selectByBoardType" resultType="com.openeuler.southbound.model.factory.BoardFactory">
-        SELECT * FROM
-        `board_factory` bf left join chip_factory cf on bf.chip_id = cf.chip_id
-        left join chip_version cv on cf.chip_id = cv.chip_id
-        left join version_plan vp on vp.version_id = cv.version_id
+        SELECT * FROM `board_plan` bp
+        LEFT JOIN chip_factory cf ON bp.chip_factory = cf.chip_factory
+        LEFT JOIN `board_factory` bf ON cf.chip_id = bf.chip_id
+        LEFT JOIN version_plan vp ON bp.version_id = vp.version_id
         WHERE
         board_type= #{boardType} and version_name = #{versionName}
     </select>
@@ -47,10 +47,11 @@
     </select>
     <select id="selectAllBoardFromBoardFactory"
             resultType="com.openeuler.southbound.model.factory.BoardFactory">
-        SELECT * FROM
-        `board_factory` bf left join chip_factory cf on bf.chip_id = cf.chip_id
-        left join chip_version cv on cf.chip_id = cv.chip_id
-        left join version_plan vp on vp.version_id = cv.version_id
+        SELECT * FROM `board_factory` bf
+        LEFT JOIN chip_factory cf ON bf.chip_id = cf.chip_id
+        LEFT JOIN chip_version cv ON cf.chip_id = cv.chip_id
+        LEFT JOIN version_plan vp ON vp.version_id = cv.version_id
+        RIGHT JOIN `board_plan` bp ON bp.chip_factory = cf.chip_factory
         where version_name = #{versionName}
     </select>
 

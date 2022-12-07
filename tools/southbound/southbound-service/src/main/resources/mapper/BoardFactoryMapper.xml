@@ -120,12 +120,6 @@
             <if test="chipFactory != null and chipFactory != ''">
                 AND cf.chip_factory = #{chipFactory}
             </if>
-            <if test="versionName != null and versionName != ''">
-                AND vp.version_name = #{versionName}
-            </if>
-            <if test="versionId != null and versionId != ''">
-                AND vp.version_id = #{versionId}
-            </if>
         </where>
     </select>
     <select id="queryExtendModelList" resultType="java.lang.String">
@@ -137,12 +131,6 @@
             1=1
             <if test="chipFactory != null and chipFactory != ''">
                 AND cf.chip_factory = #{chipFactory}
-            </if>
-            <if test="versionName != null and versionName != ''">
-                AND vp.version_name = #{versionName}
-            </if>
-            <if test="versionId != null and versionId != ''">
-                AND vp.version_id = #{versionId}
             </if>
         </where>
     </select>

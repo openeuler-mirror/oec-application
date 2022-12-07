@@ -81,7 +81,7 @@ public class BoardFactoryServiceImpl implements BoardFactoryService {
         List<String> extendBoardModelList = boardFactoryMapper.queryExtendModelList(boardFactory);
         List<String> extendModels = new ArrayList<>();
         extendBoardModelList.forEach(item -> {
-            if (item != null) {
+            if (item != null && !item.isEmpty()) {
                 Collections.addAll(extendModels, item.split(","));
             }
         });

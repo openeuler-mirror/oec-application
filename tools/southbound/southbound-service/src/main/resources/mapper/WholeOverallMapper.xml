@@ -16,11 +16,12 @@
 
     <!-- 查询全景整机列表 -->
     <select id="queryAll" resultMap="BaseResultMap">
-        SELECT wf.whole_factory, cf.cpu_factory, cf.cpu_model, wf.hardware_model, wf.extend_model,
-        cf.architecture, vp.version_name, vp.version_id, wf.create_time
-        FROM `whole_factory` wf
-        INNER JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id,
-        `version_plan` vp
+        SELECT wf.whole_factory, wf.hardware_model, wf.extend_model,cf.cpu_factory, cf.cpu_model,
+        cf.architecture,vp.version_name,vp.version_id,wf.create_time
+        FROM `whole_plan` wp
+        LEFT JOIN `whole_factory` wf ON wp.whole_factory = wf.whole_factory
+        LEFT JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id
+        LEFT JOIN  `version_plan` vp ON   wp.version_id = vp.version_id
         <where>
             <if test="versionId != null and versionId != ''">
                 vp.version_id IN
@@ -78,13 +79,14 @@
         OR FIND_IN_SET(#{hardwareModel}, wp.release_list))
     </select>
 
-    <!-- 查询全景整机列表版本是否在适配计划中 -->
+    <!-- 导出数据 -->
     <select id="exportAllData" resultMap="BaseResultMap">
-        SELECT wf.whole_factory, cf.cpu_factory, cf.cpu_model, wf.hardware_model, wf.extend_model,
-        cf.architecture, vp.version_name, vp.version_id, wf.create_time
-        FROM `whole_factory` wf
-        INNER JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id,
-        `version_plan` vp
+        SELECT wf.whole_factory, wf.hardware_model, wf.extend_model,cf.cpu_factory, cf.cpu_model,
+        cf.architecture,vp.version_name,vp.version_id,wf.create_time
+        FROM `whole_plan` wp
+        LEFT JOIN `whole_factory` wf ON wp.whole_factory = wf.whole_factory
+        LEFT JOIN `cpu_factory` cf ON cf.cpu_id = wf.cpu_id
+        LEFT JOIN  `version_plan` vp ON   wp.version_id = vp.version_id
         ORDER BY wf.create_time DESC
     </select>
 </mapper>

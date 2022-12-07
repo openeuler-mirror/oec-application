@@ -16,9 +16,10 @@
     <select id="queryAll" resultMap="FilterResultMap">
         SELECT cf.chip_factory, bf.board_type, cf.chip_model, bf.typical_board_model, bf.extend_board_model,
         vp.version_name, bf.create_time
-        FROM `board_factory` bf
-        INNER JOIN `chip_factory` cf ON cf.chip_id = bf.chip_id,
-        `version_plan` vp
+        FROM `board_plan` bp
+        LEFT JOIN chip_factory cf ON bp.chip_factory = cf.chip_factory
+        LEFT JOIN `board_factory` bf ON cf.chip_id = bf.chip_id
+        LEFT JOIN version_plan vp ON bp.version_id = vp.version_id
         <where>
             <if test="versionId != null and versionId != ''">
                 vp.version_id IN
@@ -115,9 +116,10 @@
     <select id="exportAllData" resultMap="FilterResultMap">
         SELECT cf.chip_factory, bf.board_type, cf.chip_model, bf.typical_board_model, bf.extend_board_model,
         vp.version_name, bf.create_time
-        FROM `board_factory` bf
-        INNER JOIN `chip_factory` cf ON cf.chip_id = bf.chip_id,
-        `version_plan` vp
+        FROM `board_plan` bp
+        LEFT JOIN chip_factory cf ON bp.chip_factory = cf.chip_factory
+        LEFT JOIN `board_factory` bf ON cf.chip_id = bf.chip_id
+        LEFT JOIN version_plan vp ON bp.version_id = vp.version_id
         ORDER BY bf.create_time DESC
     </select>
 </mapper>
