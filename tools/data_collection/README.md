@@ -83,3 +83,21 @@ dnf install
   ...
 }
 ```
+
+## get_ecology_compatiable_list.py
+
+### 用法
+
+```
+python3 get_ecology_compatiable_list.py
+    将https://ecology.chinauos.com上的兼容性清单导出到excel表格： ecology_uos_compatiable_list.xls
+```
+
+## get_kylinos_compatiable_list.py
+
+### 用法
+
+```
+python3 get_kylinos_compatiable_list.py
+    将https://eco.kylinos.cn上的兼容性清单导出到excel表格：kylinos_compatiable_list.xls
+```
