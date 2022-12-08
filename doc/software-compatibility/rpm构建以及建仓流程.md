@@ -6,9 +6,9 @@
 3. 仓库的webhook将自动触发构建任务
 
 #### 一、基于PR，创建仓库
-在[oepkgs-management](https://gitee.com/oepkgs/oepkgs-management)仓库提PR(如何提PR，详见文档最后的[QA](##QA))，填写两个配置文件，PR合入之后，创仓机器人ci-rebot会在[src-oepkgs](https://gitee.com/src-oepkgs)下面自动创建仓库。
+在[oepkgs-management](https://gitee.com/oepkgs/oepkgs-management)仓库提PR(如何提PR，详见文档最后的[QA](##QA))，填写两个配置文件，PR合入之后，创仓机器人ci-robot会在[src-oepkgs](https://gitee.com/src-oepkgs)下面自动创建仓库。
 
-oepkgs-management仓库中的两个配置文件(以qemu为例)：
+oepkgs-management仓库中的两个配置文件(以nginx为例)：
 ```
 # 在oepkgs-management仓库sig目录下面创建虚拟化领域的sig组
 # 创建oepkgs-management/sig/virtual/sig-info.yaml文件
@@ -29,19 +29,19 @@ maintainers:
 # 该sig组管理的仓库
 repositories:
 - repo: 
-  - src-oepkgs/qemu   
+  - src-oepkgs/nginx   
 ```
 
 ```
 # 在oepkgs-management/sig/virtual下面创建src-oepkgs/仓库名称首字母/仓库名称.yaml
 # ci-rebot将依据这个文件进行自动建仓
-oepkgs-management/sig/virtual/src-oepkgs/q/qemu.yaml:
+oepkgs-management/sig/virtual/src-oepkgs/q/nginx.yaml:
 
 # 仓库名称
-name: qemu
-description: "QEMU is a generic and open source processor emulator which achieves a good emulation speed by using dynamic translation"
+name: nginx
+description: "nginx is a generic and open source processor emulator which achieves a good emulation speed by using dynamic translation"
 # 仓库地址
-upstream: https://gitee.com/src-oepkgs/qemu
+upstream: https://gitee.com/src-oepkgs/nginx
 # 仓库分支
 branches:
 - name: master
@@ -55,9 +55,9 @@ branches:
 type: public
 ```
 #### 二、补充源码文件
-完成步骤一之后，5分钟内会生成https://gitee.com/src-oepkgs/qemu仓库，通过PR往这个仓库中补充源码文件：
+完成步骤一之后，5分钟内会生成 https://gitee.com/src-oepkgs/nginx 仓库，通过PR往这个仓库中补充源码文件：
 
-分别是可用于支撑生成rpm包的qemu.spec文件、软件包源码包qemu-2.12.0.tar.bz2，详见：https://gitee.com/src-oepkgs/qemu
+分别是可用于支撑生成rpm包的nginx.spec文件、软件包源码包nginx-2.12.0.tar.bz2，详见：https://gitee.com/src-oepkgs/nginx
 
 提了PR之后，在5~30分钟时间内，会进行PR门禁构建测试，PR会评论出PR构建结果，建议在**Build_Result**显示为**SUCCESS**之后合入PR
 
@@ -92,7 +92,7 @@ suite: rpmbuild
 # 测试用例 ~/lkp-test/tests/rpmbuild
 rpmbuild:
 # 远程仓库源码包地址
-upstream_repo: https://gitee.com/src-oepkgs/qemu
+upstream_repo: https://gitee.com/src-oepkgs/nginx
 # 构建后的包仓库位置，都将放置在contrib/$sig仓库中
 custom_repo_name: contrib/virtual
 
@@ -113,9 +113,7 @@ os_version: $upstream_branch
 # docker_image: $upstream_branch
 ```
 #### 2. 查看日志判断是否构建成功
-###### 2.1 可通过job_id来查看日志(该job_id之后将由门禁系统，以评论形式评论至仓库PR中，目前暂无)
- <u>https://compass-ci.openeuler.org/jobs</u>
-
+###### 2.1 可通过构建工程系统，以评论形式评论至仓库PR中
 
 #### 3. rpmbuild脚本
 在submit rpmbuild.yaml 时，测试用例**rpmbuild**会去引用脚本
@@ -125,8 +123,7 @@ os_version: $upstream_branch
 
 如果构建成功，则通过upload_rpm_pkg函数先将测试机上打好的软件包放入```/srv/rpm/upload```,再通过update_repo_mq处理上传的软件包。处理完的包会先放入/srv/rpm/testing中，每天零点定时更新到/srv/rpm/pub中,也就是https://repo.oepkgs.net/openEuler/rpm/仓库中
 #### 4. 测试构建的包能否正常安装
-###### 4.1  可以查看job_id(自动构建任务，无需提交,可通过job_id来查看日志,该job_id之后将由门禁系统，以评论形式评论至仓库PR中，目前暂无)
-<u>https://compass-ci.openeuler.org/jobs</u>
+###### 4.1  可以查看自动构建任务，无需提交，以评论形式评论至仓库PR中)
 
 ###### 4.2  手动提交install.yaml
 需要加入以下参数
@@ -174,9 +171,9 @@ mount_repo_name: compatible/c7
 
 
 ### 如何查询软件包位置？
-[https://compass-ci.openeuler.org/oepkgs](https://compass-ci.openeuler.org/oepkgs)
+[https://search.oepkgs.net/](https://search.oepkgs.net/)
 可在此查询引入到软件所的软件包
 
 ### 如何下载使用仓库中的软件包？
-在[https://compass-ci.openeuler.org/oepkgs](https://compass-ci.openeuler.org/oepkgs)
-查询软件包在软件所中的仓库存放位置之后，详见[openEuler社区开源软件适配流程.md](https://gitee.com/openeuler/oec-application/blob/master/doc/openEuler%E7%A4%BE%E5%8C%BA%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6%E9%80%82%E9%85%8D%E6%B5%81%E7%A8%8B.md)的最后一节：**下载使用软件**，修改这一节中的示例中的**baseurl**即可。
+在[https://search.oepkgs.net/](https://search.oepkgs.net/)
+查询软件包在软件所中的仓库存放位置之后，点开软件包的详情页，按照安装指引便可下载使用软件包。
