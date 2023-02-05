@@ -10,6 +10,8 @@ spec文件是配置规范文件，是RPM软件包编译过程的核心，它说�
 - 检查spec文件中patch在prep阶段的使用情况
 - 保存spec中exclusive arch字段信息
 
+![结果图](spec.png)
+
 ## 规范检查项目
 #### 检查当前版本号是否比上一个commit新
 
