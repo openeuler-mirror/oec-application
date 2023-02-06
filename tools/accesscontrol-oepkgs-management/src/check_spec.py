@@ -1,20 +1,5 @@
 # -*- encoding=utf-8 -*-
-"""
-# **********************************************************************************
-# Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
-# [openeuler-jenkins] is licensed under the Mulan PSL v2.
-# You can use this software according to the terms and conditions of the Mulan PSL v2.
-# You may obtain a copy of Mulan PSL v2 at:
-#          http://license.coscl.org.cn/MulanPSL2
-# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-# EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-# MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-# See the Mulan PSL v2 for more details.
-# Author:
-# Create: 2020-09-23
-# Description: check spec file
-# **********************************************************************************
-"""
+
 import os
 import calendar
 import logging
@@ -23,12 +8,12 @@ import re
 from datetime import datetime, timezone
 import yaml
 
-from src.proxy.git_proxy import GitProxy
-from src.proxy.requests_proxy import do_requests
-from src.ac.framework.ac_result import FAILED, SUCCESS, WARNING
-from src.ac.framework.ac_base import BaseCheck
-from src.ac.common.rpm_spec_adapter import RPMSpecAdapter
-from src.ac.common.gitee_repo import GiteeRepo
+from git import GitProxy
+from requests_proxy import do_requests
+from ac_result import FAILED, SUCCESS, WARNING
+from ac_base import BaseCheck
+from rpm_spec_adapter import RPMSpecAdapter
+from gitee_repo import GiteeRepo
 from pyrpm.spec import Spec
 from src.constant import Constant
 
