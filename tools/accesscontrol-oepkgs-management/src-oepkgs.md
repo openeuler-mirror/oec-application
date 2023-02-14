@@ -41,6 +41,82 @@ function exec_check() {
   log_info "***** End to exec static check *****"
 }
 ```
+## 说明
+
+```python
+self._ac_check_elements
+```
+
+```json
+{
+	'spec': {
+		'hint': 'check_spec_file',
+		'module': 'spec.check_spec',
+		'entry': 'CheckSpec',
+		'ignored': ['homepage']
+	},
+	'code': {
+		'hint': 'check_code_style',
+		'module': 'code.check_code_style',
+		'entry': 'CheckCodeStyle',
+		'exclude': True,
+		'ignored': ['patch']
+	},
+	'package_yaml': {
+		'hint': 'check_package_yaml_file',
+		'module': 'package_yaml.check_yaml',
+		'entry': 'CheckPackageYaml',
+		'ignored': ['fields']
+	},
+	'package_license': {
+		'hint': 'check_package_license',
+		'module': 'package_license.check_license',
+		'entry': 'CheckLicense'
+	},
+	'binary': {
+		'hint': 'check_binary_file',
+		'module': 'binary.check_binary_file',
+		'entry': 'CheckBinaryFile'
+	},
+	'sca': {
+		'exclude': True
+	},
+	'openlibing': {
+		'exclude': True
+	}
+}
+
+{
+	'version_control': 'git',
+	'src_repo': 'https://code.wireshark.org/review/gitweb?p=wireshark.git',
+	'tag_prefix': '^v',
+	'seperator': '.'
+}
+```
+
+
+
+## 2 package yaml
+
+函数调用关系图
+
+![](check_yaml.png)
+
+此文件夹中包含两个python文件
+
+**1 check_yaml.py**
+
+检查软件包中的yaml文件
+
+| 类方法/属性            | 描述                   | 作用说明                                                     |
+| ---------------------- | ---------------------- | ------------------------------------------------------------ |
+| __init__               | 初始化                 | CheckPackageYaml实例化对象，初始设置一些参数值               |
+| is_change_package_yaml | 判断是否更改了yaml文件 | 如果本次提交变更了yaml，则对yaml进行检查                     |
+| check_fields           | 检查fileds             | 从具体的目标分{tbranch}支下载源码及关联仓库代码，编译软件包、比较软件包差异也需目标分支参数 |
+| check_repo             | 检查repo               | 检查yaml的有效性,能否从上游社区获取版本信息                  |
+| check_repo_domain      | 检查repo作用域         | 检查spec中source0域名是否包含yaml的version_control,仅做日志告警只返回SUCCESS(autoconf为特例) |
+| check_repo_name        | 检查repo名称           | 检查spec中是否包含yaml中src_repo字段的软件名,仅做日志告警只返回SUCCESS |
+| __call__               | ·                      | 使CheckPackageYaml的实例对象变为了可调用对象                 |
 
 # 三、trigger阶段参数列表
 | 参数名               | 默认值                           | 描述                                           | 来源            |
