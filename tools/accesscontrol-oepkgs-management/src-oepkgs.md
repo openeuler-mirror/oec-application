@@ -14,7 +14,35 @@ oepkgs (Open External Packages Service) 是一个为 openEuler 操作系统以�
 #### 2.3 门禁检查结果
 ![check](check.png)
 
-# 一、trigger阶段参数列表
+# 二、执行流程
+![执行流程](jenkins_check.png)
+#### 2.1. Trigger.sh脚本
+
+此脚本主要分为三个步骤
+
+1、下载oepkgs源码
+
+2、执行静态检查（license，spec等）
+
+3、执行额外操作，目前只有pkgship仓库需要额外操作
+
+ac.py文件主要在第二步中执行
+
+```shell
+function exec_check() {
+  log_info "***** Start to exec static check *****"
+  export PYTHONPATH=${shell_path}
+  python3 ${shell_path}/src/ac/framework/ac.py \
+    -w ${WORKSPACE} -r ${giteeRepoName} -o acfile -t ${GiteeToken} \
+    -p ${giteePullRequestIid} -b ${giteeTargetBranch} -a ${GiteeUserPassword} \
+    -x ${prCreateTime} -l ${triggerLink} -z ${jobTriggerTime} -m "${comment}" \
+    -i ${commentID} -e ${giteeCommitter} --jenkins-base-url ${jenkins_api_host} \
+    --jenkins-user ${jenkins_user} --jenkins-api-token ${jenkins_api_token}
+  log_info "***** End to exec static check *****"
+}
+```
+
+# 三、trigger阶段参数列表
 | 参数名               | 默认值                           | 描述                                           | 来源            |
 | -------------------- | -------------------------------- | ---------------------------------------------- | --------------- |
 | repo_server          | 121.36.53.23                     | repo地址，用来存储工程之间共享的文件服务器     | 自定义          |
