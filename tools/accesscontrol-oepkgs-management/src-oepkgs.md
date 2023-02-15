@@ -119,34 +119,6 @@ def check_license_in_spec(self):
 
 3.从接口返回的信息license是否在白名单内
 
-##### license_in_src：检查src文件中的license是否在白名单中
-
-```
-def check_license_in_src(self):
-    """
-    check whether the license in src file is in white list
-    :return
-    """
-    self._license_in_src = self._pkg_license.scan_licenses_in_license(self._work_tar_dir)
-    self._license_in_src = self._pkg_license.translate_license(self._license_in_src)
-    if not self._license_in_src:
-        logger.warning("cannot find licenses in src")
-    rs_code = self._pkg_license.check_license_safe(self._license_in_src)
-    if rs_code == 0:
-        return SUCCESS
-    elif rs_code == 1:
-        return WARNING
-    else:
-        logger.error("licenses in src are not in white list")
-        return FAILED
-```
-
-1.获取代码中的license文件
-
-2.通过指定接口 (https://compliance2.openeuler.org/sca) 获取相关license信息
-
-3.从接口返回的信息license是否在白名单内
-
 
 
 # 三、trigger阶段参数列表
