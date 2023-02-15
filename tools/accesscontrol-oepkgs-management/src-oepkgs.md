@@ -79,7 +79,92 @@ function exec_check() {
 
 #### 2.4 license
 **check_license.py**
+**license分为三种：**
 
+Not Free Licenses -> black
+Free Licenses -> white
+Need Review Licenses -> need review
+
+**最终结果：**
+
+```
+self._white_black_list = {license_id: tag, ... }
+self._license_translation = {alias: license_id }
+```
+
+##### license_in_spec：检查spec文件中的license是否在白名单中
+
+```
+def check_license_in_spec(self):
+    """
+    check whether the license in spec file is in white list
+    :return
+    """
+    if self._spec is None:
+        logger.error("spec file not find")
+        return FAILED
+    rs_code = self._pkg_license.check_license_safe(self._spec.license)
+    if rs_code == 0:
+        return SUCCESS
+    elif rs_code == 1:
+        return WARNING
+    else:
+        logger.error("licenses in spec are not in white list")
+        return FAILED
+```
+
+1.获取spec中的license信息
+
+2.通过指定接口 (https://compliance2.openeuler.org/sca) 获取相关license信息
+
+3.从接口返回的信息license是否在白名单内
+
+##### license_in_src：检查src文件中的license是否在白名单中
+
+```
+def check_license_in_src(self):
+    """
+    check whether the license in src file is in white list
+    :return
+    """
+    self._license_in_src = self._pkg_license.scan_licenses_in_license(self._work_tar_dir)
+    self._license_in_src = self._pkg_license.translate_license(self._license_in_src)
+    if not self._license_in_src:
+        logger.warning("cannot find licenses in src")
+    rs_code = self._pkg_license.check_license_safe(self._license_in_src)
+    if rs_code == 0:
+        return SUCCESS
+    elif rs_code == 1:
+        return WARNING
+    else:
+        logger.error("licenses in src are not in white list")
+        return FAILED
+```
+
+1.获取代码中的license文件
+
+2.通过指定接口 (https://compliance2.openeuler.org/sca) 获取相关license信息
+
+3.从接口返回的信息license是否在白名单内
+
+##### license_is_same：检查spec文件和src文件中的license是否一致
+
+```
+def check_license_is_same(self):
+    """
+    check whether the license in spec file and in src file is same
+    :return
+    """
+    if self._pkg_license.check_licenses_is_same(self._license_in_spec, 	   self._license_in_src,self._pkg_license._later_support_license):
+        logger.info("licenses in src:%s and in spec:%s are same",
+        self._license_in_src, self._license_in_spec)
+        return SUCCESS
+    else:
+        logger.error("licenses in src:%s and in spec:%s are not same",self._license_in_src, self._license_in_spec)
+        return WARNING
+```
+
+1.src中的license是否都被包含在spec的license里面
 
 # 三、trigger阶段参数列表
 | 参数名               | 默认值                           | 描述                                           | 来源            |
