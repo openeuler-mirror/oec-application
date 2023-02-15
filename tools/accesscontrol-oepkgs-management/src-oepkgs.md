@@ -164,7 +164,6 @@ def check_license_is_same(self):
         return WARNING
 ```
 
-1.src中的license是否都被包含在spec的license里面
 
 # 三、trigger阶段参数列表
 | 参数名               | 默认值                           | 描述                                           | 来源            |
