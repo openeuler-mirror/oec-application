@@ -40,28 +40,46 @@ function exec_check() {
 }
 ```
 
+#### 2.2 spec
 
-#### 2.2 package yaml
+**check_spec.py**
 
-函数调用关系图
+![输入图片说明](check_spec_problem.png)
 
-![](check_yaml.png)
+| 类方法/属性               | 描述                         | 作用说明                                  |
+| ------------------------- | ---------------------------- | ----------------------------------------- |
+| __init__                  | 初始化                       | CheckSpec实例化对象，初始设置一些参数值   |
+| _only_change_package_yaml | 判断是否更改了yaml文件       | 如果本次提交只变更yaml，则无需检查version |
+| _is_lts_branch            | 判断是否是lts分支            |                                           |
+| check_version             | 检查版本信息                 | 检查当前版本号是否比上一个commit新        |
+| check_homepage            | 检查spec文件中的主页url      | 检查主页是否可访问                        |
+| check_patches             | 检查spec中的patch            | 检查spec中的patch是否存在                 |
+| check_changelog           | 检查changelog中的日期错误    |                                           |
+| _ex_exclusive_arch        | 保存spec中exclusive_arch信息 |                                           |
+| _ex_pkgship               | pkgship需求                  |                                           |
+| _parse_spec               | 获取最新提交的spec文件       | 解析changelog内容                         |
+| __call__                  | ·                            | 使CheckSpec的实例对象变为了可调用对象     |
 
-此文件夹中包含两个python文件
+#### 2.3 binary
 
-**1 check_yaml.py**
+**check_binary_file.py**
+![输入图片说明](check_binary.png)
 
-检查软件包中的yaml文件
+检查压缩包中的二进制文件
 
-| 类方法/属性            | 描述                   | 作用说明                                                     |
-| ---------------------- | ---------------------- | ------------------------------------------------------------ |
-| __init__               | 初始化                 | CheckPackageYaml实例化对象，初始设置一些参数值               |
-| is_change_package_yaml | 判断是否更改了yaml文件 | 如果本次提交变更了yaml，则对yaml进行检查                     |
-| check_fields           | 检查fileds             | 从具体的目标分{tbranch}支下载源码及关联仓库代码，编译软件包、比较软件包差异也需目标分支参数 |
-| check_repo             | 检查repo               | 检查yaml的有效性,能否从上游社区获取版本信息                  |
-| check_repo_domain      | 检查repo作用域         | 检查spec中source0域名是否包含yaml的version_control,仅做日志告警只返回SUCCESS(autoconf为特例) |
-| check_repo_name        | 检查repo名称           | 检查spec中是否包含yaml中src_repo字段的软件名,仅做日志告警只返回SUCCESS |
-| __call__               | ·                      | 使CheckPackageYaml的实例对象变为了可调用对象                 |
+| 类方法/属性                         | 描述                     | 作用说明                                      |
+| ----------------------------------- | ------------------------ | --------------------------------------------- |
+| __init__                            | 初始化                   | CheckBinaryFile实例化对象，初始设置一些参数值 |
+| BINARY_LIST                         | 二进制文件后缀集         |                                               |
+| check_compressed_file               | 解压缩包                 |                                               |
+| check_binary                        | 检查二进制文件           |                                               |
+| _upstream_community_tarball_in_spec | spec指定的上游社区压缩包 | 检查spec指定的上游社区压缩包                  |
+| _get_all_file_suffixes              | 获取文件夹中文件后缀     | 获取当前文件中所有文件名后缀,并判断           |
+| __call__                            | ·                        | 使CheckBinaryFile的实例对象变为了可调用对象   |
+
+#### 2.4 license
+**check_license.py**
+
 
 # 三、trigger阶段参数列表
 | 参数名               | 默认值                           | 描述                                           | 来源            |
