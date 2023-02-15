@@ -15,16 +15,14 @@ oepkgs (Open External Packages Service) 是一个为 openEuler 操作系统以�
 ![check](check.png)
 
 # 二、执行流程
-![执行流程](jenkins_check.png)
-#### 2.1. Trigger.sh脚本
+![输入图片说明](check_all.png)
+#### 2.1 Trigger.sh脚本
 
-此脚本主要分为三个步骤
+此脚本主要分为两个步骤
 
 1、下载oepkgs源码
 
 2、执行静态检查（license，spec等）
-
-3、执行额外操作，目前只有pkgship仓库需要额外操作
 
 ac.py文件主要在第二步中执行
 
@@ -41,62 +39,9 @@ function exec_check() {
   log_info "***** End to exec static check *****"
 }
 ```
-## 说明
-
-```python
-self._ac_check_elements
-```
-
-```json
-{
-	'spec': {
-		'hint': 'check_spec_file',
-		'module': 'spec.check_spec',
-		'entry': 'CheckSpec',
-		'ignored': ['homepage']
-	},
-	'code': {
-		'hint': 'check_code_style',
-		'module': 'code.check_code_style',
-		'entry': 'CheckCodeStyle',
-		'exclude': True,
-		'ignored': ['patch']
-	},
-	'package_yaml': {
-		'hint': 'check_package_yaml_file',
-		'module': 'package_yaml.check_yaml',
-		'entry': 'CheckPackageYaml',
-		'ignored': ['fields']
-	},
-	'package_license': {
-		'hint': 'check_package_license',
-		'module': 'package_license.check_license',
-		'entry': 'CheckLicense'
-	},
-	'binary': {
-		'hint': 'check_binary_file',
-		'module': 'binary.check_binary_file',
-		'entry': 'CheckBinaryFile'
-	},
-	'sca': {
-		'exclude': True
-	},
-	'openlibing': {
-		'exclude': True
-	}
-}
-
-{
-	'version_control': 'git',
-	'src_repo': 'https://code.wireshark.org/review/gitweb?p=wireshark.git',
-	'tag_prefix': '^v',
-	'seperator': '.'
-}
-```
 
 
-
-## 2 package yaml
+#### 2.2 package yaml
 
 函数调用关系图
 
