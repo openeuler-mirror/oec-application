@@ -147,22 +147,6 @@ def check_license_in_src(self):
 
 3.从接口返回的信息license是否在白名单内
 
-##### license_is_same：检查spec文件和src文件中的license是否一致
-
-```
-def check_license_is_same(self):
-    """
-    check whether the license in spec file and in src file is same
-    :return
-    """
-    if self._pkg_license.check_licenses_is_same(self._license_in_spec, 	   self._license_in_src,self._pkg_license._later_support_license):
-        logger.info("licenses in src:%s and in spec:%s are same",
-        self._license_in_src, self._license_in_spec)
-        return SUCCESS
-    else:
-        logger.error("licenses in src:%s and in spec:%s are not same",self._license_in_src, self._license_in_spec)
-        return WARNING
-```
 
 
 # 三、trigger阶段参数列表
