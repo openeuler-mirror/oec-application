@@ -120,7 +120,7 @@ def check_license_in_spec(self):
 
 3.从接口返回的信息license是否在白名单内
 
-#### package yaml
+#### 2.5 package yaml
 
 ![输入图片说明](../image/check_yaml.png)
 
