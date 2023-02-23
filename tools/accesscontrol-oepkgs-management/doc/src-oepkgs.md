@@ -155,11 +155,11 @@ def check_license_in_spec(self):
 
 #### 2.5 package yaml
 
-![输入图片说明](../image/check_yaml.png)
-
 此文件夹中包含两个python文件
 
-**1 check_yaml.py**
+- **1.check_yaml.py**
+
+![输入图片说明](../image/check_yaml.png)
 
 检查软件包中的yaml文件
 
@@ -173,6 +173,40 @@ def check_license_in_spec(self):
 | check_repo_name        | 检查repo名称           | 检查spec中是否包含yaml中src_repo字段的软件名,仅做日志告警只返回SUCCESS |
 | __call__               | ·                      | 使CheckPackageYaml的实例对象变为了可调用对象                 |
 
+- **2 check_repo.py**
+
+获取上游社区的release tags
+![输入图片说明](../image/tags.png)
+
+| 类名                 | 方法                 | 描述                                        | 作用说明                                       |
+| -------------------- | -------------------- | ------------------------------------------- | ---------------------------------------------- |
+| AbsReleaseTags       |                      | 获取release tags的抽象类                    |                                                |
+| DefaultReleaseTags   |                      | 获取release tags的基类                      |                                                |
+|                      | url                  |                                             | 通过src_repo生成url                            |
+|                      | get_tags             |                                             | 通过url获取上游社区的release tags              |
+| HttpReleaseTagsMixin |                      | 通过web请求形式获取release tags             |                                                |
+|                      | get_redirect_resp    |                                             | 获取重定向的url和cookie                        |
+|                      | get_request_response |                                             | 获取url请求获取response                        |
+| HgReleaseTags        |                      | 获取hg上游社区release tags                  |                                                |
+| HgRawReleaseTags     |                      | 获取hg raw上游社区release tags              |                                                |
+| MetacpanReleaseTags  |                      | 获取metacpan上游社区release tags            |                                                |
+| PypiReleaseTags      |                      | 获取pypi上游社区release tags                |                                                |
+| RubygemReleaseTags   |                      | 获取rubygem上游社区release tags             |                                                |
+| GnuftpReleaseTags    |                      | 获取gnu-ftp上游社区release tags             |                                                |
+| FtpReleaseTags       |                      | 获取ftp上游社区release tags                 |                                                |
+| CmdReleaseTagsMixin  |                      | 通过shell命令获取上游社区的release tags     |                                                |
+|                      | get_cmd_response     |                                             | 获取shell命令的response                        |
+| SvnReleaseTags       |                      | 通过shell svn命令获取上游社区的release tags |                                                |
+| GitReleaseTags       |                      | 通过shell git命令获取上游社区的release tags |                                                |
+|                      | trans_reponse_tags   |                                             | 解析git命令返回值为纯数字形式的tag             |
+| GithubReleaseTags    |                      | 获取github上游社区release tags              |                                                |
+| GiteeReleaseTags     |                      | 获取gitee上游社区release tags               |                                                |
+| GitlabReleaseTags    |                      | 获取gitlab.gnome上游社区release tags        |                                                |
+| ReleaseTagsFactory   |                      | ReleaseTags及其子类的工厂类                 |                                                |
+|                      | get_release_tags     |                                             | 通过version control返回对应的ReleaseTags的子类 |
+
+
+#### 2.6 osc build
 
 # 三、trigger阶段参数列表
 | 参数名               | 默认值                           | 描述                                           | 来源            |
