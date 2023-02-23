@@ -10,12 +10,12 @@ oepkgs (Open External Packages Service) 是一个为 openEuler 操作系统以�
 首次提交 PR，或评论/retest
 
 #### 2.2 门禁开始运行标志
-![start](start.png)
+![start](../image/start.png)
 #### 2.3 门禁检查结果
-![](result.png)
+![](../image/result.png)
 
 # 二、执行流程
-![输入图片说明](overview.png)
+![输入图片说明](../image/overview.png)
 #### 2.1 Trigger.sh脚本
 
 此脚本主要分为两个步骤
@@ -44,7 +44,7 @@ function exec_check() {
 
 **check_spec.py**
 
-![输入图片说明](check_spec_problem.png)
+![输入图片说明](../image/check_spec_problem.png)
 
 | 类方法/属性               | 描述                         | 作用说明                                  |
 | ------------------------- | ---------------------------- | ----------------------------------------- |
@@ -63,7 +63,7 @@ function exec_check() {
 #### 2.3 binary
 
 **check_binary_file.py**
-![输入图片说明](check_binary.png)
+![输入图片说明](../image/check_binary.png)
 
 检查压缩包中的二进制文件
 
