@@ -15,6 +15,39 @@ oepkgs (Open External Packages Service) 是一个为 openEuler 操作系统以�
 ![](../image/result.png)
 
 # 二、执行流程
+
+### 设计逻辑
+
+- 部署x86-64和aarch64架构下的k8s集群
+- 将集群配置为**Jenkins slave**
+- **Jenkins master** 运行在x86-64架构k8s集群内
+
+### 流水线任务
+
+> 相同任务只运行一个实例
+
+#### trigger
+
+- 码云触发
+- 并行跑门禁任务，cpu架构不限，失败则中止任务并对pr评论
+- 成功传递参数给下游 **job**
+  - 项目名(**repo**)
+  - 分支(**branch**)
+  - pull request id(**prid**)
+  - 发起者(**committer**)
+
+#### multiarch
+
+- 支持x86_64和aarch64架构
+- trigger成功后触发
+- 执行[**`python osc_build_k8s.py $repo $arch $WORKSPACE`**](https://gitee.com/src-openeuler/ci_check/blob/k8s/private_build/build/osc_build_k8s.py)进行构建
+
+#### comment
+
+- 收集门禁、build结果
+- 调用接口[**提交Pull Request评论**](https://gitee.com/wuyu15255872976/gitee-python-client/blob/master/docs/PullRequestsApi.md#post_v5_repos_owner_repo_pulls)反馈结果给码云
+- cpu架构不限
+
 ![输入图片说明](../image/overview.png)
 ![输入图片说明](../image/detail.png)
 #### 2.1 Trigger.sh脚本
