@@ -16,6 +16,7 @@ oepkgs (Open External Packages Service) 是一个为 openEuler 操作系统以�
 
 # 二、执行流程
 ![输入图片说明](../image/overview.png)
+![输入图片说明](../image/detail.png)
 #### 2.1 Trigger.sh脚本
 
 此脚本主要分为两个步骤
@@ -119,6 +120,25 @@ def check_license_in_spec(self):
 
 3.从接口返回的信息license是否在白名单内
 
+#### package yaml
+
+![输入图片说明](../image/check_yaml.png)
+
+此文件夹中包含两个python文件
+
+**1 check_yaml.py**
+
+检查软件包中的yaml文件
+
+| 类方法/属性            | 描述                   | 作用说明                                                     |
+| ---------------------- | ---------------------- | ------------------------------------------------------------ |
+| __init__               | 初始化                 | CheckPackageYaml实例化对象，初始设置一些参数值               |
+| is_change_package_yaml | 判断是否更改了yaml文件 | 如果本次提交变更了yaml，则对yaml进行检查                     |
+| check_fields           | 检查fileds             | 从具体的目标分{tbranch}支下载源码及关联仓库代码，编译软件包、比较软件包差异也需目标分支参数 |
+| check_repo             | 检查repo               | 检查yaml的有效性,能否从上游社区获取版本信息                  |
+| check_repo_domain      | 检查repo作用域         | 检查spec中source0域名是否包含yaml的version_control,仅做日志告警只返回SUCCESS(autoconf为特例) |
+| check_repo_name        | 检查repo名称           | 检查spec中是否包含yaml中src_repo字段的软件名,仅做日志告警只返回SUCCESS |
+| __call__               | ·                      | 使CheckPackageYaml的实例对象变为了可调用对象                 |
 
 
 # 三、trigger阶段参数列表
