@@ -12,7 +12,7 @@ oepkgs (Open External Packages Service) 是一个为 openEuler 操作系统以�
 #### 2.2 门禁开始运行标志
 ![start](start.png)
 #### 2.3 门禁检查结果
-![输入图片说明](result.png)
+![](result.png)
 
 # 二、执行流程
 ![输入图片说明](check_all.png)
