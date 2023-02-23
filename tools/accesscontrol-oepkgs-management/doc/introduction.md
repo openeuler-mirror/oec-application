@@ -11,7 +11,7 @@ oepkgs-management仓库主要用于存放src-oepkgs组织仓的配置文件。�
 
 
 ### 流程图
-![流程图](progress.png)
+![流程图](../image/progress.png)
 
 #### Jenkins介绍
 Gitee Jenkins Plugin 是码云基于 GitLab Plugin 开发的 Jenkins 插件。用于配置 Jenkins 触发器，接受码云平台发送的 WebHook 触发 Jenkins 进行自动化持续集成或持续部署，并可将构建状态反馈回码云平台。
@@ -125,9 +125,9 @@ def analysis(response):
 ##### 形成报告 report_table
 使用python组装html页面，导入校验结果
 problem
-![report](failed.png)
+![report](../image/failed.png)
 no problem
-![report](success.png)
+![report](../image/success.png)
 
 ```
 def _comment_of_ac(self, owner, repo, gitee_token, url):
@@ -255,6 +255,6 @@ def comment_pr(self, num, comment):
 
 #####
 用户根据pr评论日中日志来修改commit
-![detail](detail.png)
+![detail](../image/detail.png)
 
 
