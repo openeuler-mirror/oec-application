@@ -15,7 +15,7 @@ oepkgs (Open External Packages Service) 是一个为 openEuler 操作系统以�
 ![](result.png)
 
 # 二、执行流程
-![输入图片说明](check_all.png)
+![输入图片说明](overview.png)
 #### 2.1 Trigger.sh脚本
 
 此脚本主要分为两个步骤
