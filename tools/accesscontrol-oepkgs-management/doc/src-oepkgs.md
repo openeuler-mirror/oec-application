@@ -5,7 +5,7 @@ oepkgs (Open External Packages Service) 是一个为 openEuler 操作系统以�
 
 门禁代码开源[https://gitee.com/openeuler/openeuler-jenkins](https://gitee.com/openeuler/openeuler-jenkins)
 
-### 2. src-openeuler 门禁静态检查项
+### 2. src-openeuler 门禁检查项
 #### 2.1 门禁触发方式
 首次提交 PR，或评论/retest
 
