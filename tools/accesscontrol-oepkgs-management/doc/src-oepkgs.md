@@ -234,7 +234,7 @@ mpac： multibuild package
 
 3：osc build失败
 
-### service文件结构说明
+- ##### service文件结构说明
 
 ```yaml
 <services> 1
