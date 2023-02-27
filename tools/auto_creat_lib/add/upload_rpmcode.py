@@ -144,8 +144,6 @@ if __name__ == '__main__':
                 "rm -rf *;rpm2cpio {0} | cpio -div;git add .;git commit -m '{1}';git push".format(rpm_path,
                                                                                                   rpm_version))
             print(os.getcwd())
-            #os.chdir(os.path.pardir)
-            #os.system("rm -rf {0}".format(yaml_file))
             print("-------- pwd --------")
             print(os.getcwd())
             commit_id = os.popen("git rev-parse HEAD").read().strip()
@@ -169,6 +167,5 @@ if __name__ == '__main__':
         tag_num = tag_num + 1
         os.system("curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/protection' -d '{{\"access_token\":\"{}\"}}'".format(yaml_file, sys.argv[1], api_token))
         src_code_up.append(yaml_file)
-        # os.system("rm -rf {}".format(yaml_file))
         print(tag_num)
         print(src_code_up)
