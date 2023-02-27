@@ -55,5 +55,3 @@ for i in a_list:
         c.append(i)
 print(len(c))
 print(c)
-
-# 测excel里除第一行以外 其他行为空的 第一行的值和数量
