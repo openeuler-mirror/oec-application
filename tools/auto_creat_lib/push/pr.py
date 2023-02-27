@@ -55,8 +55,6 @@ def getAllFilesInPath(path):
                 allFileNum = allFileNum + 1
                 # 总文件数+1
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
-                # yaml_name = f[:-5]
-                # allYamlList.append(yaml_name)
                 if path.split("/")[1] == "oepkgs-management_10":
                     allYamldata.append(os.path.abspath(path + "/" + f))
                 elif path.split("/")[1] == "oepkgs-management":
@@ -69,10 +67,9 @@ def creat_pr():
     print("------ pr -------")
     data = {"access_token": api_token, "title": "自动化创建库", "head": "zhang-yn:master", "base": "master"}
     response = requests.post("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls", params=data,headers=headers)
-    #print(response)
+    print(response)
     pr_num = json.loads(response.text)["number"]
     print("-------- waiting 10 minutes ---------")
-    #sys.exit()
     time.sleep(300)
     response = requests.get("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls/{}/merge?access_token={}".format(pr_num,api_token),headers=headers)
     response_dict = json.loads(response.text)
@@ -125,7 +122,6 @@ if __name__ == '__main__':
             if item.split("/")[-1][:-5].lower() + ".yaml" in Inyaml:
                 continue
         dest_path = real_path + "oepkgs-management" + "/"  + "/".join(item.split("/")[-5:-1]) + "/"
-        #print(item)
         if item.split("/")[-1] not in Inyaml and len(item.split("/")[-1][:-5]) > 1 and len(item.split("/")[-1].split(".")) == 2:
             a = a + 1
             if not os.path.exists(dest_path):
