@@ -1,5 +1,17 @@
-# !/usr/bin/python3
-# -*- coding:UTF-8 -*-
+#!/usr/bin/env python3
+# coding: utf-8
+# Copyright (c) 2022 Huawei Technologies Co., Ltd.
+# oec-hardware is licensed under the Mulan PSL v2.
+# You can use this software according to the terms and conditions of the Mulan PSL v2.
+# You may obtain a copy of Mulan PSL v2 at:
+#     http://license.coscl.org.cn/MulanPSL2
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+# PURPOSE.
+# See the Mulan PSL v2 for more details.
+# Author: @zhangyinuo
+# Create: 2023-02-27
+# Desc: Submit oec-hardware job automatically on compass-ci
 
 import base64
 import sys
@@ -80,16 +92,6 @@ def creat_pr():
             print("---------- pr 未关闭 ------------")
             sys.exit()
         print("--- 已合入 ---")
-    #time.sleep(300)
-    #print(pr_num)
-    #sys.exit()
-    #os.system(
-    #    "{} 'https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls/{}/comments' -d '{{\"access_token\":\"{}\"，\"body\":\"{}\"}}'".format(
-    #        rq_header, pr_num, robot_token, "/lgtm"))
-    #os.system(
-    #    "{} 'https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls/{}/comments' -d '{{\"access_token\":\"{}\"，\"body\":\"{}\"}}'".format(
-    #        rq_header, pr_num, robot_token, "/approve"))
-
 
 
 # 监听pr
@@ -130,29 +132,6 @@ if __name__ == '__main__':
     print(len(allYamldata))
     print(len(set(allYamldata)))
     print("---------------")
-    #b = [j.split("/")[-1] for j in allYamldata]
-    #a = copy.deepcopy(b)
-    #for i in a:
-    #    if i in Inyaml:
-    #        b.remove(i)
-    #print(len(set(b)))
-    #print(b)
-    #sys.exit()
-    #print(len(set([j.split("/")[-1][:-5] for j in allYamldata])))
-    #c = [j.split("/")[-1][:-5] for j in allYamldata]
-    #list_num = []
-    #for i in c:
-    #    if c.count(i) > 1:
-    #        list_num.append(i)
-    #print(list_num)
-    #sys.exit()
-    # if len(get_Bletter(i)) != 0:
-    #for i, item in enumerate(allYamldata):
-    #    if len(get_Bletter(item.split("/")[-1][:-5])) != 0:
-    #        if item.split("/")[-1][:-5].lower() + ".yaml" not in Inyaml:
-    #            if item.split("/")[-1][:-5].lower() in [j.split("/")[-1][:-5] for j in allYamldata]:
-    #                print(item.split("/")[-1][:-5],item.split("/")[-1][:-5].lower(),item)
-    #sys.exit()
     for i, item in enumerate(allYamldata):
         if len(get_Bletter(item.split("/")[-1][:-5])) != 0:
             if item.split("/")[-1][:-5].lower() + ".yaml" in Inyaml:
@@ -173,58 +152,5 @@ if __name__ == '__main__':
                 # print(a)
                 a = 0
                 print("--------")
-                # print(a)
-    # data = {"access_token": api_token, "title": "自动化创建库", "head": "zhang-yn:master", "base": "master"}
-    # response = requests.post("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls", params=data,
-    # headers = headers)
-    # pr_num = json.loads(response.text)["number"]
-    # print(pr_num)
-    # # listen_event(pr_num)
 
-
-
-
-
-    print("------- creat end -------")
-    sys.exit()
-    for lib_name in d:
-    # fork仓库
-        os.system("{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/forks' -d '{{\"access_token\":\"{}\"}}'".format(rq_header,
-                                                                                                  lib_name,
-                                                                                                  api_token))
-        module_name = d[lib_name]
-        for rpm_path in module_name:
-            rpm_version = rpm_path.split("/")[-1][:-8][len(lib_name) + 1:]
-        # 解压rpm，git commit
-            if not os.path.exists(real_path+lib_name):
-                os.system(
-            "git clone 'https://gitee.com/zhang-yn/{0}.git';cd {0};pwd;rm -rf *;rpm2cpio {1} | cpio -div;git add .;git commit -m '{2}';git push".format(
-                lib_name, rpm_path, rpm_version))
-                print(
-                "git clone 'https://gitee.com/zhang-yn/{0}.git';cd {0};rm -rf README.*;rpm2cpio {1} | cpio -div;git add .;git commit -m '{2}';git push".format(
-                    lib_name, rpm_path, rpm_version))
-            else:
-                os.system(
-                "cd {0};rm -rf *;rpm2cpio {1} | cpio -div;git add .;git commit -m '{2}';git push".format(lib_name,
-                                                                                         rpm_path,
-                                                                                         rpm_version))
-
-        # 创建pr
-        data = {"access_token": api_token, "title": "自动化创建库", "head": "zhang-yn:master",
-        "base": "openEuler-22.03-LTS"}
-        response = requests.post("https://gitee.com/api/v5/repos/wwccyang/{}/pulls".format(lib_name), params=data,
-        headers = rq_header)
-
-        # 取commit信息，打tag
-        response_url = requests.get(
-        "https://gitee.com/api/v5/repos/src-oepkgs/{}/commits?access_token={}=master&page=1&per_page=20".format(
-            lib_name, api_token), headers = rq_header)
-        pr_num = json.loads(response_url.text)
-        for i in range(1, len(d[lib_name]) + 1):
-            print("********************")
-        print(pr_num[i]["sha"])
-        commit_id = pr_num[i]["sha"]
-        tag_str = pr_num[i]["commit"]["message"]
-        os.system(
-        "{} 'https://gitee.com/api/v5/repos/zhang-yn/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
-            rq_header, lib_name, api_token, commit_id, "22.0-" + tag_str))
+print("------- creat end -------")
