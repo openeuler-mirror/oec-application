@@ -1,5 +1,17 @@
-# !/usr/bin/python3
-# -*- coding:UTF-8 -*-
+#!/usr/bin/env python3
+# coding: utf-8
+# Copyright (c) 2022 Huawei Technologies Co., Ltd.
+# oec-hardware is licensed under the Mulan PSL v2.
+# You can use this software according to the terms and conditions of the Mulan PSL v2.
+# You may obtain a copy of Mulan PSL v2 at:
+#     http://license.coscl.org.cn/MulanPSL2
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+# PURPOSE.
+# See the Mulan PSL v2 for more details.
+# Author: @zhangyinuo
+# Create: 2023-02-27
+# Desc: Submit oec-hardware job automatically on compass-ci
 
 import base64
 import sys
@@ -62,11 +74,6 @@ def getAllFilesInPath(path):
 def read_yaml(path):
     with open(r"{}".format(path), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read(), Loader=yaml.FullLoader)
-        #a = config.get("group")
-        #d_oepkg[config.get("name")].append(config.get("group"))
-        #d_oepkg[config.get("name")].append(config.get("description"))
-        #d_oepkg[config.get("name")].append(config.get("license"))
-        # for i in name_list:
         if config.get("name").lower in name_list:
             ws.write(line,0,config.get("name"))
             ws.write(line,1,config.get("group"))
@@ -74,7 +81,6 @@ def read_yaml(path):
             ws.write(line,3,config.get("license"))
         else:
             else_list.append(i)
-        #print(d_oepkg)
 
 
 if __name__ == '__main__':
@@ -109,8 +115,6 @@ if __name__ == '__main__':
     for i in Inyaml:
         read_yaml(i)
         line = line + 1
-        #num = num + 1
-        #if num == 10:
     print("------ test -----")
     wb.save('1.xls')
     print("=========")
