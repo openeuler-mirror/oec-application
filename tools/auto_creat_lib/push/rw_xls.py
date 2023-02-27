@@ -1,5 +1,17 @@
-# # !/usr/bin/python3
-# # -*- coding:UTF-8 -*-
+#!/usr/bin/env python3
+# coding: utf-8
+# Copyright (c) 2022 Huawei Technologies Co., Ltd.
+# oec-hardware is licensed under the Mulan PSL v2.
+# You can use this software according to the terms and conditions of the Mulan PSL v2.
+# You may obtain a copy of Mulan PSL v2 at:
+#     http://license.coscl.org.cn/MulanPSL2
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+# PURPOSE.
+# See the Mulan PSL v2 for more details.
+# Author: @zhangyinuo
+# Create: 2023-02-27
+# Desc: Submit oec-hardware job automatically on compass-ci
 
 import base64
 import sys
@@ -29,12 +41,6 @@ with open("log1.txt","r") as f:
         for j in data:
             sheet.write(row, cloum, j)
             cloum = cloum + 1
-            #data = i.split("/blob/master/")[1]
-            #sys.exit()
-            # print(data)
-            #data = "https://gitee.com/{}/{}/blob/master/{}".format(upper,i[2:].split("/", 1)[0],i[2:].split("/", 1)[1])
-            # with open("./docker_1.txt","a+") as f1:
-            #     f1.write(data + "\n")
         sheet.write(row, 12, a)
         cloum = cloum + 1
         with open("docker_link.txt","r") as f1:
