@@ -102,17 +102,12 @@ def listen_event(pr_num):
 
 
 if __name__ == '__main__':
-    # 读取rpm包名存入列表内
-    # rpm_pkg_path = input("请输入要获取的rpm包目录：")
-    # api_token = input("请输入api的token：")
     headers = {"Content-Type": "application/json;charset=UTF-8"}
     rpm_pkg_path = "/srv/rpm/pub/"
     rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
     real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
     api_token = "077fd301428ee142b5bc5d5eaae0a0fc"
     robot_token = "c951fee688f4b037d27602d7461b81fc"
-    # 取rpm包总数和rpm文件绝对路径
-    # getAllFilesInPath(rpm_pkg_path)
 
     a = 0
     # 创建pr
@@ -128,7 +123,6 @@ if __name__ == '__main__':
     for i, item in enumerate(allYamldata):
         if len(get_Bletter(item.split("/")[-1][:-5])) != 0:
             if item.split("/")[-1][:-5].lower() + ".yaml" in Inyaml:
-                # os.system("rm -rf {}".format(item))
                 continue
         dest_path = real_path + "oepkgs-management" + "/"  + "/".join(item.split("/")[-5:-1]) + "/"
         #print(item)
