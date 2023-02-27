@@ -1,5 +1,17 @@
-# !/usr/bin/python3
-# -*- coding:UTF-8 -*-
+#!/usr/bin/env python3
+# coding: utf-8
+# Copyright (c) 2022 Huawei Technologies Co., Ltd.
+# oec-hardware is licensed under the Mulan PSL v2.
+# You can use this software according to the terms and conditions of the Mulan PSL v2.
+# You may obtain a copy of Mulan PSL v2 at:
+#     http://license.coscl.org.cn/MulanPSL2
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+# PURPOSE.
+# See the Mulan PSL v2 for more details.
+# Author: @zhangyinuo
+# Create: 2023-02-27
+# Desc: Submit oec-hardware job automatically on compass-ci
 
 import base64
 import sys
@@ -11,7 +23,7 @@ import requests
 import time
 import copy
 from collections import defaultdict, OrderedDict
-# import requests.adapters
+import requests.adapters
 
 from xml.etree.ElementTree import parse
 
@@ -81,13 +93,6 @@ if __name__ == '__main__':
     print("yaml文件的名字")
     with open("yaml_file_d.json", "r") as f:
         d = json.load(f)
-    # print(d)
-    # d_list = copy.deepcopy(d)
-    # for i in d_list:
-    #     if i != "rt61pci-firmware":
-    #         del d[i]
-    #     else:
-    #         break
     print("---------------")
     print(len(d))
     print(d)
@@ -137,11 +142,8 @@ if __name__ == '__main__':
                 "rm -rf *;rpm2cpio {0} | cpio -div;git add .;git commit -m '{1}';git push".format(rpm_path,
                                                                                                   rpm_version))
             print(os.getcwd())
-            #os.chdir(os.path.pardir)
-            #os.system("rm -rf {0}".format(yaml_file))
             print("-------- pwd --------")
             print(os.getcwd())
-            # response_url = os.popen("curl -X GET --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}?access_token={}'".format(yaml_file, sys.argv[1], api_token)).read()
             commit_id = os.popen("git rev-parse HEAD").read().strip()
             print(commit_id)
             os.chdir(os.path.pardir)
@@ -149,8 +151,6 @@ if __name__ == '__main__':
             print("-------- pwd --------")
             print(os.getcwd())
             print("------- sha value ------")
-            # print(response_json)
-            # commit_id = response_json["commit"]["sha"]
             print(commit_id)
             if sys.argv[1] == "master":
                 os.system(
@@ -164,7 +164,5 @@ if __name__ == '__main__':
             print(yaml_file)
         tag_num = tag_num + 1
         os.system("curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/protection' -d '{{\"access_token\":\"{}\"}}'".format(yaml_file, sys.argv[1], api_token))
-        # r_pt.close()
         src_code_up.append(yaml_file)
-        # os.system("rm -rf {}".format(yaml_file))
         print(src_code_up)
