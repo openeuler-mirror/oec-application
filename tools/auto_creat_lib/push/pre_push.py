@@ -83,19 +83,9 @@ def shell_cmd(rpm_key, path):
 
 
 if __name__ == '__main__':
-    # 读取rpm包名存入列表内
-    # rpm_pkg_path = input("请输入要获取的rpm包目录：")
-    # api_token = input("请输入api的token：")
     if len(sys.argv) != 2:
         sys.exit()
-
-    # requests.adapters.DEFUALT_RETRYS = 10
-    headers = {"Content-Type":"application/json;charset=UTF-8","connection":"close"}
-    rpm_pkg_path = "/srv/rpm/pub/openeuler-22.03-LTS"
-    rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
     real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
-    api_token = "613df0cd941abfdfc90f36445e98736d"
-    robot_token = "c951fee688f4b037d27602d7461b81fc"
     print("yaml文件的名字")
     getAllFilesInPath("./oepkgs-management/sig")
     print(allYamlList)
@@ -108,17 +98,14 @@ if __name__ == '__main__':
     for yaml_modify in d:
         tag_num = tag_num + 1
         print("------ branch {} 已添加 -----".format(tag_num))
-        # if yaml_modify not in allYamlList:
         yaml_file = ""
         if yaml_modify[0].isdigit():
             for i, item in enumerate(yaml_modify):
                 if not item.isdigit() and item == "-":
                     yaml_file = yaml_file + yaml_modify[i + 1:]
-                    # yaml_file = yaml_modify[i + 1:] + "-" + yaml_modify[:i]
                     break
                 elif not item.isdigit() and item != "-":
                     yaml_file = yaml_file + yaml_modify[i:]
-                    # yaml_file = yaml_modify[i + 1:] + yaml_modify[:i]
                     break
                 else:
                     yaml_file = yaml_file + ones[int(item)] + "-"
@@ -134,25 +121,19 @@ if __name__ == '__main__':
             print("-------- out of yaml file --------")
             print(src_code_is)
             continue
-        # elif yaml_file in allFileList and yaml_file.lower() not in allFileList:
-        # elif yaml_file in allFileList and yaml_file.lower() in allFileList:
-        #     yaml_file = yaml_file.lower()
         os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
         if not os.path.exists(real_path + yaml_file):
             yaml_file = yaml_file.lower()
             os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
             if not os.path.exists(real_path + yaml_file):
                 allYamldata.append(yaml_file)
-                #print("------ allYamldata {} 已添加 -----".format(yaml_file))
                 continue
-        # time.sleep()
         os.chdir(os.getcwd() + "/" + yaml_file)
         commit_id = os.popen("git tag").read().strip()
         
         repo_branch = os.popen("git branch -r").read().strip()
         branch_a = repo_branch.split("\n")
         if repo_branch == "":
-            #print("----- {} branch 不存在 -----".format(yaml_file))
             allYamldata_branch.append(yaml_file)
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
@@ -206,5 +187,5 @@ if __name__ == '__main__':
     print(allYamldata_tag)
     print("--------- d_oepkg list -----------")
     print(len(d_oepkg))
-    #print(allYamldata_tag)
+    print(allYamldata_tag)
     print("---- end ----")
