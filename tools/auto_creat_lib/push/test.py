@@ -25,7 +25,6 @@ from collections import defaultdict
 from xml.etree.ElementTree import parse
 
 with open("./yaml_list.txt","r") as f:
-    #for i in f.readlines():
     yaml_list = f.read()
     for i in yaml_list.split(", "):
         i = i.split("'")[1]
