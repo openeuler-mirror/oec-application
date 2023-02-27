@@ -71,5 +71,3 @@ for key in suse_name:
         # sheet["P{}".format(col_value.index(key)+2)] = value
 print("****************")
 wb.save("zyn2.xlsx")
-
-# excel里插入一行 进行比对后
