@@ -29,14 +29,9 @@ sheet = xl.add_sheet('docker', cell_overwrite_ok=True)
 row = 0
 cloum = 0
 
-# a = os.system("find ./ -name Dockerfile > log.txt")
 with open("log1.txt","r") as f:
     for k,i in enumerate(f.readlines()):
-        #print(i)
         a = os.popen("grep FROM {}".format(i)).read()
-        #print(a)
-        #with open("./test.txt","a+") as f1:
-            #f1.write(a.strip() + "-------------" + i)
         data = i.split("/")
         for j in data:
             sheet.write(row, cloum, j)
