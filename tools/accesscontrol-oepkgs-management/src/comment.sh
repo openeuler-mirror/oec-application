@@ -15,7 +15,7 @@ function log_error()
 # 执行评论功能
 function exec_comment() {
   log_info "***** Start to exec comment *****"
-  python3 /var/jenkins_home/accesscontrol/oec-application/tools/oepkgs-management-AccessControl/src/pr_comment.py -p $1 -t "c951fee688f4b037d27602d7461b81fc" -u "https://gitee.com/oepkgs/oepkgs-management.git" -n $2
+  python3 /var/jenkins_home/accesscontrol/oec-application/tools/oepkgs-management-AccessControl/src/pr_comment.py -p $1 -t "xxxxx" -u "https://gitee.com/oepkgs/oepkgs-management.git" -n $2
   log_info "***** End to exec comment *****"
 }
 
