@@ -23,5 +23,3 @@ with open("./yaml_list.txt","r") as f:
         os.chdir(os.path.pardir)
         os.system("rm -rf {}".format(i))
 print("-------- end -------")
-
-    # print(type(", ".split(i)))
