@@ -82,14 +82,7 @@ if __name__ == '__main__':
     # api_token = input("请输入api的token：")
     if len(sys.argv) != 2:
         sys.exit()
-
-    # requests.adapters.DEFUALT_RETRYS = 10
-    headers = {"Content-Type":"application/json;charset=UTF-8","Connection":"close"}
     rpm_pkg_path = "/srv/rpm/testing/openeuler-20.03-LTS-SP3"
-    rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
-    real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
-    api_token = "68a19dd4a3bd83ce89b3ce0e3ca979d1"
-    robot_token = "c951fee688f4b037d27602d7461b81fc"
     # 取rpm包总数和rpm文件绝对路径
     getAllFilesInPath(rpm_pkg_path)
     print("当前路径下的总文件数 =", allFileNum)
