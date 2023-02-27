@@ -84,19 +84,6 @@ def read_yaml(path):
 
 
 if __name__ == '__main__':
-    # 读取rpm包名存入列表内
-    # rpm_pkg_path = input("请输入要获取的rpm包目录：")
-    # api_token = input("请输入api的token：")
-    headers = {"Content-Type": "application/json;charset=UTF-8"}
-    rpm_pkg_path = "/srv/rpm/pub/"
-    rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
-    real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
-    closed_header = "curl -X PATCH --header 'Content-Type: application/json;charset=UTF-8'"
-    api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
-    robot_token = "c951fee688f4b037d27602d7461b81fc"
-    # 取rpm包总数和rpm文件绝对路径
-    # getAllFilesInPath(rpm_pkg_path)
-
     a = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
