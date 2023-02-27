@@ -40,12 +40,8 @@ oepkgs_list = []
 a_list = []
 for i in col_value:
     a_list.append(i.lower())
-# j = 2
-# with open("rpm_info.json", "w") as f:
 def write(col, a):
     for key in a.keys():
-        # if key == "openeuler-22.03-LTS-SP1":
-        #     print(b[key].keys())
         sheet.write(1, col, key)
         sheet.write(2, col, "name")
         sheet.write(2, col + 1, "group")
