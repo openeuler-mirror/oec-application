@@ -1,5 +1,17 @@
-# !/usr/bin/python3
-# -*- coding:UTF-8 -*-
+#!/usr/bin/env python3
+# coding: utf-8
+# Copyright (c) 2022 Huawei Technologies Co., Ltd.
+# oec-hardware is licensed under the Mulan PSL v2.
+# You can use this software according to the terms and conditions of the Mulan PSL v2.
+# You may obtain a copy of Mulan PSL v2 at:
+#     http://license.coscl.org.cn/MulanPSL2
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+# PURPOSE.
+# See the Mulan PSL v2 for more details.
+# Author: @zhangyinuo
+# Create: 2023-02-27
+# Desc: Submit oec-hardware job automatically on compass-ci
 
 import base64
 import sys
@@ -82,48 +94,14 @@ if __name__ == '__main__':
     api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
     robot_token = "c951fee688f4b037d27602d7461b81fc"
     print("yaml文件的名字")
-    #getAllFilesInPath("./oepkgs-management/sig")
-    #print(allYamlList)
     with open("yaml_sp3.json", "r") as f:
         d = json.load(f)
-    # print(d)
-    #d_list = copy.deepcopy(d)
-    #for i in d_list:
-    #     if i != "openblas":
-    #         del d[i]
-    #     else:
-    #         break
     print("---------------")
     print(len(d))
     print(d)
     #sys.exit()
     tag_num = 0
     for yaml_file in d:
-        # # if yaml_modify not in allYamlList:
-        # yaml_file = ""
-        # if yaml_modify[0].isdigit():
-        #     for i, item in enumerate(yaml_modify):
-        #         if not item.isdigit() and item == "-":
-        #             yaml_file = yaml_file + yaml_modify[i + 1:]
-        #             # yaml_file = yaml_modify[i + 1:] + "-" + yaml_modify[:i]
-        #             break
-        #         elif not item.isdigit() and item != "-":
-        #             yaml_file = yaml_file + yaml_modify[i:]
-        #             # yaml_file = yaml_modify[i + 1:] + yaml_modify[:i]
-        #             break
-        #         else:
-        #             yaml_file = yaml_file + ones[int(item)] + "-"
-        # elif "+" in yaml_modify:
-        #     yaml_file = yaml_modify.replace("+", "plus")
-        # else:
-        #     yaml_file = yaml_modify
-        # print("*****{}****".format(yaml_modify))
-        #
-        # if yaml_file not in allYamlList:
-        #     src_code_is.append(yaml_file)
-        #     print("-------- out of yaml file --------")
-        #     print(src_code_is)
-        #     continue
         module_name = d[yaml_file]
         print("----module_name----")
         print(module_name)
@@ -139,87 +117,15 @@ if __name__ == '__main__':
         print("------++++++")
         print(version_list)
         print(rpm_dict)
-        # sys.exit()
         print("+-+-+-+-+-+-+-+")
-        # s = requests.session()
-        # s.keep_alive = False
-        # branch_data = os.popen("curl -X GET --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches?access_token={}'".format(yaml_file, api_token)).read()
-        # print("------ branch_data -----")
-        # print(branch_data)
-        # response_txt = json.loads(branch_data)
-        # print("------ branch list -----")
-        # print(response_txt)
-        # branch_data.close()
-        # branch_list = [i["name"] for i in response_txt]
-        # print(branch_list)
-        # print([i["name"] for i in response_txt])
-        # if type(response_txt) == list:
-        #     if sys.argv[1] not in [i["name"] for i in response_txt]:
-        #         continue
-        #     else:
-        #         tag_num = tag_num + 1
-        #         print("------ tag_num ------")
-                # print(tag_num)
-                # print("https://gitee.com/api/v5/repos/src-oepkgs/{0}/branches/{1}/setting?access_token={2}".format(
-                #     yaml_file, sys.argv[1], api_token))
-                # s = requests.session()
-                # s.keep_alive = False
         os.system("curl -X DELETE --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/setting?access_token={}'".format(yaml_file, sys.argv[1], api_token))
         for rpm_version in version_list:
             rpm_path = rpm_dict[rpm_version]
-            # if not os.path.exists(real_path + yaml_file):
-            # time.sleep(1)
-            # s = requests.session()
-            # s.keep_alive = False
-            # tags_data = requests.get(
-            #     "https://gitee.com/api/v5/repos/src-oepkgs/{}/tags?access_token={}".format(yaml_file,
-            #                                                                                api_token),
-            #     headers=headers)
-            # response_txt = json.loads(tags_data.text)
-            # tags_data.close()
             print("***************")
-            # print(response_txt)
-            # tag_list = [i["name"] for i in response_txt]
-            # print(tag_list)
-            # sys.exit()
-            # if sys.argv[1] == "master":
-            #     if "20.03-LTS-SP1" + "-v" + rpm_version in [i["name"] for i in response_txt]:
-            #         os.chdir(os.path.pardir)
-            #         os.system("rm -rf {0}".format(yaml_file))
-            #         print(os.getcwd())
-            #         src_code_is.append(yaml_file)
-            #         print(src_code_is)
-            #         # continue
-            #         break
-            # else:
-            #     if sys.argv[1][10:] + "-v" + rpm_version in [i["name"] for i in response_txt]:
-            #         os.chdir(os.path.pardir)
-            #         os.system("rm -rf {0}".format(yaml_file))
-            #         print(os.getcwd())
-            #         src_code_is.append(yaml_file)
-            #         print(src_code_is)
-            #         # continue
-            #         break
             if sys.argv[1] == "master":
-                # if "20.03-LTS-SP1" + "-v" + rpm_version in [i["name"] for i in response_txt]:
-                    # os.chdir(os.path.pardir)
-                    # os.system("rm -rf {0}".format(yaml_file))
-                    # print(os.getcwd())
-                    # src_code_is.append(yaml_file)
-                    # print(src_code_is)
-                    # continue
-                    # break
                 os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
                 print("-----git clone-----")
             else:
-                # if sys.argv[1][10:] + "-v" + rpm_version in [i["name"] for i in response_txt]:
-                    # os.chdir(os.path.pardir)
-                    # os.system("rm -rf {0}".format(yaml_file))
-                    # print(os.getcwd())
-                    # src_code_is.append(yaml_file)
-                    # print(src_code_is)
-                    # continue
-                    # break
                 os.system("git clone -b {1} 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file,
                                                                                             sys.argv[1]))
                 print("-----git clone-----")
@@ -233,7 +139,7 @@ if __name__ == '__main__':
 
             print("-----****-----")
             print(os.getcwd())
-            # print("-----****-----")
+            print("-----****-----")
             os.system(
                 "rm -rf *;rpm2cpio {0} | cpio -div;git add .;git commit -m '{1}';git push".format(rpm_path,
                                                                                                   rpm_version))
@@ -242,33 +148,13 @@ if __name__ == '__main__':
             #os.system("rm -rf {0}".format(yaml_file))
             print("-------- pwd --------")
             print(os.getcwd())
-            # else:
-            #     #print(os.getcwd())
-            #     print("-------- pwd2 --------")
-            #     print(os.getcwd())
-            #     #os.chdir(os.getcwd() + "/" + yaml_file)
-            #     os.system("rm -rf *;rpm2cpio {1} | cpio -div;git add .;git commit -m '{2}';git push".format(yaml_file,rpm_path,rpm_version))
-            # time.sleep(3)
-            # st = requests.session()
-            # st.keep_alive = False
-            # time.sleep(3)
-            # response_url = os.popen("curl -X GET --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}?access_token={}'".format(yaml_file, sys.argv[1], api_token)).read()
             commit_id = os.popen("git rev-parse HEAD").read().strip()
             print(commit_id)
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
             print("-------- pwd --------")
             print(os.getcwd())
-            # response_json = json.loads(response_url)
-            # response_url.close()
-            # if response_json == {'message': 'Branch does not exist'}:
-            #     print("-------")
-            #     print("{} is 500".format(yaml_file))
-            #     yaml_error.append(yaml_file)
-            #     break
             print("------- sha value ------")
-            # print(response_json)
-            # commit_id = response_json["commit"]["sha"]
             print(commit_id)
             if sys.argv[1] == "master":
                 os.system(
@@ -281,25 +167,8 @@ if __name__ == '__main__':
             print("------- 库名 ------")
             print(yaml_file)
         tag_num = tag_num + 1
-        # time.sleep(1)
-        # s = requests.session()
-        # s.keep_alive = False
-        # data = {"access_token": api_token}
         os.system("curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/protection' -d '{{\"access_token\":\"{}\"}}'".format(yaml_file, sys.argv[1], api_token))
-        # r_pt.close()
-        #sys.exit()
         src_code_up.append(yaml_file)
         # os.system("rm -rf {}".format(yaml_file))
         print(tag_num)
         print(src_code_up)
-        #time.sleep(1)
-# else:
-#     src_code_is.append(yaml_file)
-#     print(src_code_is)
-#     time.sleep(2)
-    #if tag_num >= 3:
-    #    print("----- time sleep -----")
-    #    #print(time.sleep(1800))
-    #    print("----- time end -----")
-    #    print("----tag_num------")
-    #    sys.exit()
