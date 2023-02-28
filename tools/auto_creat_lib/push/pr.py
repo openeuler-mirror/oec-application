@@ -11,7 +11,7 @@
 # See the Mulan PSL v2 for more details.
 # Author: @zhangyinuo
 # Create: 2023-02-27
-# Desc: Submit oec-hardware job automatically on compass-ci
+# Desc: Automatically submit PR to the code repository configuration library.
 
 import base64
 import sys
@@ -24,6 +24,7 @@ import time
 from collections import defaultdict
 from xml.etree.ElementTree import parse
 from txdpy import get_Bletter,get_Sletter
+import logging
 
 srcOepkgsNum = 0
 allFileNum = 0
@@ -39,7 +40,6 @@ dict_list = defaultdict(list)
 Inyaml = []
 
 def getAllFilesInPath(path):
-    #print(path)
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
@@ -64,12 +64,10 @@ def getAllFilesInPath(path):
 
 
 def creat_pr():
-    print("------ pr -------")
     data = {"access_token": api_token, "title": "自动化创建库", "head": "zhang-yn:master", "base": "master"}
     response = requests.post("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls", params=data,headers=headers)
-    print(response)
     pr_num = json.loads(response.text)["number"]
-    print("-------- waiting 10 minutes ---------")
+    logging.info("-------- waiting 10 minutes ---------")
     time.sleep(300)
     response = requests.get("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls/{}/merge?access_token={}".format(pr_num,api_token),headers=headers)
     response_dict = json.loads(response.text)
@@ -77,13 +75,12 @@ def creat_pr():
         commit_id = os.popen("{0} 'https://gitee.com/api/v5/repos/new-op/community/pulls/{1}' -d '{{\"access_token\":\"{2}\",\"state\":\"closed\"}}'".format(closed_header, pr_num, api_token)).read()
         response_json = json.loads(commit_id)
         if response_json["state"] == "closed":
-        # print("******* 当前提交未合并 ********")
             creat_pr()
         else:
-            print("---------- pr 未关闭 ------------")
+            logging.info("---------- pr 未关闭 ------------")
             sys.exit()
     time.sleep(500)
-    print("--- 已合入 ---")
+    logging.info("--- 已合入 ---")
 
 
 # 监听pr
@@ -109,14 +106,8 @@ if __name__ == '__main__':
     a = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
-    print("--------")
     getAllFilesInPath("./oepkgs-management_10/sig")
     getAllFilesInPath("./oepkgs-management/sig")
-    print("********")
-    print(Inyaml)
-    print("===========")
-    print(len(allYamldata))
-    print("---------------")
     for i, item in enumerate(allYamldata):
         if len(get_Bletter(item.split("/")[-1][:-5])) != 0:
             if item.split("/")[-1][:-5].lower() + ".yaml" in Inyaml:
@@ -131,7 +122,5 @@ if __name__ == '__main__':
             if a >= 100:
                 os.system("cd {0};git add .;git commit -m '自动化仓库创建';git push".format("oepkgs-management"))
                 creat_pr()
-                # print(a)
                 a = 0
-                print("--------")
-    sys.exit()
+                logging.info("---- pr end ----")
