@@ -201,7 +201,7 @@ def listen_event(pr_num):
         headers=headers)
     response_dict = json.loads(response.text)
     if "Pull Request已经合并" in response_dict:
-        print("------------pr已合入-------------")
+        logging.info("------------pr已合入-------------")
     else:
         time.sleep(600)
         listen_event(pr_num)
@@ -420,15 +420,12 @@ a = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multime
 
 if __name__ == '__main__':
     # 读取rpm包名存入列表内
-    # rpm_pkg_path = input("请输入要获取的rpm包目录：")
-    # api_token = input("请输入api的token：")
     headers = {"Content-Type": "application/json;charset=UTF-8"}
     rpm_pkg_path = "/srv/rpm/pub/"
     # rpm_pkg_path = "contrib"
     api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
     # 取rpm包总数和rpm文件绝对路径
     getAllFilesInPath(rpm_pkg_path)
-    print("当前路径下的总文件数 =", allFileNum)
     for rpm_path in allFileList:
         rpm_file = shell_cmd("Name", rpm_path)  # 获取rpm信息
         d[rpm_file].append(rpm_path)
@@ -436,17 +433,10 @@ if __name__ == '__main__':
     # 获取src-oepkgs上已经存在的库，通过yaml文件获取
     getAllFilesInPath("./oepkgs-management_1/sig")
     # 判断取到的rpm文件是否在舱内已经存在，进行过滤
-    print("***************")
-    # print(d)
-    print("---------------")
-    # print(allYamlList)
     d_list = copy.deepcopy(d)
     for i in d_list:
         if i in allYamlList or str.lower(i) in allYamlList:
             d.pop(i)
-    print(d)
-    print("-----*****-----")
-    print(len(d.keys()))
     # 遍历字典进行yaml创建
     source_ocde("module2.xml")
     for yaml_modify in d:
@@ -493,14 +483,12 @@ if __name__ == '__main__':
             else:
                 yaml_liu.append(yaml_modify)
     logging.info("------- 剩余 ------")
-    print(yaml_liu)
 
     for d_oepkg_key in d_oepkg.keys():
         group_dir = d_oepkg_key
         sig_code_str = {}
         if not os.path.exists(real_path + "/oepkgs-management_1/sig/{}/sig-info.yaml".format(group_dir)):
             for i, item in enumerate(d_oepkg[d_oepkg_key]):
-                print(real_path + "oepkgs-management_1/sig/{}/sig-info.yaml".format(group_dir))
                 if i == 0:
                     sig_code_str = sig_info("sig-info.yaml", group_dir, item.split("-+-")[0], item.split("-+-")[4])
                     base64_encode("./test.yaml", group_dir, item)
@@ -514,7 +502,6 @@ if __name__ == '__main__':
                         sig_code_str['repositories'][type_str[0]]['repo'].append("src-oepkgs/" + item.split("-+-")[0])
                     base64_encode("./test.yaml", group_dir, item)
             logging.info("---------sig_code_str----------")
-            print(sig_code_str)
             code_str = base64.b64encode(
                 yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
                     'utf-8')).decode('utf-8')
@@ -527,10 +514,8 @@ if __name__ == '__main__':
                 if j == 0:
                     sig_code_str = sig_info("./oepkgs-management_1/sig/{}/sig-info.yaml".format(group_dir), group_dir,
                                             items.split("-+-")[0], items.split("-+-")[4])
-                    print(sig_code_str)
                     base64_encode("./test.yaml", group_dir, items)
                 else:
-                    print(sig_code_str)
                     base64_encode("./test.yaml", group_dir, items)
                     type_str = [j for j, i in enumerate(sig_code_str['repositories']) if
                                 i.get("type") == items.split("-+-")[4]]
