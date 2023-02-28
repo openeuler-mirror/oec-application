@@ -32,7 +32,6 @@ script_toute = sys.path[0]
 c = []
 dict_list = {}
 dict_oepkgs = {}
-
 openeuler_version = ["openEuler-20.03-LTS", "openEuler-20.03-LTS-SP1", "openEuler-20.03-LTS-SP2", "openEuler-20.03-LTS-SP3", "openEuler-20.09", "openEuler-21.03", "openEuler-21.09", "openEuler-22.03-LTS", "openEuler-22.03-LTS-SP1", "openEuler-22.09"]
 oepkgs_version = [ "openeuler-20.03-LTS-SP1", "openeuler-20.03-LTS-SP2", "openeuler-20.03-LTS-SP3","openeuler-22.03-LTS", "openeuler-22.03-LTS-SP1"]
 requests.DEFAULT_RETRIES = 5
