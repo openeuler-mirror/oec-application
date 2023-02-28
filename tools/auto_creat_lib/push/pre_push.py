@@ -67,7 +67,6 @@ def getAllFilesInPath(path):
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
                 # allYamldata.append(os.path.abspath(path + "/" + f))
-
     for dl in curPathDirList:
         getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
@@ -139,7 +138,6 @@ if __name__ == '__main__':
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
             continue
-
         if commit_id == "":
             d_oepkg[yaml_file]=d[yaml_modify]
             os.chdir(os.path.pardir)
@@ -157,6 +155,5 @@ if __name__ == '__main__':
                 os.chdir(os.path.pardir)
                 os.system("rm -rf {0}".format(yaml_file))
                 add_yaml = add_yaml + 1
-        
     with open("yaml_sp3.json", "w") as f:
         f.write(json.dumps(d_oepkg))
