@@ -49,16 +49,21 @@ def write(col, a):
         sheet.write(2, col + 2, "summary")
         sheet.write(2, col + 3, "lincense")
         sheet.write(2, col + 4, "link")
-        for i in a[key].keys():
-            if i.lower() in a_list:
-                num = a_list.index(i.lower()) + 3
-                sheet.write(num, col, i)
-                sheet.write(num, col + 1, a[key][i].split("-*-")[1])
-                sheet.write(num, col + 2, a[key][i].split("-*-")[2])
-                sheet.write(num, col + 3, a[key][i].split("-*-")[0])
-                sheet.write(num, col + 4, a[key][i].split("-*-")[3])
+        write_col(a)
         col = col + 5
     return col
+
+
+def write_col(a)
+    for i in a[key].keys():
+        if i.lower() in a_list:
+            num = a_list.index(i.lower()) + 3
+            sheet.write(num, col, i)
+            sheet.write(num, col + 1, a[key][i].split("-*-")[1])
+            sheet.write(num, col + 2, a[key][i].split("-*-")[2])
+            sheet.write(num, col + 3, a[key][i].split("-*-")[0])
+            sheet.write(num, col + 4, a[key][i].split("-*-")[3])
+
 
 if __name__ == '__main__':
     col = 2
