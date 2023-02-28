@@ -11,7 +11,7 @@
 # See the Mulan PSL v2 for more details.
 # Author: @zhangyinuo
 # Create: 2023-02-27
-# Desc: Submit oec-hardware job automatically on compass-ci
+# Desc: Automatically processes the XML file that stores RPM information and writes the processed information to the JSON file.
 
 import base64
 import copy
@@ -26,7 +26,7 @@ from lxml import html
 import time
 from xml.etree.ElementTree import parse
 import threading
-
+import logging
 
 script_toute = sys.path[0]
 c = []
@@ -35,7 +35,6 @@ dict_oepkgs = {}
 
 openeuler_version = ["openEuler-20.03-LTS", "openEuler-20.03-LTS-SP1", "openEuler-20.03-LTS-SP2", "openEuler-20.03-LTS-SP3", "openEuler-20.09", "openEuler-21.03", "openEuler-21.09", "openEuler-22.03-LTS", "openEuler-22.03-LTS-SP1", "openEuler-22.09"]
 oepkgs_version = [ "openeuler-20.03-LTS-SP1", "openeuler-20.03-LTS-SP2", "openeuler-20.03-LTS-SP3","openeuler-22.03-LTS", "openeuler-22.03-LTS-SP1"]
-#oepkgs_version = ["openeuler-20.03-LTS", "openeuler-20.03-LTS-SP1", "openeuler-20.03-LTS-SP2", "openeuler-20.03-LTS-SP3","openeuler-22.03-LTS", "openeuler-22.03-LTS-SP1"]
 requests.DEFAULT_RETRIES = 5
 s = requests.session()
 s.keep_alive = False
@@ -100,7 +99,6 @@ def openeuler(version):
         openeuler_link = "https://repo.openeuler.org/{0}/source/".format(i)
         print( openeuler_link + "repodata/")
         a = requests.get(openeuler_link + "repodata/")
-        print(a)
         tree = html.fromstring(a.content)
         navareas = tree.xpath('//tbody/tr/td[@class ="link"]/a/@href')
         for j in navareas:
@@ -108,9 +106,7 @@ def openeuler(version):
                 os.system("wget https://repo.openeuler.org/{0}/source/repodata/{1};gzip -d {1}".format(i, j))
                 xml_file(i,j[:-3],openeuler_link,"openeuler",dict_list[i])
                 time.sleep(25)
-    print("***********")
     print(len(dict_list))
-    print("***********")
     with open("test.json", "w", encoding="utf-8", ) as f:
         f.write(json.dumps(dict_list))
 
@@ -119,7 +115,7 @@ def oepkgs(version):
         dict_oepkgs[i] = {}
         getAllFilesInPath("/srv/rpm/pub/" + i,dict_oepkgs[i])
         os.system("rm -rf *-primary.xml")
-    print("----------- xml end  -----------")
+    logging.info("----------- xml end  -----------")
     with open("oepkgs.json", "w", encoding="utf-8", ) as f:
         f.write(json.dumps(dict_oepkgs))
 
