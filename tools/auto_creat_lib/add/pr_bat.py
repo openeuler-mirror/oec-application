@@ -27,6 +27,7 @@ from xml.etree.ElementTree import parse
 from txdpy import get_Bletter,get_Sletter
 import logging
 
+
 srcOepkgsNum = 0
 allFileNum = 0
 allFileList = []  # 存放 当前路径 以及当前路径的子路径 下的所有文件
@@ -39,6 +40,7 @@ d = defaultdict(list)
 d_oepkg = defaultdict(list)
 dict_list = defaultdict(list)
 Inyaml = []
+
 
 def getAllFilesInPath(path):
     global allFileNum
@@ -110,7 +112,6 @@ if __name__ == '__main__':
     closed_header = "curl -X PATCH --header 'Content-Type: application/json;charset=UTF-8'"
     api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
     robot_token = "c951fee688f4b037d27602d7461b81fc"
-
     a = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
