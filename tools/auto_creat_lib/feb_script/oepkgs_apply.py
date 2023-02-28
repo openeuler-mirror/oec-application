@@ -42,6 +42,12 @@ def getAllFilesInPath(path,dict_value):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
+    fileRoute(files,allFileNum,curPathDirList)
+    for dl in curPathDirList:
+        getAllFilesInPath(path + "/" + dl,dict_value)  # 递归获取当前目录下的文件夹内的文件
+
+
+def fileRoute(files,allFileNum,curPathDirList):
     for f in files:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
@@ -56,10 +62,6 @@ def getAllFilesInPath(path,dict_value):
                 xml_file(path.split("/")[4],f[:-3],oepkgs_link,"oepkgs",dict_value)
 
 
-    for dl in curPathDirList:
-        getAllFilesInPath(path + "/" + dl,dict_value)  # 递归获取当前目录下的文件夹内的文件
-
-
 def xml_file(version,xmlfile_path,link_str,signal,dict_value):
     Parse = parse(xmlfile_path)
     root = Parse.getroot()
@@ -68,22 +70,26 @@ def xml_file(version,xmlfile_path,link_str,signal,dict_value):
         b = ""
         c = ""
         for k in child:
-            if k.tag[39:] == "summary":
-                d = k.text
-            if k.tag[39:] == "name":
-                a = k.text
-            if k.tag[39:] == "location":
-                e = link_str + k.attrib["href"]
-            if k.tag[39:] == "format":
-                for j in k:
-                    if j.tag[36:] == "license":
-                        b = j.text
-                    if j.tag[36:] == "group":
-                        c = j.text
-                if signal == "openeuler":
-                    dict_list[version][a] = b + "-*-" + c + "-*-" + d + "-*-" + e
-                else:
-                    dict_value[a] = b + "-*-" + c + "-*-" + d + "-*-" + e
+            jsonFile(a,b,c,k)
+
+
+def jsonFile(a,b,c,k)
+    if k.tag[39:] == "summary":
+            d = k.text
+        if k.tag[39:] == "name":
+            a = k.text
+        if k.tag[39:] == "location":
+            e = link_str + k.attrib["href"]
+        if k.tag[39:] == "format":
+            for j in k:
+                if j.tag[36:] == "license":
+                    b = j.text
+                if j.tag[36:] == "group":
+                    c = j.text
+            if signal == "openeuler":
+                dict_list[version][a] = b + "-*-" + c + "-*-" + d + "-*-" + e
+            else:
+                dict_value[a] = b + "-*-" + c + "-*-" + d + "-*-" + e
 
 
 def openeuler(version):
