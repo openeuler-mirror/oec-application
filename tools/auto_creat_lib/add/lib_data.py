@@ -52,8 +52,8 @@ def getAllFilesInPath(path):
         getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
-def fileRoute(file,allFileNum,curPathDirList):
-    for f in file:
+def fileRoute(files,allFileNum,curPathDirList):
+    for f in files:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
                 pass  # 排除隐藏文件夹
