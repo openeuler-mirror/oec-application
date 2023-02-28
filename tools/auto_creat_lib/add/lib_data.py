@@ -47,13 +47,13 @@ def getAllFilesInPath(path):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
-    fileRoute(files,allFileNum)
+    fileRoute(files,allFileNum,curPathDirList)
     for dl in curPathDirList:
         getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
-def fileRoute(file,allFileNum)
-    for f in files:
+def fileRoute(file,allFileNum,curPathDirList)
+    for f in file:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
                 pass  # 排除隐藏文件夹
