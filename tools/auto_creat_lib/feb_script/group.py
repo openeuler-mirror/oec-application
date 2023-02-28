@@ -47,6 +47,12 @@ def getAllFilesInPath(path):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
+    fileRoute(files,allFileNum,curPathDirList)
+    for dl in curPathDirList:
+        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
+
+
+def fileRoute(files,allFileNum,curPathDirList):
     for f in files:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
@@ -63,8 +69,6 @@ def getAllFilesInPath(path):
                     allYamldata.append(os.path.abspath(path + "/" + f))
                 elif path.split("/")[1] == "oepkgs-management":
                     Inyaml.append(path + "/" + f)
-    for dl in curPathDirList:
-        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
 def read_yaml(path):
