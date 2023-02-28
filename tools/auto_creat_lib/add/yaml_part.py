@@ -24,7 +24,6 @@ import time
 import copy
 from collections import defaultdict, OrderedDict
 import logging
-
 from xml.etree.ElementTree import parse
 
 srcOepkgsNum = 0
@@ -66,8 +65,6 @@ def getAllFilesInPath(path):
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
-                # allYamldata.append(os.path.abspath(path + "/" + f))
-
     for dl in curPathDirList:
         getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
@@ -83,8 +80,6 @@ def shell_cmd(rpm_key, path):
 
 if __name__ == '__main__':
     # 读取rpm包名存入列表内
-    # rpm_pkg_path = input("请输入要获取的rpm包目录：")
-    # api_token = input("请输入api的token：")
     if len(sys.argv) != 2:
         sys.exit()
     print("yaml文件的名字")
@@ -143,7 +138,6 @@ if __name__ == '__main__':
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
             add_yaml = add_yaml + 1
-            logging.info("----- tag 不存在 -----")
             logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
         else:
             tag_list = commit_id.split("\n")
@@ -158,24 +152,8 @@ if __name__ == '__main__':
                 os.chdir(os.path.pardir)
                 os.system("rm -rf {0}".format(yaml_file))
                 add_yaml = add_yaml + 1
-                logging.info("----- 20.03-LTS-SP3 存在 -----")
                 logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
         
     with open("yaml_sp3.json", "w") as f:
         f.write(json.dumps(d_oepkg))
     logging.info("--------- yaml list -----------")
-    print(len(src_code_is))
-    print(src_code_is)
-    logging.info("--------- git list -----------")
-    print(len(allYamldata))
-    print(allYamldata)
-    logging.info("--------- branch list -----------")
-    print(len(allYamldata_branch))
-    print(allYamldata_branch)
-    logging.info("--------- tag list -----------")
-    print(len(allYamldata_tag))
-    print(allYamldata_tag)
-    logging.info("--------- d_oepkg list -----------")
-    print(len(d_oepkg))
-    print(allYamldata_tag)
-    print("---- end ----")
