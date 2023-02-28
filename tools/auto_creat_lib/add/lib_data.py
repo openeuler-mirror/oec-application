@@ -11,7 +11,7 @@
 # See the Mulan PSL v2 for more details.
 # Author: @zhangyinuo
 # Create: 2023-02-27
-# Desc: Submit oec-hardware job automatically on compass-ci
+# Desc:Read the path of the software repository and write it into the JSON file
 
 import base64
 import sys
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     #getAllFilesInPath("./oepkgs-management/sig")
     print("------- yaml file ---------")
     print(len(allYamlList))
-    # print(allYamlList)
+    print(allYamlList)
     print("------- rpm dict -------")
     with open("sp3_yaml.json", "w") as f:
         f.write(json.dumps(d))
