@@ -93,8 +93,6 @@ def listen_event(pr_num):
         listen_event(pr_num)
 
 
-
-
 if __name__ == '__main__':
     headers = {"Content-Type": "application/json;charset=UTF-8"}
     rpm_pkg_path = "/srv/rpm/pub/"
@@ -102,7 +100,6 @@ if __name__ == '__main__':
     real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
     api_token = "077fd301428ee142b5bc5d5eaae0a0fc"
     robot_token = "c951fee688f4b037d27602d7461b81fc"
-
     a = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
