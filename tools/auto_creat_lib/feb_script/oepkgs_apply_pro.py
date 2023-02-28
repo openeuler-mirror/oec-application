@@ -40,6 +40,7 @@ oepkgs_list = []
 a_list = []
 for i in col_value:
     a_list.append(i.lower())
+
 def write(col, a):
     for key in a.keys():
         sheet.write(1, col, key)
@@ -56,10 +57,8 @@ def write(col, a):
                 sheet.write(num, col + 2, a[key][i].split("-*-")[2])
                 sheet.write(num, col + 3, a[key][i].split("-*-")[0])
                 sheet.write(num, col + 4, a[key][i].split("-*-")[3])
-                print(col)
         col = col + 5
     return col
-
 
 if __name__ == '__main__':
     col = 2
