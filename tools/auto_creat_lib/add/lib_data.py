@@ -52,7 +52,7 @@ def getAllFilesInPath(path):
         getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
-def fileRoute(file,allFileNum,curPathDirList)
+def fileRoute(file,allFileNum,curPathDirList):
     for f in file:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
