@@ -33,4 +33,3 @@ with open("./yaml_list.txt","r") as f:
         os.system("git add .;git commit -m 'create';git push;")
         os.chdir(os.path.pardir)
         os.system("rm -rf {}".format(i))
-print("-------- end -------")
