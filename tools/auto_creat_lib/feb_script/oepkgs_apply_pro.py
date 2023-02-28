@@ -26,20 +26,19 @@ col_value = sh.col_values(0)
 del col_value[0]
 del col_value[1]
 del col_value[2]
-
 xls = xlrd.open_workbook("oepkgs.xlsx")
 xls_file = copy(xls)
 sheet = xls_file.get_sheet(3)
-
 with open("test.json","r",) as f :
     openeuler_data = json.loads(f.read())
+
 with open("oepkgs.json","r",) as f1 :
     oepkgs_data = json.loads(f1.read())
-
 oepkgs_list = []
 a_list = []
 for i in col_value:
     a_list.append(i.lower())
+
 
 def write(col, a):
     for key in a.keys():
