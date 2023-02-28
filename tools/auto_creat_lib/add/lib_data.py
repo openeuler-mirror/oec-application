@@ -23,7 +23,6 @@ import requests
 import time
 import copy
 from collections import defaultdict, OrderedDict
-# import requests.adapters
 
 from xml.etree.ElementTree import parse
 
