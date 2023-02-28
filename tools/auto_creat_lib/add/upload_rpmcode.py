@@ -85,7 +85,6 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.exit()
 
-    # requests.adapters.DEFUALT_RETRYS = 10
     headers = {"Content-Type":"application/json;charset=UTF-8","Connection":"close"}
     rpm_pkg_path = "/srv/rpm/pub/openeuler-20.03-LTS-SP1"
     rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
@@ -95,7 +94,6 @@ if __name__ == '__main__':
     with open("yaml_sp3.json", "r") as f:
         d = json.load(f)
     print(len(d))
-    #sys.exit()
     tag_num = 0
     for yaml_file in d:
         module_name = d[yaml_file]
