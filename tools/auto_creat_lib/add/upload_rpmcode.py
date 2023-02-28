@@ -53,6 +53,7 @@ def getAllFilesInPath(path):
     for dl in curPathDirList:
         getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
+
 def fileRoute(files,allFileNum,curPathDirList):
     for f in files:
         if os.path.isdir(path + "/" + f):
@@ -83,7 +84,6 @@ if __name__ == '__main__':
     # 读取rpm包名存入列表内
     if len(sys.argv) != 2:
         sys.exit()
-
     headers = {"Content-Type":"application/json;charset=UTF-8","Connection":"close"}
     rpm_pkg_path = "/srv/rpm/pub/openeuler-20.03-LTS-SP1"
     rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
