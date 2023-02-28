@@ -11,7 +11,7 @@
 # See the Mulan PSL v2 for more details.
 # Author: @zhangyinuo
 # Create: 2023-02-27
-# Desc: Submit oec-hardware job automatically on compass-ci
+# Desc: Determine the different elements of a list and extract them.
 
 import xlrd
 import xlwt
