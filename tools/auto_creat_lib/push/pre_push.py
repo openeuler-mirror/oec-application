@@ -23,7 +23,6 @@ import requests
 import time
 import copy
 from collections import defaultdict, OrderedDict
-
 from xml.etree.ElementTree import parse
 
 srcOepkgsNum = 0
@@ -72,7 +71,6 @@ def fileRoute(files,allFileNum,curPathDirList):
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
-                # allYamldata.append(os.path.abspath(path + "/" + f))
 
 
 # 获取rpm信息，拿到name和description
