@@ -111,9 +111,7 @@ if __name__ == '__main__':
             yaml_file = yaml_modify.replace("+", "plus")
         else:
             yaml_file = yaml_modify
-        logging.info("----- yaml_modify ----")
         logging.info("*****{}****".format(yaml_modify))
-
         if yaml_file not in allYamlList:
             src_code_is.append(yaml_file)
             logging.info("-------- out of yaml file --------")
@@ -129,7 +127,6 @@ if __name__ == '__main__':
                 continue
         os.chdir(os.getcwd() + "/" + yaml_file)
         commit_id = os.popen("git tag").read().strip()
-        
         repo_branch = os.popen("git branch").read().strip()
         if repo_branch == "":
             logging.info("----- {} branch 不存在 -----".format(yaml_file))
@@ -157,7 +154,6 @@ if __name__ == '__main__':
                 os.system("rm -rf {0}".format(yaml_file))
                 add_yaml = add_yaml + 1
                 logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
-        
     with open("yaml_sp3.json", "w") as f:
         f.write(json.dumps(d_oepkg))
     logging.info("--------- yaml list -----------")
