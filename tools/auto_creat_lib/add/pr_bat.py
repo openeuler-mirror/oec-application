@@ -11,7 +11,7 @@
 # See the Mulan PSL v2 for more details.
 # Author: @zhangyinuo
 # Create: 2023-02-27
-# Desc: Submit oec-hardware job automatically on compass-ci
+# Desc: Image Repository Configuration Library Integrating Files
 
 import base64
 import sys
