@@ -81,15 +81,19 @@ def jsonFile(a,b,c,k):
         if k.tag[39:] == "location":
             e = link_str + k.attrib["href"]
         if k.tag[39:] == "format":
-            for j in k:
-                if j.tag[36:] == "license":
-                    b = j.text
-                if j.tag[36:] == "group":
-                    c = j.text
-            if signal == "openeuler":
-                dict_list[version][a] = b + "-*-" + c + "-*-" + d + "-*-" + e
-            else:
-                dict_value[a] = b + "-*-" + c + "-*-" + d + "-*-" + e
+            write(a,b,c,d,e,k)
+
+
+def write(a,b,c,d,e,k):
+    for j in k:
+        if j.tag[36:] == "license":
+            b = j.text
+        if j.tag[36:] == "group":
+            c = j.text
+        if signal == "openeuler":
+            dict_list[version][a] = b + "-*-" + c + "-*-" + d + "-*-" + e
+        else:
+            dict_value[a] = b + "-*-" + c + "-*-" + d + "-*-" + e
 
 
 def openeuler(version):
