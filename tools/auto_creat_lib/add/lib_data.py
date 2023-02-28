@@ -25,6 +25,7 @@ import copy
 from collections import defaultdict, OrderedDict
 
 from xml.etree.ElementTree import parse
+import logging
 
 srcOepkgsNum = 0
 allFileNum = 0
@@ -90,9 +91,9 @@ if __name__ == '__main__':
         d[rpm_file].append(rpm_path)
     # 获取src-oepkgs上已经存在的库，通过yaml文件获取
     #getAllFilesInPath("./oepkgs-management/sig")
-    print("------- yaml file ---------")
+    logging.info('--------yaml file-----------')
     print(len(allYamlList))
     print(allYamlList)
-    print("------- rpm dict -------")
+    logging.info('--------yaml file-----------')
     with open("sp3_yaml.json", "w") as f:
         f.write(json.dumps(d))
