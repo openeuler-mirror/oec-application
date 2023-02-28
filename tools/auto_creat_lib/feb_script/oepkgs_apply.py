@@ -73,9 +73,9 @@ def xml_file(version,xmlfile_path,link_str,signal,dict_value):
             jsonFile(a,b,c,k)
 
 
-def jsonFile(a,b,c,k)
+def jsonFile(a,b,c,k):
     if k.tag[39:] == "summary":
-            d = k.text
+        d = k.text
         if k.tag[39:] == "name":
             a = k.text
         if k.tag[39:] == "location":
