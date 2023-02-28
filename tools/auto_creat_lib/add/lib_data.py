@@ -94,6 +94,6 @@ if __name__ == '__main__':
     logging.info('--------yaml file-----------')
     print(len(allYamlList))
     print(allYamlList)
-    logging.info('--------yaml file-----------')
+    logging.info('--------rpm file-----------')
     with open("sp3_yaml.json", "w") as f:
         f.write(json.dumps(d))
