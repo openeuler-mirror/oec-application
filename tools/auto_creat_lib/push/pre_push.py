@@ -23,7 +23,6 @@ import requests
 import time
 import copy
 from collections import defaultdict, OrderedDict
-# import requests.adapters
 
 from xml.etree.ElementTree import parse
 
@@ -86,18 +85,16 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.exit()
     real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
-    print("yaml文件的名字")
     getAllFilesInPath("./oepkgs-management/sig")
     print(allYamlList)
     with open("sp3_yaml.json", "r") as f:
         d = json.load(f)
-    print("---------------")
     print(len(d))
     tag_num = 0
     add_yaml = 0
     for yaml_modify in d:
         tag_num = tag_num + 1
-        print("------ branch {} 已添加 -----".format(tag_num))
+        logging.info("------ branch {} 已添加 -----".format(tag_num))
         yaml_file = ""
         if yaml_modify[0].isdigit():
             for i, item in enumerate(yaml_modify):
@@ -113,13 +110,11 @@ if __name__ == '__main__':
             yaml_file = yaml_modify.replace("+", "plus")
         else:
             yaml_file = yaml_modify
-        print("----- yaml_modify ----")
-        print("*****{}****".format(yaml_modify))
+        logging.info("----- yaml_modify ----")
 
         if yaml_file not in allYamlList:
             src_code_is.append(yaml_file)
-            print("-------- out of yaml file --------")
-            print(src_code_is)
+            logging.info("-------- out of yaml file --------")
             continue
         os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
         if not os.path.exists(real_path + yaml_file):
@@ -139,7 +134,7 @@ if __name__ == '__main__':
             os.system("rm -rf {0}".format(yaml_file))
             continue
         if "origin/openEuler-22.03-LTS" not in [i.strip() for i in branch_a]:
-            print("----- openEuler-22.03-LTS 不存在 ----")
+            logging.info("----- openEuler-22.03-LTS 不存在 ----")
             branch_list.append(yaml_file)
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
@@ -150,12 +145,9 @@ if __name__ == '__main__':
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
             add_yaml = add_yaml + 1
-            print("----- tag 不存在 -----")
-            print("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
         else:
             tag_list = commit_id.split("\n")
             if "22.03-LTS" in [ i[:9] for i in tag_list]:
-                print("----- {} tag 已存在 -----".format(yaml_file))
                 allYamldata_tag.append(yaml_file)
                 os.chdir(os.path.pardir)
                 os.system("rm -rf {0}".format(yaml_file))
@@ -165,27 +157,6 @@ if __name__ == '__main__':
                 os.chdir(os.path.pardir)
                 os.system("rm -rf {0}".format(yaml_file))
                 add_yaml = add_yaml + 1
-                print("----- 22.03-LTS 存在 -----")
-                print("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
         
     with open("yaml_sp3.json", "w") as f:
         f.write(json.dumps(d_oepkg))
-    print("--------- yaml list -----------")
-    print(len(src_code_is))
-    print(src_code_is)
-    print("--------- git list -----------")
-    print(len(allYamldata))
-    print(allYamldata)
-    print("--------- branch list -----------")
-    print(len(allYamldata_branch))
-    print(allYamldata_branch)
-    print("--------- 22 list -----------")
-    print(len(branch_list))
-    print(branch_list)
-    print("--------- tag list -----------")
-    print(len(allYamldata_tag))
-    print(allYamldata_tag)
-    print("--------- d_oepkg list -----------")
-    print(len(d_oepkg))
-    print(allYamldata_tag)
-    print("---- end ----")
