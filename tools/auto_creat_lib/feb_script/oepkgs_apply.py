@@ -62,16 +62,12 @@ def getAllFilesInPath(path,dict_value):
 
 
 def xml_file(version,xmlfile_path,link_str,signal,dict_value):
-    print("************")
-    print(xmlfile_path)
-    print(version,xmlfile_path,link_str,signal)
     Parse = parse(xmlfile_path)
     root = Parse.getroot()
     for child in root:
         a = ""
         b = ""
         c = ""
-        print("********")
         for k in child:
             if k.tag[39:] == "summary":
                 d = k.text
@@ -83,21 +79,18 @@ def xml_file(version,xmlfile_path,link_str,signal,dict_value):
                 for j in k:
                     if j.tag[36:] == "license":
                         b = j.text
-                        # print(b)
                     if j.tag[36:] == "group":
-                        # print(c)
                         c = j.text
                 if signal == "openeuler":
                     dict_list[version][a] = b + "-*-" + c + "-*-" + d + "-*-" + e
                 else:
-                    print("******")
                     dict_value[a] = b + "-*-" + c + "-*-" + d + "-*-" + e
+
 
 def openeuler(version):
     for i in version:
         dict_list[i] = {}
         openeuler_link = "https://repo.openeuler.org/{0}/source/".format(i)
-        print( openeuler_link + "repodata/")
         a = requests.get(openeuler_link + "repodata/")
         tree = html.fromstring(a.content)
         navareas = tree.xpath('//tbody/tr/td[@class ="link"]/a/@href')
@@ -106,9 +99,9 @@ def openeuler(version):
                 os.system("wget https://repo.openeuler.org/{0}/source/repodata/{1};gzip -d {1}".format(i, j))
                 xml_file(i,j[:-3],openeuler_link,"openeuler",dict_list[i])
                 time.sleep(25)
-    print(len(dict_list))
     with open("test.json", "w", encoding="utf-8", ) as f:
         f.write(json.dumps(dict_list))
+
 
 def oepkgs(version):
     for i in version:
@@ -118,6 +111,7 @@ def oepkgs(version):
     logging.info("----------- xml end  -----------")
     with open("oepkgs.json", "w", encoding="utf-8", ) as f:
         f.write(json.dumps(dict_oepkgs))
+
 
 if __name__ == '__main__':
     openeuler(openeuler_version)
