@@ -52,6 +52,12 @@ def getAllFilesInPath(path):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
+    fileRoute(files,allFileNum,curPathDirList)
+    for dl in curPathDirList:
+        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
+
+
+def fileRoute(files,allFileNum,curPathDirList):
     for f in files:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
@@ -67,8 +73,6 @@ def getAllFilesInPath(path):
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
                 # allYamldata.append(os.path.abspath(path + "/" + f))
-    for dl in curPathDirList:
-        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
 # 获取rpm信息，拿到name和description
