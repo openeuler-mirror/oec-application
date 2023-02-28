@@ -124,6 +124,12 @@ def getAllFilesInPath(path):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
+    fileRoute(files,allFileNum,curPathDirList)
+    for dl in curPathDirList:
+        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
+
+
+def fileRoute(files,allFileNum,curPathDirList):
     for f in files:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
@@ -139,27 +145,18 @@ def getAllFilesInPath(path):
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
 
-    for dl in curPathDirList:
-        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
-
 
 # base64编码，文件创建api接口需要
 def base64_encode(path, group_dir, yaml_str):
     with open(r"{}".format(path), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read().format(yaml_str.split("-+-")[0], yaml_str.split("-+-")[1], yaml_str.split("-+-")[2],
                                            yaml_str.split("-+-")[3]), Loader=yaml.FullLoader)
-        print(config)
         encode_str = base64.b64encode(
             yaml.dump(config, allow_unicode=True, default_flow_style=False, sort_keys=False).encode('utf-8')).decode(
             'utf-8')
-        print(
-            "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsrc-oepkgs%2F{}%2F{}.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
-                rq_header, group_dir, yaml_str.split("-+-")[0][0], yaml_str.split("-+-")[0], api_token, encode_str))
         os.system(
             "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsrc-oepkgs%2F{}%2F{}.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
                 rq_header, group_dir, yaml_str.split("-+-")[0][0], yaml_str.split("-+-")[0], api_token, encode_str))
-        print("--------- yaml_end ------------")
-        # return encode_str
 
 
 # 获取rpm信息，拿到name和description
@@ -175,15 +172,10 @@ def shell_cmd(rpm_key, path):
 def sig_info(yaml_module, sig_name, yaml_name, group_secdir):
     with open(r"{}".format(yaml_module), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read().format(sig_name), Loader=yaml.FullLoader)
-        print("------------------")
-        print(yaml_module)
-        print(config)
         if yaml_module == "sig-info.yaml":
             config['repositories'] = [{'repo': ['src-oepkgs/' + yaml_name], 'type': group_secdir}]
         else:
-            print("111111111111111")
             type_str = [j for j, i in enumerate(config['repositories']) if i.get("type") == group_secdir]
-            print(type_str)
             if len(type_str) == 0:
                 config['repositories'].append({'repo': ['src-oepkgs/' + yaml_name], 'type': group_secdir})
             else:
@@ -192,23 +184,13 @@ def sig_info(yaml_module, sig_name, yaml_name, group_secdir):
 
 
 def sig_info_add(sig_name, str_content):
-    print("--------- info ----------")
-    print("----------------")
-    print(
-        "https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml?access_token={}".format(
-            sig_name, api_token))
-    print("****************")
     response_url = requests.get(
         "https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml?access_token={}".format(
             sig_name, api_token), headers=headers)
     pr_num = json.loads(response_url.text)
-    print(
-        "curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\", \"sha\":\"{}\", \"message\":\"test\"}}'".format(
-            sig_name, api_token, pr_num["sha"]))
     os.system(
         "curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\", \"sha\":\"{}\", \"message\":\"test\"}}'".format(
             sig_name, api_token, str_content, pr_num["sha"]))
-
 
 
 # 监听pr
@@ -233,19 +215,21 @@ def source_ocde(xmlfile):
         b = ""
         c = ""
         for i in child:
-            if i.tag[39:] == "summary":
-                d = i.text
-            if i.tag[39:] == "name":
-                a = i.text
-            if i.tag[39:] == "format":
-                for j in i:
-                    if j.tag[36:] == "license":
-                        b = j.text
-                        # print(b)
-                    if j.tag[36:] == "group":
-                        # print(c)
-                        c = j.text
-                dict_list[a].append(b + "-*-" + c + "-*-" + d)
+            jsonFile(a,b,c,i)
+
+
+def jsonFile(a,b,c,i):
+    if i.tag[39:] == "summary":
+        d = i.text
+        if i.tag[39:] == "name":
+            a = i.text
+        if i.tag[39:] == "format":
+            for j in i:
+                if j.tag[36:] == "license":
+                    b = j.text
+                if j.tag[36:] == "group":
+                    c = j.text
+            dict_list[a].append(b + "-*-" + c + "-*-" + d)
 
 
 a = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multimedia/game",
