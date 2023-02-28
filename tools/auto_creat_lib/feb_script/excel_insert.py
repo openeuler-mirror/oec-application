@@ -22,16 +22,13 @@ from xlutils.copy import copy
 
 suse_name = {}
 book = xlrd.open_workbook("zyn1.xlsx")
-
 # 获取第一张工作表
 sh = book.sheet_by_index(0)
 col_value = sh.col_values(0)
 del col_value[0]
-
 # 读取
 wb = openpyxl.load_workbook("zyn1.xlsx")
 sheet = wb['包清单']
-
 a_list = []
 num = 124756
 for key in suse_name:
