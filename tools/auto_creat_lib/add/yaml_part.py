@@ -23,7 +23,7 @@ import requests
 import time
 import copy
 from collections import defaultdict, OrderedDict
-# import requests.adapters
+import logging
 
 from xml.etree.ElementTree import parse
 
@@ -89,16 +89,14 @@ if __name__ == '__main__':
         sys.exit()
     print("yaml文件的名字")
     getAllFilesInPath("./oepkgs-management/sig")
-    print(allYamlList)
     with open("sp3_yaml.json", "r") as f:
         d = json.load(f)
-    print("---------------")
     print(len(d))
     tag_num = 0
     add_yaml = 0
     for yaml_modify in d:
         tag_num = tag_num + 1
-        print("------ branch {} 已添加 -----".format(tag_num))
+        logging.info("------ branch {} 已添加 -----".format(tag_num))
         yaml_file = ""
         if yaml_modify[0].isdigit():
             for i, item in enumerate(yaml_modify):
@@ -114,13 +112,13 @@ if __name__ == '__main__':
             yaml_file = yaml_modify.replace("+", "plus")
         else:
             yaml_file = yaml_modify
-        print("----- yaml_modify ----")
-        print("*****{}****".format(yaml_modify))
+        logging.info("----- yaml_modify ----")
+        logging.info("*****{}****".format(yaml_modify))
 
         if yaml_file not in allYamlList:
             src_code_is.append(yaml_file)
-            print("-------- out of yaml file --------")
-            print(src_code_is)
+            logging.info("-------- out of yaml file --------")
+            logging.info(src_code_is)
             continue
         os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
         if not os.path.exists(real_path + yaml_file):
@@ -128,14 +126,14 @@ if __name__ == '__main__':
             os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
             if not os.path.exists(real_path + yaml_file):
                 allYamldata.append(yaml_file)
-                print("------ allYamldata {} 已添加 -----".format(yaml_file))
+                logging.info("------ allYamldata {} 已添加 -----".format(yaml_file))
                 continue
         os.chdir(os.getcwd() + "/" + yaml_file)
         commit_id = os.popen("git tag").read().strip()
         
         repo_branch = os.popen("git branch").read().strip()
         if repo_branch == "":
-            print("----- {} branch 不存在 -----".format(yaml_file))
+            logging.info("----- {} branch 不存在 -----".format(yaml_file))
             allYamldata_branch.append(yaml_file)
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
@@ -145,12 +143,12 @@ if __name__ == '__main__':
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
             add_yaml = add_yaml + 1
-            print("----- tag 不存在 -----")
-            print("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
+            logging.info("----- tag 不存在 -----")
+            logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
         else:
             tag_list = commit_id.split("\n")
             if "20.03-LTS-SP3" in [ i[:13] for i in tag_list]:
-                print("----- {} tag 已存在 -----".format(yaml_file))
+                logging.info("----- {} tag 已存在 -----".format(yaml_file))
                 allYamldata_tag.append(yaml_file)
                 os.chdir(os.path.pardir)
                 os.system("rm -rf {0}".format(yaml_file))
@@ -160,24 +158,24 @@ if __name__ == '__main__':
                 os.chdir(os.path.pardir)
                 os.system("rm -rf {0}".format(yaml_file))
                 add_yaml = add_yaml + 1
-                print("----- 20.03-LTS-SP3 存在 -----")
-                print("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
+                logging.info("----- 20.03-LTS-SP3 存在 -----")
+                logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
         
     with open("yaml_sp3.json", "w") as f:
         f.write(json.dumps(d_oepkg))
-    print("--------- yaml list -----------")
+    logging.info("--------- yaml list -----------")
     print(len(src_code_is))
     print(src_code_is)
-    print("--------- git list -----------")
+    logging.info("--------- git list -----------")
     print(len(allYamldata))
     print(allYamldata)
-    print("--------- branch list -----------")
+    logging.info("--------- branch list -----------")
     print(len(allYamldata_branch))
     print(allYamldata_branch)
-    print("--------- tag list -----------")
+    logging.info("--------- tag list -----------")
     print(len(allYamldata_tag))
     print(allYamldata_tag)
-    print("--------- d_oepkg list -----------")
+    logging.info("--------- d_oepkg list -----------")
     print(len(d_oepkg))
     print(allYamldata_tag)
     print("---- end ----")
