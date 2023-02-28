@@ -91,7 +91,6 @@ if __name__ == '__main__':
     # 获取src-oepkgs上已经存在的库，通过yaml文件获取
     logging.info('--------yaml file-----------')
     print(len(allYamlList))
-    print(allYamlList)
     logging.info('--------rpm file-----------')
     with open("sp3_yaml.json", "w") as f:
         f.write(json.dumps(d))
