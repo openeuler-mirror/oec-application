@@ -11,7 +11,7 @@
 # See the Mulan PSL v2 for more details.
 # Author: @zhangyinuo
 # Create: 2023-02-27
-# Desc: Submit oec-hardware job automatically on compass-ci
+# Desc: Automatically insert values into Excel files.
 
 
 import xlrd
@@ -27,14 +27,6 @@ book = xlrd.open_workbook("zyn1.xlsx")
 sh = book.sheet_by_index(0)
 col_value = sh.col_values(0)
 del col_value[0]
-
-# xls = xlrd.open_workbook("oepkgs.xlsx")
-# xls_file = copy(xls)
-# sheet = xls_file.get_sheet(3)
-
-# book1 = xlrd.open_workbook("oepkgs.xlsx")
-# sh1 = book1.sheet_by_index(2)
-# col_value1 = sh1.col_values(0)
 
 # 读取
 wb = openpyxl.load_workbook("zyn1.xlsx")
