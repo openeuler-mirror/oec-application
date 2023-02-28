@@ -11,7 +11,7 @@
 # See the Mulan PSL v2 for more details.
 # Author: @zhangyinuo
 # Create: 2023-02-27
-# Desc: Submit oec-hardware job automatically on compass-ci
+# Desc: Read the RPM package information in the repository based on the version and write the YAML file based on the information.
 
 import base64
 import sys
@@ -246,7 +246,6 @@ def source_ocde(xmlfile):
                         # print(c)
                         c = j.text
                 dict_list[a].append(b + "-*-" + c + "-*-" + d)
-    # print(dict_list)
 
 
 a = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multimedia/game",
@@ -484,7 +483,7 @@ if __name__ == '__main__':
             yaml_file = yaml_modify
         if yaml_modify in dict_list.keys() and dict_list[yaml_modify][0].split("-*-")[1] in a.keys():
             group_str = dict_list[yaml_modify][0].split("-*-")[1]
-            print("-----{0}-----*******{1}******".format(yaml_modify, group_str))
+            logging.info("-----{0}-----*******{1}******".format(yaml_modify, group_str))
             des_str = ""
             rpm_str = dict_list[yaml_modify][0].split("-*-")[2]
             for str_dig in rpm_str.split(" "):
@@ -509,9 +508,7 @@ if __name__ == '__main__':
                     group_dict[group_str].split("/", 1)[1])
             else:
                 yaml_liu.append(yaml_modify)
-    print("------- 需要添加 -------")
-    print(d_oepkg)
-    print("------- 剩余 ------")
+    logging.info("------- 剩余 ------")
     print(yaml_liu)
 
     for d_oepkg_key in d_oepkg.keys():
@@ -519,18 +516,11 @@ if __name__ == '__main__':
         sig_code_str = {}
         if not os.path.exists(real_path + "/oepkgs-management_1/sig/{}/sig-info.yaml".format(group_dir)):
             for i, item in enumerate(d_oepkg[d_oepkg_key]):
-                print("44-------------------")
                 print(real_path + "oepkgs-management_1/sig/{}/sig-info.yaml".format(group_dir))
-                print("222--------------")
                 if i == 0:
-                    print("bbbbbbb-----------ddddddddddd")
                     sig_code_str = sig_info("sig-info.yaml", group_dir, item.split("-+-")[0], item.split("-+-")[4])
-                    print(sig_code_str)
-                    print("dddddd-------------------bbbbb")
                     base64_encode("./test.yaml", group_dir, item)
                 else:
-                    print("333------------------")
-
                     type_str = [j for j, i in enumerate(sig_code_str['repositories']) if
                                 i.get("type") == item.split("-+-")[4]]
                     if len(type_str) == 0:
@@ -539,7 +529,7 @@ if __name__ == '__main__':
                     else:
                         sig_code_str['repositories'][type_str[0]]['repo'].append("src-oepkgs/" + item.split("-+-")[0])
                     base64_encode("./test.yaml", group_dir, item)
-            print("---------sig_code_str----------")
+            logging.info("---------sig_code_str----------")
             print(sig_code_str)
             code_str = base64.b64encode(
                 yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
@@ -547,19 +537,16 @@ if __name__ == '__main__':
             os.system(
                 "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
                     rq_header, group_dir, api_token, code_str))
-            print("---------sig_code_str end----------")
+            logging.info("---------sig_code_str end----------")
         else:
             for j, items in enumerate(d_oepkg[d_oepkg_key]):
-                print("dddddd-------------------")
                 if j == 0:
                     sig_code_str = sig_info("./oepkgs-management_1/sig/{}/sig-info.yaml".format(group_dir), group_dir,
                                             items.split("-+-")[0], items.split("-+-")[4])
-                    print("-------000000-------")
                     print(sig_code_str)
                     base64_encode("./test.yaml", group_dir, items)
                 else:
                     print(sig_code_str)
-                    print("------22222222-------")
                     base64_encode("./test.yaml", group_dir, items)
                     type_str = [j for j, i in enumerate(sig_code_str['repositories']) if
                                 i.get("type") == items.split("-+-")[4]]
@@ -568,7 +555,6 @@ if __name__ == '__main__':
                             {'repo': ['src-oepkgs/' + items.split("-+-")[0]], 'type': items.split("-+-")[4]})
                     else:
                         sig_code_str['repositories'][type_str[0]]['repo'].append("src-oepkgs/" + items.split("-+-")[0])
-            print("dddddd-------------------")
             code_str = base64.b64encode(
                 yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
                     'utf-8')).decode('utf-8')
