@@ -67,8 +67,6 @@ def getAllFilesInPath(path):
         getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
-
-
 def read_yaml(path):
     with open(r"{}".format(path), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read(), Loader=yaml.FullLoader)
@@ -86,7 +84,6 @@ if __name__ == '__main__':
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
     getAllFilesInPath("./oepkgs-management/sig")
-    print(len(Inyaml))
     wb = xlwt.Workbook()
     ws = wb.add_sheet('1 sheet')
     line = 0
@@ -97,4 +94,3 @@ if __name__ == '__main__':
         line = line + 1
     logging.info("------ test -----")
     wb.save('1.xls')
-    print("==== end =====")
