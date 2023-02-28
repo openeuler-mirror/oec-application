@@ -80,8 +80,6 @@ def shell_cmd(rpm_key, path):
 
 if __name__ == '__main__':
     # 读取rpm包名存入列表内
-    # rpm_pkg_path = input("请输入要获取的rpm包目录：")
-    # api_token = input("请输入api的token：")
     if len(sys.argv) != 2:
         sys.exit()
 
@@ -93,22 +91,17 @@ if __name__ == '__main__':
     robot_token = "c951fee688f4b037d27602d7461b81fc"
     with open("yaml_sp3.json", "r") as f:
         d = json.load(f)
-    print(len(d))
     tag_num = 0
     for yaml_file in d:
         module_name = d[yaml_file]
-        print(module_name)
         rpm_dict = {}
         version_set = set()
         for rpm_path in module_name:
             rpm_version = shell_cmd("Version", rpm_path)
-            print(rpm_version)
             version_set.add(rpm_version)
             rpm_dict[rpm_version] = rpm_path
         version_list = list(version_set)
         version_list.sort()
-        print(version_list)
-        print(rpm_dict)
         os.system("curl -X DELETE --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/setting?access_token={}'".format(yaml_file, sys.argv[1], api_token))
         for rpm_version in version_list:
             rpm_path = rpm_dict[rpm_version]
@@ -118,24 +111,14 @@ if __name__ == '__main__':
                 os.system("git clone -b {1} 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file,
                                                                                             sys.argv[1]))
             if not os.path.exists(real_path + yaml_file):
-                print("route is {}".format(os.path.exists(real_path + yaml_file)))
                 break
             os.chdir(os.getcwd() + "/" + yaml_file)
-            print(os.listdir("./"))
-
-
-            print(os.getcwd())
             os.system(
                 "rm -rf *;rpm2cpio {0} | cpio -div;git add .;git commit -m '{1}';git push".format(rpm_path,
                                                                                                   rpm_version)))
             commit_id = os.popen("git rev-parse HEAD").read().strip()
-            print(commit_id)
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
-            logging.info("-------- pwd --------")
-            print(os.getcwd())
-            logging.info("------- sha value ------")
-            print(commit_id)
             if sys.argv[1] == "master":
                 os.system(
                     "{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
@@ -145,8 +128,6 @@ if __name__ == '__main__':
                     "{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
                         rq_header, yaml_file, api_token, commit_id, sys.argv[1][10:] + "-v" + rpm_version.replace("^",".").replace("~",".")))
             logging.info("------- 库名 ------")
-            print(yaml_file)
         tag_num = tag_num + 1
         os.system("curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/protection' -d '{{\"access_token\":\"{}\"}}'".format(yaml_file, sys.argv[1], api_token))
         src_code_up.append(yaml_file)
-        print(tag_num)
