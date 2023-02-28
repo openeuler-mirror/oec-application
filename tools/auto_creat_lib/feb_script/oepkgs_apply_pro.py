@@ -11,7 +11,7 @@
 # See the Mulan PSL v2 for more details.
 # Author: @zhangyinuo
 # Create: 2023-02-27
-# Desc: Submit oec-hardware job automatically on compass-ci
+# Desc: Extracts information from the JSON file and writes the information to the Excel file.
 
 import xlrd
 import xlwt
