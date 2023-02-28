@@ -138,7 +138,6 @@ if __name__ == '__main__':
                 os.system("cd {0};git add .;git commit -m '自动化仓库创建';git push".format("oepkgs-management"))
                 creat_pr()
                 time.sleep(500)
-                print(a)
                 a = 0
                 print("--------")
 
