@@ -61,7 +61,6 @@ def getAllFilesInPath(path):
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
-                # allYamldata.append(os.path.abspath(path + "/" + f))
 
     for dl in curPathDirList:
         getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
