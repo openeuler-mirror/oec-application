@@ -89,7 +89,6 @@ if __name__ == '__main__':
         rpm_file = shell_cmd("Name", rpm_path)  # 获取rpm信息
         d[rpm_file].append(rpm_path)
     # 获取src-oepkgs上已经存在的库，通过yaml文件获取
-    #getAllFilesInPath("./oepkgs-management/sig")
     logging.info('--------yaml file-----------')
     print(len(allYamlList))
     print(allYamlList)
