@@ -23,8 +23,7 @@ import requests
 import time
 import copy
 from collections import defaultdict, OrderedDict
-# import requests.adapters
-
+import logging
 from xml.etree.ElementTree import parse
 
 srcOepkgsNum = 0
@@ -93,17 +92,13 @@ if __name__ == '__main__':
     real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
     api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
     robot_token = "c951fee688f4b037d27602d7461b81fc"
-    print("yaml文件的名字")
     with open("yaml_sp3.json", "r") as f:
         d = json.load(f)
-    print("---------------")
     print(len(d))
-    print(d)
     #sys.exit()
     tag_num = 0
     for yaml_file in d:
         module_name = d[yaml_file]
-        print("----module_name----")
         print(module_name)
         rpm_dict = {}
         version_set = set()
@@ -114,45 +109,34 @@ if __name__ == '__main__':
             rpm_dict[rpm_version] = rpm_path
         version_list = list(version_set)
         version_list.sort()
-        print("------++++++")
         print(version_list)
         print(rpm_dict)
-        print("+-+-+-+-+-+-+-+")
         os.system("curl -X DELETE --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/setting?access_token={}'".format(yaml_file, sys.argv[1], api_token))
         for rpm_version in version_list:
             rpm_path = rpm_dict[rpm_version]
-            print("***************")
             if sys.argv[1] == "master":
                 os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
-                print("-----git clone-----")
             else:
                 os.system("git clone -b {1} 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file,
                                                                                             sys.argv[1]))
-                print("-----git clone-----")
             if not os.path.exists(real_path + yaml_file):
-                print("-------path is not exist-------")
                 print("route is {}".format(os.path.exists(real_path + yaml_file)))
                 break
             os.chdir(os.getcwd() + "/" + yaml_file)
             print(os.listdir("./"))
 
 
-            print("-----****-----")
             print(os.getcwd())
-            print("-----****-----")
             os.system(
                 "rm -rf *;rpm2cpio {0} | cpio -div;git add .;git commit -m '{1}';git push".format(rpm_path,
-                                                                                                  rpm_version))
-            print(os.getcwd())
-            print("-------- pwd --------")
-            print(os.getcwd())
+                                                                                                  rpm_version)))
             commit_id = os.popen("git rev-parse HEAD").read().strip()
             print(commit_id)
             os.chdir(os.path.pardir)
             os.system("rm -rf {0}".format(yaml_file))
-            print("-------- pwd --------")
+            logging.info("-------- pwd --------")
             print(os.getcwd())
-            print("------- sha value ------")
+            logging.info("------- sha value ------")
             print(commit_id)
             if sys.argv[1] == "master":
                 os.system(
@@ -162,10 +146,9 @@ if __name__ == '__main__':
                 os.system(
                     "{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
                         rq_header, yaml_file, api_token, commit_id, sys.argv[1][10:] + "-v" + rpm_version.replace("^",".").replace("~",".")))
-            print("------- 库名 ------")
+            logging.info("------- 库名 ------")
             print(yaml_file)
         tag_num = tag_num + 1
         os.system("curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/protection' -d '{{\"access_token\":\"{}\"}}'".format(yaml_file, sys.argv[1], api_token))
         src_code_up.append(yaml_file)
         print(tag_num)
-        print(src_code_up)
