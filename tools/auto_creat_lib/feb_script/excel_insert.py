@@ -58,8 +58,5 @@ for key in suse_name:
         sheet["T{}".format(num)] = "TRUE"
         num = num + 1
     else:
-        # sheet["A{}".format(col_value.index(key.lower())+2)] = key.lower()
         sheet["T{}".format(col_value.index(key.lower())+2)] = "TRUE"
-        # sheet["P{}".format(col_value.index(key)+2)] = value
-print("****************")
 wb.save("zyn2.xlsx")
