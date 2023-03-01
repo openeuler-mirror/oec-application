@@ -242,7 +242,7 @@ def source_ocde(xmlfile):
                 dict_list[a1].append(b + "-*-" + c + "-*-" + d1)
 
 
-a = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multimedia/game",
+suse_group_info = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multimedia/game",
      "Amusements/Games/3D/Race": "multimedia/game", "Amusements/Games/3D/Shoot": "multimedia/game",
      "Amusements/Games/3D/Simulation": "multimedia/game", "Amusements/Games/Action/Arcade": "multimedia/game",
      "Amusements/Games/Action/Breakout": "multimedia/game", "Amusements/Games/Action/Other": "multimedia/game",
@@ -430,7 +430,7 @@ a = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multime
 
 
 def data(yaml_pre,yaml_now):
-    if yaml_pre in dict_list.keys() and dict_list[yaml_pre][0].split("-*-")[1] in a.keys():
+    if yaml_pre in dict_list.keys() and dict_list[yaml_pre][0].split("-*-")[1] in suse_group_info.keys():
         group_str = dict_list[yaml_pre][0].split("-*-")[1]
         logging.info("-----{0}-----*******{1}******".format(yaml_pre, group_str))
         des_str = ""
@@ -439,10 +439,10 @@ def data(yaml_pre,yaml_now):
             str_dig = "".join(filter(str.isalpha, str_dig.strip()))
             des_str = des_str + str_dig + " "
         license_str = dict_list[yaml_pre][0].split("-*-")[0]
-        if group_str in a.keys():
-            d_oepkg[a[group_str].split("/", 1)[0].replace(" ", "")].append(
+        if group_str in suse_group_info.keys():
+            d_oepkg[suse_group_info[group_str].split("/", 1)[0].replace(" ", "")].append(
                 yaml_now + "-+-" + des_str + "-+-" + license_str + "-+-" + group_str + "-+-" +
-                a[group_str].split("/", 1)[1])
+                suse_group_info[group_str].split("/", 1)[1])
     else:
         group_str = shell_cmd("Group", d[yaml_pre][0])
         license_str = shell_cmd("License", d[yaml_pre][0])
