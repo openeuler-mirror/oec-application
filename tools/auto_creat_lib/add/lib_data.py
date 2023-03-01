@@ -46,12 +46,6 @@ def getAllFilesInPath(path):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
-    fileRoute(files,allFileNum,curPathDirList)
-    for dl in curPathDirList:
-        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
-
-
-def fileRoute(files,allFileNum,curPathDirList):
     for f in files:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
@@ -66,6 +60,8 @@ def fileRoute(files,allFileNum,curPathDirList):
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
+    for dl in curPathDirList:
+        getAllFilesInPath(path + "/" + dl)
 
 
 # 获取rpm信息，拿到name和description
@@ -92,5 +88,5 @@ if __name__ == '__main__':
         d[rpm_file].append(rpm_path)
     # 获取src-oepkgs上已经存在的库，通过yaml文件获取
     logging.info('--------rpm file-----------')
-    with open("sp3_yaml.json", "w") as f:
-        f.write(json.dumps(d))
+    with open("sp3_yaml.json", "w") as fw:
+        fw.write(json.dumps(d))
