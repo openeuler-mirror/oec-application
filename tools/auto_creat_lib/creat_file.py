@@ -245,21 +245,21 @@ def source_ocde(xmlfile):
     Parse = parse(xmlfile)
     root = Parse.getroot()
     for child in root:
-        a = ""
+        a1 = ""
         b = ""
         c = ""
         for i in child:
             if i.tag[39:] == "summary":
                 d1 = i.text
             if i.tag[39:] == "name":
-                a = i.text
+                a1 = i.text
             if i.tag[39:] == "format":
                 for j in i:
                     if j.tag[36:] == "license":
                         b = j.text
                     if j.tag[36:] == "group":
                         c = j.text
-                dict_list[a].append(b + "-*-" + c + "-*-" + d1)
+                dict_list[a1].append(b + "-*-" + c + "-*-" + d1)
 
 
 a = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multimedia/game",
