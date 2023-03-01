@@ -124,12 +124,6 @@ def getAllFilesInPath(path):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
-    fileRoute(files,allFileNum,curPathDirList)
-    for dl in curPathDirList:
-        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
-
-
-def fileRoute(files,allFileNum,curPathDirList):
     for f in files:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
@@ -144,6 +138,8 @@ def fileRoute(files,allFileNum,curPathDirList):
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
+    for dl in curPathDirList:
+        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
 # base64编码，文件创建api接口需要
@@ -151,12 +147,18 @@ def base64_encode(path, group_dir, yaml_str):
     with open(r"{}".format(path), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read().format(yaml_str.split("-+-")[0], yaml_str.split("-+-")[1], yaml_str.split("-+-")[2],
                                            yaml_str.split("-+-")[3]), Loader=yaml.FullLoader)
+        print(config)
         encode_str = base64.b64encode(
             yaml.dump(config, allow_unicode=True, default_flow_style=False, sort_keys=False).encode('utf-8')).decode(
             'utf-8')
+        print(
+            "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsrc-oepkgs%2F{}%2F{}.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
+                rq_header, group_dir, yaml_str.split("-+-")[0][0], yaml_str.split("-+-")[0], api_token, encode_str))
         os.system(
             "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsrc-oepkgs%2F{}%2F{}.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
                 rq_header, group_dir, yaml_str.split("-+-")[0][0], yaml_str.split("-+-")[0], api_token, encode_str))
+        print("--------- yaml_end ------------")
+        # return encode_str
 
 
 # 获取rpm信息，拿到name和description
@@ -168,14 +170,38 @@ def shell_cmd(rpm_key, path):
             return rpm_value[1].strip()
 
 
+def yamlName(yaml_data):
+    name = ""
+    if yaml_data[0].isdigit():
+        for i, item in enumerate(yaml_data):
+            if not item.isdigit() and item == "-":
+                name = name + yaml_data[i + 1:]
+                break
+            elif not item.isdigit() and item != "-":
+                name = name + yaml_data[i:]
+                break
+            else:
+                name = name + ones[int(item)] + "-"
+    elif "+" in yaml_data:
+        name = yaml_data.replace("+", "plus")
+    else:
+        name = yaml_data
+    logging.info("*****{}****".format(yaml_data))
+    return name
+
 # sig_info.yaml创建
 def sig_info(yaml_module, sig_name, yaml_name, group_secdir):
     with open(r"{}".format(yaml_module), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read().format(sig_name), Loader=yaml.FullLoader)
+        print("------------------")
+        print(yaml_module)
+        print(config)
         if yaml_module == "sig-info.yaml":
             config['repositories'] = [{'repo': ['src-oepkgs/' + yaml_name], 'type': group_secdir}]
         else:
+            print("111111111111111")
             type_str = [j for j, i in enumerate(config['repositories']) if i.get("type") == group_secdir]
+            print(type_str)
             if len(type_str) == 0:
                 config['repositories'].append({'repo': ['src-oepkgs/' + yaml_name], 'type': group_secdir})
             else:
@@ -184,13 +210,23 @@ def sig_info(yaml_module, sig_name, yaml_name, group_secdir):
 
 
 def sig_info_add(sig_name, str_content):
+    print("--------- info ----------")
+    print("----------------")
+    print(
+        "https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml?access_token={}".format(
+            sig_name, api_token))
+    print("****************")
     response_url = requests.get(
         "https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml?access_token={}".format(
             sig_name, api_token), headers=headers)
     pr_num = json.loads(response_url.text)
+    print(
+        "curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\", \"sha\":\"{}\", \"message\":\"test\"}}'".format(
+            sig_name, api_token, pr_num["sha"]))
     os.system(
         "curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\", \"sha\":\"{}\", \"message\":\"test\"}}'".format(
             sig_name, api_token, str_content, pr_num["sha"]))
+
 
 
 # 监听pr
@@ -201,7 +237,7 @@ def listen_event(pr_num):
         headers=headers)
     response_dict = json.loads(response.text)
     if "Pull Request已经合并" in response_dict:
-        logging.info("------------pr已合入-------------")
+        print("------------pr已合入-------------")
     else:
         time.sleep(600)
         listen_event(pr_num)
@@ -215,21 +251,19 @@ def source_ocde(xmlfile):
         b = ""
         c = ""
         for i in child:
-            jsonFile(a,b,c,i)
-
-
-def jsonFile(a,b,c,i):
-    if i.tag[39:] == "summary":
-        d = i.text
-        if i.tag[39:] == "name":
-            a = i.text
-        if i.tag[39:] == "format":
-            for j in i:
-                if j.tag[36:] == "license":
-                    b = j.text
-                if j.tag[36:] == "group":
-                    c = j.text
-            dict_list[a].append(b + "-*-" + c + "-*-" + d)
+            if i.tag[39:] == "summary":
+                d = i.text
+            if i.tag[39:] == "name":
+                a = i.text
+            if i.tag[39:] == "format":
+                for j in i:
+                    if j.tag[36:] == "license":
+                        b = j.text
+                        # print(b)
+                    if j.tag[36:] == "group":
+                        # print(c)
+                        c = j.text
+                dict_list[a].append(b + "-*-" + c + "-*-" + d)
 
 
 a = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multimedia/game",
@@ -418,6 +452,93 @@ a = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multime
      "System/X11/Terminals": "desktop/Graphical Basics", "System/X11/Utilities": "desktop/Graphical Basics",
      "YaST": "systemtools/tools", "System/YaST": "systemtools/tools"}
 
+
+def data(yaml_pre,yaml_now):
+    if yaml_pre in dict_list.keys() and dict_list[yaml_pre][0].split("-*-")[1] in a.keys():
+        group_str = dict_list[yaml_pre][0].split("-*-")[1]
+        logging.info("-----{0}-----*******{1}******".format(yaml_pre, group_str))
+        des_str = ""
+        rpm_str = dict_list[yaml_pre][0].split("-*-")[2]
+        for str_dig in rpm_str.split(" "):
+            str_dig = "".join(filter(str.isalpha, str_dig.strip()))
+            des_str = des_str + str_dig + " "
+        license_str = dict_list[yaml_pre][0].split("-*-")[0]
+        if group_str in a.keys():
+            d_oepkg[a[group_str].split("/", 1)[0].replace(" ", "")].append(
+                yaml_now + "-+-" + des_str + "-+-" + license_str + "-+-" + group_str + "-+-" +
+                a[group_str].split("/", 1)[1])
+    else:
+        group_str = shell_cmd("Group", d[yaml_pre][0])
+        license_str = shell_cmd("License", d[yaml_pre][0])
+        des_str = ""
+        rpm_str = shell_cmd("Summary", d[yaml_pre][0])
+        for str_dig in rpm_str.split(" "):
+            str_dig = "".join(filter(str.isalpha, str_dig.strip()))
+            des_str = des_str + str_dig + " "
+        if group_str in group_dict.keys():
+            d_oepkg[group_dict[group_str].split("/", 1)[0].replace(" ", "")].append(
+                yaml_now + "-+-" + des_str + "-+-" + license_str + "-+-" + group_str + "-+-" +
+                group_dict[group_str].split("/", 1)[1])
+        else:
+            yaml_liu.append(yaml_pre)
+
+
+def yaml_isexist(d_oepkg_key):
+    sig_code_str = {}
+    for i, item in enumerate(d_oepkg[d_oepkg_key]):
+        print(real_path + "oepkgs-management_1/sig/{}/sig-info.yaml".format(d_oepkg_key))
+        if i == 0:
+            sig_code_str = sig_info("sig-info.yaml", d_oepkg_key, item.split("-+-")[0], item.split("-+-")[4])
+            base64_encode("./test.yaml", d_oepkg_key, item)
+        else:
+            type_str = [j for j, i in enumerate(sig_code_str['repositories']) if
+                        i.get("type") == item.split("-+-")[4]]
+            if len(type_str) == 0:
+                sig_code_str['repositories'].append(
+                    {'repo': ['src-oepkgs/' + item.split("-+-")[0]], 'type': item.split("-+-")[4]})
+            else:
+                sig_code_str['repositories'][type_str[0]]['repo'].append("src-oepkgs/" + item.split("-+-")[0])
+            base64_encode("./test.yaml", d_oepkg_key, item)
+    logging.info("---------sig_code_str----------")
+    print(sig_code_str)
+    code_str = base64.b64encode(
+        yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
+            'utf-8')).decode('utf-8')
+    os.system(
+        "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
+            rq_header, d_oepkg_key, api_token, code_str))
+    logging.info("---------sig_code_str end----------")
+
+
+def yaml_not_exist(d_oepkg_key):
+    sig_code_str = {}
+    for j, items in enumerate(d_oepkg[d_oepkg_key]):
+        if j == 0:
+            sig_code_str = sig_info("./oepkgs-management_1/sig/{}/sig-info.yaml".format(d_oepkg_key), d_oepkg_key,
+                                    items.split("-+-")[0], items.split("-+-")[4])
+            base64_encode("./test.yaml", d_oepkg_key, items)
+        else:
+            base64_encode("./test.yaml", d_oepkg_key, items)
+            type_str = [j for j, i in enumerate(sig_code_str['repositories']) if
+                        i.get("type") == items.split("-+-")[4]]
+            if len(type_str) == 0:
+                sig_code_str['repositories'].append(
+                    {'repo': ['src-oepkgs/' + items.split("-+-")[0]], 'type': items.split("-+-")[4]})
+            else:
+                sig_code_str['repositories'][type_str[0]]['repo'].append("src-oepkgs/" + items.split("-+-")[0])
+    code_str = base64.b64encode(
+        yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
+            'utf-8')).decode('utf-8')
+    sig_info_add(d_oepkg_key, code_str)
+
+
+def insert_data():
+    for rpm_path in allFileList:
+        rpm_file = shell_cmd("Name", rpm_path)  # 获取rpm信息
+        d[rpm_file].append(rpm_path)
+    os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management_1.git';")
+
+
 if __name__ == '__main__':
     # 读取rpm包名存入列表内
     headers = {"Content-Type": "application/json;charset=UTF-8"}
@@ -426,13 +547,11 @@ if __name__ == '__main__':
     api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
     # 取rpm包总数和rpm文件绝对路径
     getAllFilesInPath(rpm_pkg_path)
-    for rpm_path in allFileList:
-        rpm_file = shell_cmd("Name", rpm_path)  # 获取rpm信息
-        d[rpm_file].append(rpm_path)
-    os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management_1.git';")
+    print("当前路径下的总文件数 =", allFileNum)
+    insert_data()
     # 获取src-oepkgs上已经存在的库，通过yaml文件获取
     getAllFilesInPath("./oepkgs-management_1/sig")
-    # 判断取到的rpm文件是否在舱内已经存在，进行过滤
+    # 判断取到的rpm文件是否在舱内已经存在，进行过滤)
     d_list = copy.deepcopy(d)
     for i in d_list:
         if i in allYamlList or str.lower(i) in allYamlList:
@@ -440,91 +559,12 @@ if __name__ == '__main__':
     # 遍历字典进行yaml创建
     source_ocde("module2.xml")
     for yaml_modify in d:
-        yaml_file = ""
-        if yaml_modify[0].isdigit():
-            for i, item in enumerate(yaml_modify):
-                if not item.isdigit() and item == "-":
-                    yaml_file = yaml_file + yaml_modify[i + 1:]
-                    break
-                elif not item.isdigit() and item != "-":
-                    yaml_file = yaml_file + yaml_modify[i:]
-                    break
-                else:
-                    yaml_file = yaml_file + ones[int(item)] + "-"
-        elif "+" in yaml_modify:
-            yaml_file = yaml_modify.replace("+", "plus")
-        else:
-            yaml_file = yaml_modify
-        if yaml_modify in dict_list.keys() and dict_list[yaml_modify][0].split("-*-")[1] in a.keys():
-            group_str = dict_list[yaml_modify][0].split("-*-")[1]
-            logging.info("-----{0}-----*******{1}******".format(yaml_modify, group_str))
-            des_str = ""
-            rpm_str = dict_list[yaml_modify][0].split("-*-")[2]
-            for str_dig in rpm_str.split(" "):
-                str_dig = "".join(filter(str.isalpha, str_dig.strip()))
-                des_str = des_str + str_dig + " "
-            license_str = dict_list[yaml_modify][0].split("-*-")[0]
-            if group_str in a.keys():
-                d_oepkg[a[group_str].split("/", 1)[0].replace(" ", "")].append(
-                    yaml_file + "-+-" + des_str + "-+-" + license_str + "-+-" + group_str + "-+-" +
-                    a[group_str].split("/", 1)[1])
-        else:
-            group_str = shell_cmd("Group", d[yaml_modify][0])
-            license_str = shell_cmd("License", d[yaml_modify][0])
-            des_str = ""
-            rpm_str = shell_cmd("Summary", d[yaml_modify][0])
-            for str_dig in rpm_str.split(" "):
-                str_dig = "".join(filter(str.isalpha, str_dig.strip()))
-                des_str = des_str + str_dig + " "
-            if group_str in group_dict.keys():
-                d_oepkg[group_dict[group_str].split("/", 1)[0].replace(" ", "")].append(
-                    yaml_file + "-+-" + des_str + "-+-" + license_str + "-+-" + group_str + "-+-" +
-                    group_dict[group_str].split("/", 1)[1])
-            else:
-                yaml_liu.append(yaml_modify)
+        yaml_file = yamlName(yaml_modify)
+        data(yaml_modify,yaml_file)
     logging.info("------- 剩余 ------")
 
-    for d_oepkg_key in d_oepkg.keys():
-        group_dir = d_oepkg_key
-        sig_code_str = {}
-        if not os.path.exists(real_path + "/oepkgs-management_1/sig/{}/sig-info.yaml".format(group_dir)):
-            for i, item in enumerate(d_oepkg[d_oepkg_key]):
-                if i == 0:
-                    sig_code_str = sig_info("sig-info.yaml", group_dir, item.split("-+-")[0], item.split("-+-")[4])
-                    base64_encode("./test.yaml", group_dir, item)
-                else:
-                    type_str = [j for j, i in enumerate(sig_code_str['repositories']) if
-                                i.get("type") == item.split("-+-")[4]]
-                    if len(type_str) == 0:
-                        sig_code_str['repositories'].append(
-                            {'repo': ['src-oepkgs/' + item.split("-+-")[0]], 'type': item.split("-+-")[4]})
-                    else:
-                        sig_code_str['repositories'][type_str[0]]['repo'].append("src-oepkgs/" + item.split("-+-")[0])
-                    base64_encode("./test.yaml", group_dir, item)
-            logging.info("---------sig_code_str----------")
-            code_str = base64.b64encode(
-                yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
-                    'utf-8')).decode('utf-8')
-            os.system(
-                "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
-                    rq_header, group_dir, api_token, code_str))
-            logging.info("---------sig_code_str end----------")
+    for oepkg_keys in d_oepkg.keys():
+        if not os.path.exists(real_path + "/oepkgs-management_1/sig/{}/sig-info.yaml".format(oepkg_keys)):
+            yaml_isexist(oepkg_keys)
         else:
-            for j, items in enumerate(d_oepkg[d_oepkg_key]):
-                if j == 0:
-                    sig_code_str = sig_info("./oepkgs-management_1/sig/{}/sig-info.yaml".format(group_dir), group_dir,
-                                            items.split("-+-")[0], items.split("-+-")[4])
-                    base64_encode("./test.yaml", group_dir, items)
-                else:
-                    base64_encode("./test.yaml", group_dir, items)
-                    type_str = [j for j, i in enumerate(sig_code_str['repositories']) if
-                                i.get("type") == items.split("-+-")[4]]
-                    if len(type_str) == 0:
-                        sig_code_str['repositories'].append(
-                            {'repo': ['src-oepkgs/' + items.split("-+-")[0]], 'type': items.split("-+-")[4]})
-                    else:
-                        sig_code_str['repositories'][type_str[0]]['repo'].append("src-oepkgs/" + items.split("-+-")[0])
-            code_str = base64.b64encode(
-                yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
-                    'utf-8')).decode('utf-8')
-            sig_info_add(group_dir, code_str)
+            yaml_not_exist(oepkg_keys)
