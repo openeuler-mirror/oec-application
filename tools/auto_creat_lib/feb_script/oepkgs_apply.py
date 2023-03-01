@@ -29,7 +29,6 @@ import threading
 import logging
 
 script_toute = sys.path[0]
-c = []
 dict_list = {}
 dict_oepkgs = {}
 openeuler_version = ["openEuler-20.03-LTS", "openEuler-20.03-LTS-SP1", "openEuler-20.03-LTS-SP2", "openEuler-20.03-LTS-SP3", "openEuler-20.09", "openEuler-21.03", "openEuler-21.09", "openEuler-22.03-LTS", "openEuler-22.03-LTS-SP1", "openEuler-22.09"]
