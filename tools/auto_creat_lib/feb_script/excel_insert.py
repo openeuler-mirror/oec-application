@@ -30,6 +30,7 @@ del col_value[0]
 wb = openpyxl.load_workbook("zyn1.xlsx")
 sheet = wb['包清单']
 a_list = []
+# num为要写入的excel文件的行数+1
 num = 124756
 for key in suse_name:
     if key.lower() not in col_value:
