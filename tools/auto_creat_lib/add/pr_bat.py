@@ -104,7 +104,7 @@ def listen_event(pr_num):
 
 
 def main():
-    a = 0
+    num = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
     getAllFilesInPath("./oepkgs-management_10/sig")
@@ -115,16 +115,16 @@ def main():
                 continue
         dest_path = real_path + "oepkgs-management" + "/"  + "/".join(item.split("/")[-5:-1]) + "/"
         if item.split("/")[-1] not in Inyaml and len(item.split("/")[-1][:-5]) > 1 and len(item.split("/")[-1].split(".")) == 2:
-            a = a + 1
+            num = num + 1
             if not os.path.exists(dest_path):
                 os.system("mkdir -p {0};cp -rf {1} {0}".format(dest_path,item))
             else:
                 os.system("cp -rf {1} {0}".format(dest_path, item))
-            if a >= 100:
+            if num >= 100:
                 os.system("cd {0};git add .;git commit -m '自动化仓库创建';git push".format("oepkgs-management"))
                 creat_pr()
                 time.sleep(500)
-                a = 0
+                num = 0
     logging.info("------- creat end -------")
 
 
