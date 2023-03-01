@@ -105,8 +105,8 @@ def oepkgs(version):
         getAllFilesInPath("/srv/rpm/pub/" + i,dict_oepkgs[i])
         os.system("rm -rf *-primary.xml")
     logging.info("----------- xml end  -----------")
-    with open("oepkgs.json", "w", encoding="utf-8", ) as f:
-        f.write(json.dumps(dict_oepkgs))
+    with open("oepkgs.json", "w", encoding="utf-8", ) as fb:
+        fb.write(json.dumps(dict_oepkgs))
 
 
 if __name__ == '__main__':
