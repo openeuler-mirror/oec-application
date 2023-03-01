@@ -129,6 +129,7 @@ if __name__ == '__main__':
     rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
     real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
     api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
+    # 读取yaml_part.py脚本生成的文件(包含当前版本上传的包的信息)
     with open("yaml_sp3.json", "r") as fw:
         file_data = json.load(fw)
     main(file_data)
