@@ -103,15 +103,7 @@ def listen_event(pr_num):
         listen_event(pr_num)
 
 
-if __name__ == '__main__':
-    # 读取rpm包名存入列表内
-    headers = {"Content-Type": "application/json;charset=UTF-8"}
-    rpm_pkg_path = "/srv/rpm/pub/"
-    rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
-    real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
-    closed_header = "curl -X PATCH --header 'Content-Type: application/json;charset=UTF-8'"
-    api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
-    robot_token = "c951fee688f4b037d27602d7461b81fc"
+def main():
     a = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
@@ -133,4 +125,13 @@ if __name__ == '__main__':
                 creat_pr()
                 time.sleep(500)
                 a = 0
-logging.info("------- creat end -------")
+    logging.info("------- creat end -------")
+
+
+if __name__ == '__main__':
+    # 读取rpm包名存入列表内
+    headers = {"Content-Type": "application/json;charset=UTF-8"}
+    real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
+    closed_header = "curl -X PATCH --header 'Content-Type: application/json;charset=UTF-8'"
+    api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
+    main()
