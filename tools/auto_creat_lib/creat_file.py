@@ -539,7 +539,6 @@ if __name__ == '__main__':
     # 读取rpm包名存入列表内
     headers = {"Content-Type": "application/json;charset=UTF-8"}
     rpm_pkg_path = "/srv/rpm/pub/"
-    # rpm_pkg_path = "contrib"
     api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
     # 取rpm包总数和rpm文件绝对路径
     getAllFilesInPath(rpm_pkg_path)
