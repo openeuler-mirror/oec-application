@@ -171,12 +171,12 @@ def shell_cmd(rpm_key, path):
 def yamlName(yaml_data):
     name = ""
     if yaml_data[0].isdigit():
-        for i, item in enumerate(yaml_data):
+        for num, item in enumerate(yaml_data):
             if not item.isdigit() and item == "-":
-                name = name + yaml_data[i + 1:]
+                name = name + yaml_data[num + 1:]
                 break
             elif not item.isdigit() and item != "-":
-                name = name + yaml_data[i:]
+                name = name + yaml_data[num:]
                 break
             else:
                 name = name + ones[int(item)] + "-"
