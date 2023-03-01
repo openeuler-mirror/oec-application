@@ -31,7 +31,6 @@ allFileList = []  # 存放 当前路径 以及当前路径的子路径 下的所
 sigInfolist = []
 allYamlList = []
 yaml_liu = []
-rpm_info = {}
 d = defaultdict(list)
 d_oepkg = defaultdict(list)
 dict_list = defaultdict(list)
