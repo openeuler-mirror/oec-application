@@ -86,7 +86,7 @@ if __name__ == '__main__':
     for rpm_path in allFileList:
         rpm_file = shell_cmd("Name", rpm_path)  # 获取rpm信息
         d[rpm_file].append(rpm_path)
-    # 获取src-oepkgs上已经存在的库，通过yaml文件获取
     logging.info('--------rpm file-----------')
+    # 取一个版本的的所有包的信息以字典形式存入json文件
     with open("sp3_yaml.json", "w") as fw:
         fw.write(json.dumps(d))
