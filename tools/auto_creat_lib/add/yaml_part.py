@@ -173,7 +173,7 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.exit()
     getAllFilesInPath("./oepkgs-management/sig")
-    #sp3_yaml.json是lib_data.py脚本生成的
+    #sp3_yaml.json是lib_data.py脚本生成的一个版本包的信息
     with open("sp3_yaml.json", "r") as fw:
         d = json.load(fw)
     main(d)    
