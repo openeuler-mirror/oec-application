@@ -158,7 +158,6 @@ def base64_encode(path, group_dir, yaml_str):
             "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsrc-oepkgs%2F{}%2F{}.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
                 rq_header, group_dir, yaml_str.split("-+-")[0][0], yaml_str.split("-+-")[0], api_token, encode_str))
         print("--------- yaml_end ------------")
-        # return encode_str
 
 
 # 获取rpm信息，拿到name和description
