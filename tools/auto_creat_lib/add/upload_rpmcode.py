@@ -49,12 +49,6 @@ def getAllFilesInPath(path):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
-    fileRoute(files,allFileNum,curPathDirList)
-    for dl in curPathDirList:
-        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
-
-
-def fileRoute(files,allFileNum,curPathDirList):
     for f in files:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
@@ -69,6 +63,8 @@ def fileRoute(files,allFileNum,curPathDirList):
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
+    for dl in curPathDirList:
+        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
 # 获取rpm信息，拿到name和description
@@ -80,6 +76,51 @@ def shell_cmd(rpm_key, path):
             return rpm_value[1].strip()
 
 
+def push_pkg(yaml_file, rpm_path, rpm_version):
+    if sys.argv[1] == "master":
+        os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
+    else:
+        os.system("git clone -b {1} 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file,
+                                                                                    sys.argv[1]))
+    if not os.path.exists(real_path + yaml_file):
+        break
+    os.chdir(os.getcwd() + "/" + yaml_file)
+    os.system(
+        "rm -rf *;rpm2cpio {0} | cpio -div;git add .;git commit -m '{1}';git push".format(rpm_path,
+                                                                                            rpm_version))
+    commit_id = os.popen("git rev-parse HEAD").read().strip()
+    os.chdir(os.path.pardir)
+    os.system("rm -rf {0}".format(yaml_file))
+    if sys.argv[1] == "master":
+        os.system(
+            "{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
+                rq_header, yaml_file, api_token, commit_id, "20.03-LTS-SP1" + "-v" + rpm_version.replace("^",".").replace("~",".")))
+    else:
+        os.system(
+            "{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
+                rq_header, yaml_file, api_token, commit_id, sys.argv[1][10:] + "-v" + rpm_version.replace("^",".").replace("~",".")))
+    logging.info("------- 库名 ------")
+
+
+def main(data):
+    for yaml_f in data:
+        module_name = data[yaml_f]
+        rpm_dict = {}
+        version_set = set()
+        for rpm_route in module_name:
+            rpm_version = shell_cmd("Version", rpm_route)
+            version_set.add(rpm_version)
+            rpm_dict[rpm_version] = rpm_route
+        version_list = list(version_set)
+        version_list.sort()
+        os.system("curl -X DELETE --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/setting?access_token={}'".format(yaml_f, sys.argv[1], api_token))
+        for rpm_version in version_list:
+            rpm_route = rpm_dict[rpm_version]
+            push_pkg(yaml_f,rpm_route,rpm_version)    
+        os.system("curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/protection' -d '{{\"access_token\":\"{}\"}}'".format(yaml_f, sys.argv[1], api_token))
+        src_code_up.append(yaml_f)
+
+
 if __name__ == '__main__':
     # 读取rpm包名存入列表内
     if len(sys.argv) != 2:
@@ -89,46 +130,6 @@ if __name__ == '__main__':
     rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
     real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
     api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
-    robot_token = "c951fee688f4b037d27602d7461b81fc"
     with open("yaml_sp3.json", "r") as f:
-        d = json.load(f)
-    tag_num = 0
-    for yaml_file in d:
-        module_name = d[yaml_file]
-        rpm_dict = {}
-        version_set = set()
-        for rpm_path in module_name:
-            rpm_version = shell_cmd("Version", rpm_path)
-            version_set.add(rpm_version)
-            rpm_dict[rpm_version] = rpm_path
-        version_list = list(version_set)
-        version_list.sort()
-        os.system("curl -X DELETE --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/setting?access_token={}'".format(yaml_file, sys.argv[1], api_token))
-        for rpm_version in version_list:
-            rpm_path = rpm_dict[rpm_version]
-            if sys.argv[1] == "master":
-                os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
-            else:
-                os.system("git clone -b {1} 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file,
-                                                                                            sys.argv[1]))
-            if not os.path.exists(real_path + yaml_file):
-                break
-            os.chdir(os.getcwd() + "/" + yaml_file)
-            os.system(
-                "rm -rf *;rpm2cpio {0} | cpio -div;git add .;git commit -m '{1}';git push".format(rpm_path,
-                                                                                                  rpm_version)))
-            commit_id = os.popen("git rev-parse HEAD").read().strip()
-            os.chdir(os.path.pardir)
-            os.system("rm -rf {0}".format(yaml_file))
-            if sys.argv[1] == "master":
-                os.system(
-                    "{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
-                        rq_header, yaml_file, api_token, commit_id, "20.03-LTS-SP1" + "-v" + rpm_version.replace("^",".").replace("~",".")))
-            else:
-                os.system(
-                    "{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
-                        rq_header, yaml_file, api_token, commit_id, sys.argv[1][10:] + "-v" + rpm_version.replace("^",".").replace("~",".")))
-            logging.info("------- 库名 ------")
-        tag_num = tag_num + 1
-        os.system("curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/protection' -d '{{\"access_token\":\"{}\"}}'".format(yaml_file, sys.argv[1], api_token))
-        src_code_up.append(yaml_file)
+        file_data = json.load(f)
+    main(file_data)
