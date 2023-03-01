@@ -551,9 +551,9 @@ if __name__ == '__main__':
     getAllFilesInPath("./oepkgs-management_1/sig")
     # 判断取到的rpm文件是否在舱内已经存在，进行过滤)
     d_list = copy.deepcopy(d)
-    for i in d_list:
-        if i in allYamlList or str.lower(i) in allYamlList:
-            d.pop(i)
+    for d_list_name in d_list:
+        if d_list_name in allYamlList or str.lower(d_list_name) in allYamlList:
+            d.pop(d_list_name)
     # 遍历字典进行yaml创建
     source_ocde("module2.xml")
     for yaml_modify in d:
