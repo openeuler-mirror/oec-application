@@ -51,12 +51,6 @@ def getAllFilesInPath(path):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
-    fileRoute(files,allFileNum,curPathDirList)
-    for dl in curPathDirList:
-        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
-
-
-def fileRoute(files,allFileNum,curPathDirList):
     for f in files:
         if os.path.isdir(path + "/" + f):
             if f[0] == ".":
@@ -71,6 +65,8 @@ def fileRoute(files,allFileNum,curPathDirList):
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
                 yaml_name = f[:-5]
                 allYamlList.append(yaml_name)
+    for dl in curPathDirList:
+        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
 # 获取rpm信息，拿到name和description
@@ -82,78 +78,106 @@ def shell_cmd(rpm_key, path):
             return rpm_value[1].strip()
 
 
+def yamlName(yaml_modify):
+    name = ""
+    if yaml_modify[0].isdigit():
+        for i, item in enumerate(yaml_modify):
+            if not item.isdigit() and item == "-":
+                name = name + yaml_modify[i + 1:]
+                break
+            elif not item.isdigit() and item != "-":
+                name = name + yaml_modify[i:]
+                break
+            else:
+                name = name + ones[int(item)] + "-"
+    elif "+" in yaml_modify:
+        name = yaml_modify.replace("+", "plus")
+    else:
+        name = yaml_modify
+    logging.info("*****{}****".format(yaml_modify))
+    return name
+
+
+def judge_yaml(name):
+    if name not in allYamlList:
+        src_code_is.append(name)
+        logging.info("-------- out of yaml file --------")
+        logging.info(src_code_is)
+        continue
+    os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(name))
+
+
+def judge_git(name):
+    if not os.path.exists(real_path + name):
+        name = name.lower()
+        os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(name))
+        if not os.path.exists(real_path + name):
+            allYamldata.append(name)
+            logging.info("------ allYamldata {} 已添加 -----".format(name))
+            continue
+
+
+def judge_branch(name):
+    if repo_branch == "":
+        logging.info("----- {} branch 不存在 -----".format(name))
+        os.chdir(os.path.pardir)
+        os.system("rm -rf {0}".format(name))
+        continue
+
+
+def judge_commitId(name,num,yaml_modify):
+    d_oepkg[yaml_file]=data[yaml_modify]
+    os.chdir(os.path.pardir)
+    os.system("rm -rf {0}".format(yaml_file))
+    num = num + 1
+    logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file,num))
+    return num
+
+
+def commitid_exist(name,commit,yaml_modify):
+    tag_list = commit.split("\n")
+    if "20.03-LTS-SP3" in [ i[:13] for i in tag_list]:
+        logging.info("----- {} tag 已存在 -----".format(yaml_file))
+        allYamldata_tag.append(yaml_file)
+        os.chdir(os.path.pardir)
+        os.system("rm -rf {0}".format(yaml_file))
+        continue
+    else:
+        d_oepkg[yaml_file]=d[yaml_modify]
+        os.chdir(os.path.pardir)
+        os.system("rm -rf {0}".format(yaml_file))
+        add_yaml = add_yaml + 1
+        logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
+
+
+def main(data):
+    tag_num = 0
+    add_yaml = 0
+    for yaml_data in data:
+        tag_num = tag_num + 1
+        logging.info("------ branch {} 已添加 -----".format(tag_num))
+        yaml_file = yamlName(yaml_data)
+        judge_yaml(yaml_file)
+        judge_git(yaml_file)
+        os.chdir(os.getcwd() + "/" + yaml_file)
+        commit_id = os.popen("git tag").read().strip()
+        repo_branch = os.popen("git branch").read().strip()
+        judge_branch(yaml_file)
+        if commit_id == "":
+            add_yaml = judge_commitId(yaml_file,add_yaml,yaml_data)
+        else:
+            commitid_exist(yaml_file,commit_id,yaml_data)
+            
+
 if __name__ == '__main__':
     # 读取rpm包名存入列表内
     if len(sys.argv) != 2:
         sys.exit()
-    print("yaml文件的名字")
     getAllFilesInPath("./oepkgs-management/sig")
+    #sp3_yaml.json是lib_data.py脚本生成的
     with open("sp3_yaml.json", "r") as f:
         d = json.load(f)
-    print(len(d))
-    tag_num = 0
-    add_yaml = 0
-    for yaml_modify in d:
-        tag_num = tag_num + 1
-        logging.info("------ branch {} 已添加 -----".format(tag_num))
-        yaml_file = ""
-        if yaml_modify[0].isdigit():
-            for i, item in enumerate(yaml_modify):
-                if not item.isdigit() and item == "-":
-                    yaml_file = yaml_file + yaml_modify[i + 1:]
-                    break
-                elif not item.isdigit() and item != "-":
-                    yaml_file = yaml_file + yaml_modify[i:]
-                    break
-                else:
-                    yaml_file = yaml_file + ones[int(item)] + "-"
-        elif "+" in yaml_modify:
-            yaml_file = yaml_modify.replace("+", "plus")
-        else:
-            yaml_file = yaml_modify
-        logging.info("*****{}****".format(yaml_modify))
-        if yaml_file not in allYamlList:
-            src_code_is.append(yaml_file)
-            logging.info("-------- out of yaml file --------")
-            logging.info(src_code_is)
-            continue
-        os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
-        if not os.path.exists(real_path + yaml_file):
-            yaml_file = yaml_file.lower()
-            os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file))
-            if not os.path.exists(real_path + yaml_file):
-                allYamldata.append(yaml_file)
-                logging.info("------ allYamldata {} 已添加 -----".format(yaml_file))
-                continue
-        os.chdir(os.getcwd() + "/" + yaml_file)
-        commit_id = os.popen("git tag").read().strip()
-        repo_branch = os.popen("git branch").read().strip()
-        if repo_branch == "":
-            logging.info("----- {} branch 不存在 -----".format(yaml_file))
-            allYamldata_branch.append(yaml_file)
-            os.chdir(os.path.pardir)
-            os.system("rm -rf {0}".format(yaml_file))
-            continue
-        if commit_id == "":
-            d_oepkg[yaml_file]=d[yaml_modify]
-            os.chdir(os.path.pardir)
-            os.system("rm -rf {0}".format(yaml_file))
-            add_yaml = add_yaml + 1
-            logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
-        else:
-            tag_list = commit_id.split("\n")
-            if "20.03-LTS-SP3" in [ i[:13] for i in tag_list]:
-                logging.info("----- {} tag 已存在 -----".format(yaml_file))
-                allYamldata_tag.append(yaml_file)
-                os.chdir(os.path.pardir)
-                os.system("rm -rf {0}".format(yaml_file))
-                continue
-            else:
-                d_oepkg[yaml_file]=d[yaml_modify]
-                os.chdir(os.path.pardir)
-                os.system("rm -rf {0}".format(yaml_file))
-                add_yaml = add_yaml + 1
-                logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file,add_yaml))
+    main(d)    
     with open("yaml_sp3.json", "w") as f:
         f.write(json.dumps(d_oepkg))
     logging.info("--------- yaml list -----------")
