@@ -250,18 +250,16 @@ def source_ocde(xmlfile):
         c = ""
         for i in child:
             if i.tag[39:] == "summary":
-                d = i.text
+                d1 = i.text
             if i.tag[39:] == "name":
                 a = i.text
             if i.tag[39:] == "format":
                 for j in i:
                     if j.tag[36:] == "license":
                         b = j.text
-                        # print(b)
                     if j.tag[36:] == "group":
-                        # print(c)
                         c = j.text
-                dict_list[a].append(b + "-*-" + c + "-*-" + d)
+                dict_list[a].append(b + "-*-" + c + "-*-" + d1)
 
 
 a = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Other": "multimedia/game",
