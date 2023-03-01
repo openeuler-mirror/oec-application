@@ -29,7 +29,8 @@ sheet = xl.add_sheet('docker', cell_overwrite_ok=True)
 row = 0
 cloum = 0
 
-with open("log1.txt","r") as f:
+# 取输入文件的每一行进行excel插入
+with open("输入文件.txt","r") as f:
     for k,i in enumerate(f.readlines()):
         a = os.popen("grep FROM {}".format(i)).read()
         data = i.split("/")
