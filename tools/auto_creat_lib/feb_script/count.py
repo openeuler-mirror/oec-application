@@ -49,4 +49,3 @@ for i in oepkgs_list:
 for i in a_list:
     if i not in oepkgs_list1:
         c.append(i)
-print(c)
