@@ -175,9 +175,9 @@ if __name__ == '__main__':
         sys.exit()
     getAllFilesInPath("./oepkgs-management/sig")
     #sp3_yaml.json是lib_data.py脚本生成的
-    with open("sp3_yaml.json", "r") as f:
-        d = json.load(f)
+    with open("sp3_yaml.json", "r") as fw:
+        d = json.load(fw)
     main(d)    
-    with open("yaml_sp3.json", "w") as f:
-        f.write(json.dumps(d_oepkg))
+    with open("yaml_sp3.json", "w") as fb:
+        fb.write(json.dumps(d_oepkg))
     logging.info("--------- yaml list -----------")
