@@ -86,13 +86,11 @@ if __name__ == '__main__':
     rpm_pkg_path = "/srv/rpm/testing/openeuler-20.03-LTS-SP3"
     # 取rpm包总数和rpm文件绝对路径
     getAllFilesInPath(rpm_pkg_path)
-    print("当前路径下的总文件数 =", allFileNum)
+    logging.info("当前路径下的总文件数 =", allFileNum)
     for rpm_path in allFileList:
         rpm_file = shell_cmd("Name", rpm_path)  # 获取rpm信息
         d[rpm_file].append(rpm_path)
     # 获取src-oepkgs上已经存在的库，通过yaml文件获取
-    logging.info('--------yaml file-----------')
-    print(len(allYamlList))
     logging.info('--------rpm file-----------')
     with open("sp3_yaml.json", "w") as f:
         f.write(json.dumps(d))
