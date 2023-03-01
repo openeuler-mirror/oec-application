@@ -38,7 +38,6 @@ allYamldata_tag = []
 src_code_up = []
 src_code_is = []
 yaml_error = []
-rpm_info = {}
 d = defaultdict(list)
 d_oepkg = defaultdict(list)
 dict_list = defaultdict(list)
