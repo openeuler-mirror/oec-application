@@ -146,17 +146,12 @@ def base64_encode(path, group_dir, yaml_str):
     with open(r"{}".format(path), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read().format(yaml_str.split("-+-")[0], yaml_str.split("-+-")[1], yaml_str.split("-+-")[2],
                                            yaml_str.split("-+-")[3]), Loader=yaml.FullLoader)
-        print(config)
         encode_str = base64.b64encode(
             yaml.dump(config, allow_unicode=True, default_flow_style=False, sort_keys=False).encode('utf-8')).decode(
             'utf-8')
-        print(
-            "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsrc-oepkgs%2F{}%2F{}.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
-                rq_header, group_dir, yaml_str.split("-+-")[0][0], yaml_str.split("-+-")[0], api_token, encode_str))
         os.system(
             "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsrc-oepkgs%2F{}%2F{}.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
                 rq_header, group_dir, yaml_str.split("-+-")[0][0], yaml_str.split("-+-")[0], api_token, encode_str))
-        print("--------- yaml_end ------------")
 
 
 # 获取rpm信息，拿到name和description
@@ -191,15 +186,10 @@ def yamlName(yaml_data):
 def sig_info(yaml_module, sig_name, yaml_name, group_secdir):
     with open(r"{}".format(yaml_module), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read().format(sig_name), Loader=yaml.FullLoader)
-        print("------------------")
-        print(yaml_module)
-        print(config)
         if yaml_module == "sig-info.yaml":
             config['repositories'] = [{'repo': ['src-oepkgs/' + yaml_name], 'type': group_secdir}]
         else:
-            print("111111111111111")
             type_str = [j for j, i in enumerate(config['repositories']) if i.get("type") == group_secdir]
-            print(type_str)
             if len(type_str) == 0:
                 config['repositories'].append({'repo': ['src-oepkgs/' + yaml_name], 'type': group_secdir})
             else:
@@ -208,19 +198,10 @@ def sig_info(yaml_module, sig_name, yaml_name, group_secdir):
 
 
 def sig_info_add(sig_name, str_content):
-    print("--------- info ----------")
-    print("----------------")
-    print(
-        "https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml?access_token={}".format(
-            sig_name, api_token))
-    print("****************")
     response_url = requests.get(
         "https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml?access_token={}".format(
             sig_name, api_token), headers=headers)
     pr_num = json.loads(response_url.text)
-    print(
-        "curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\", \"sha\":\"{}\", \"message\":\"test\"}}'".format(
-            sig_name, api_token, pr_num["sha"]))
     os.system(
         "curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\", \"sha\":\"{}\", \"message\":\"test\"}}'".format(
             sig_name, api_token, str_content, pr_num["sha"]))
@@ -235,7 +216,6 @@ def listen_event(pr_num):
         headers=headers)
     response_dict = json.loads(response.text)
     if "Pull Request已经合并" in response_dict:
-        print("------------pr已合入-------------")
     else:
         time.sleep(600)
         listen_event(pr_num)
@@ -482,7 +462,6 @@ def data(yaml_pre,yaml_now):
 def yaml_isexist(d_oepkg_key):
     sig_code_str = {}
     for i, item in enumerate(d_oepkg[d_oepkg_key]):
-        print(real_path + "oepkgs-management_1/sig/{}/sig-info.yaml".format(d_oepkg_key))
         if i == 0:
             sig_code_str = sig_info("sig-info.yaml", d_oepkg_key, item.split("-+-")[0], item.split("-+-")[4])
             base64_encode("./test.yaml", d_oepkg_key, item)
@@ -496,7 +475,6 @@ def yaml_isexist(d_oepkg_key):
                 sig_code_str['repositories'][type_str[0]]['repo'].append("src-oepkgs/" + item.split("-+-")[0])
             base64_encode("./test.yaml", d_oepkg_key, item)
     logging.info("---------sig_code_str----------")
-    print(sig_code_str)
     code_str = base64.b64encode(
         yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
             'utf-8')).decode('utf-8')
@@ -542,7 +520,6 @@ if __name__ == '__main__':
     api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
     # 取rpm包总数和rpm文件绝对路径
     getAllFilesInPath(rpm_pkg_path)
-    print("当前路径下的总文件数 =", allFileNum)
     insert_data()
     # 获取src-oepkgs上已经存在的库，通过yaml文件获取
     getAllFilesInPath("./oepkgs-management_1/sig")
