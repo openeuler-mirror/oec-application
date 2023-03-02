@@ -177,6 +177,6 @@ if __name__ == '__main__':
     with open("sp3_yaml.json", "r") as fw:
         d = json.load(fw)
     main(d)    
-    with open("yaml_sp3.json", "w") as fb:
+    with open("yaml_sp3.json", "w", 00007) as fb:
         fb.write(json.dumps(d_oepkg))
     logging.info("--------- yaml list -----------")
