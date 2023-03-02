@@ -182,6 +182,7 @@ def yamlName(yaml_data):
     logging.info("*****{}****".format(yaml_data))
     return name
 
+
 # sig_info.yaml创建
 def sig_info(yaml_module, sig_name, yaml_name, group_secdir):
     with open(r"{}".format(yaml_module), 'r', encoding='utf-8') as f:
@@ -205,7 +206,6 @@ def sig_info_add(sig_name, str_content):
     os.system(
         "curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\", \"sha\":\"{}\", \"message\":\"test\"}}'".format(
             sig_name, api_token, str_content, pr_num["sha"]))
-
 
 
 # 监听pr
@@ -429,7 +429,7 @@ suse_group_info = {"Amusement/other": "multimedia/game", "Amusements/Games/3D/Ot
      "YaST": "systemtools/tools", "System/YaST": "systemtools/tools"}
 
 
-def data(yaml_pre,yaml_now):
+def data(yaml_pre, yaml_now):
     if yaml_pre in dict_list.keys() and dict_list[yaml_pre][0].split("-*-")[1] in suse_group_info.keys():
         group_str = dict_list[yaml_pre][0].split("-*-")[1]
         logging.info("-----{0}-----*******{1}******".format(yaml_pre, group_str))
@@ -532,7 +532,7 @@ if __name__ == '__main__':
     source_ocde("module2.xml")
     for yaml_modify in d:
         yaml_file = yamlName(yaml_modify)
-        data(yaml_modify,yaml_file)
+        data(yaml_modify, yaml_file)
     logging.info("------- 剩余 ------")
 
     for oepkg_keys in d_oepkg.keys():
