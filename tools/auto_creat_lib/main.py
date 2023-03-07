@@ -50,11 +50,11 @@ oepkgs_version = [ "openeuler-20.03-LTS-SP1", "openeuler-20.03-LTS-SP2", "openeu
 
 
 def lib_data(version):
-    if version == None:
+    if version is None:
         sys.exit()
-    rpm_pkg_path = "/srv/rpm/testing/{0}".format(version)
+    rpm_pkg_route = "/srv/rpm/testing/{0}".format(version)
     # 取rpm包总数和rpm文件绝对路径
-    package.getAllFilesInPath(rpm_pkg_path)
+    package.getAllFilesInPath(rpm_pkg_route)
     logging.info("当前路径下的总文件数 =", allFileNum)
     for rpm_path in allFileList:
         rpm_file = package.shell_cmd("Name", rpm_path)  # 获取rpm信息
@@ -175,7 +175,7 @@ def count():
     for value_name in col_value:
         a_list.append(value_name.lower())
     name_list = ["oepkgs_data", "openeuler_data"]
-    for a in name_list:
+    for number in name_list:
         for key in oepkgs_data.keys():
             for j in oepkgs_data[key].keys():
                 oepkgs_list.append(j)
@@ -194,52 +194,51 @@ def excel_insert():
     col_value = sh.col_values(0)
     del col_value[0]
     # 读取
-    wb = openpyxl.load_workbook("zyn1.xlsx")
-    sheet = wb['包清单']
+    wbook = openpyxl.load_workbook("zyn1.xlsx")
+    sheet = wbook['包清单']
     a_list = []
     # num为要写入的excel文件的行数+1
-    num = 124756
+    num_index = 124756
     for key in suse_name:
         if key.lower() not in col_value:
-            sheet["A{}".format(num)] = key.lower()
-            sheet["B{}".format(num)] = "SUSE"
-            sheet["C{}".format(num)] = "FALSE"
-            sheet["D{}".format(num)] = "FALSE"
-            sheet["E{}".format(num)] = "FALSE"
-            sheet["F{}".format(num)] = "FALSE"
-            sheet["G{}".format(num)] = "FALSE"
-            sheet["H{}".format(num)] = "FALSE"
-            sheet["I{}".format(num)] = "FALSE"
-            sheet["G{}".format(num)] = "FALSE"
-            sheet["K{}".format(num)] = "FALSE"
-            sheet["L{}".format(num)] = "FALSE"
-            sheet["M{}".format(num)] = "FALSE"
-            sheet["N{}".format(num)] = "FALSE"
-            sheet["O{}".format(num)] = "FALSE"
-            sheet["P{}".format(num)] = "FALSE"
-            sheet["Q{}".format(num)] = "FALSE"
-            sheet["R{}".format(num)] = "FALSE"
-            sheet["S{}".format(num)] = "FALSE"
-            sheet["T{}".format(num)] = "TRUE"
-            num = num + 1
+            sheet["A{}".format(num_index)] = key.lower()
+            sheet["B{}".format(num_index)] = "SUSE"
+            sheet["C{}".format(num_index)] = "FALSE"
+            sheet["D{}".format(num_index)] = "FALSE"
+            sheet["E{}".format(num_index)] = "FALSE"
+            sheet["F{}".format(num_index)] = "FALSE"
+            sheet["G{}".format(num_index)] = "FALSE"
+            sheet["H{}".format(num_index)] = "FALSE"
+            sheet["I{}".format(num_index)] = "FALSE"
+            sheet["G{}".format(num_index)] = "FALSE"
+            sheet["K{}".format(num_index)] = "FALSE"
+            sheet["L{}".format(num_index)] = "FALSE"
+            sheet["M{}".format(num_index)] = "FALSE"
+            sheet["N{}".format(num_index)] = "FALSE"
+            sheet["O{}".format(num_index)] = "FALSE"
+            sheet["P{}".format(num_index)] = "FALSE"
+            sheet["Q{}".format(num_index)] = "FALSE"
+            sheet["R{}".format(num_index)] = "FALSE"
+            sheet["S{}".format(num_index)] = "FALSE"
+            sheet["T{}".format(num_index)] = "TRUE"
+            num_index = num_index + 1
         else:
             sheet["T{}".format(col_value.index(key.lower()) + 2)] = "TRUE"
-    wb.save("zyn2.xlsx")
+    wbook.save("zyn2.xlsx")
 
 
 def group():
-    a = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
     package.getAllFilesInPath_1("./oepkgs-management/sig")
-    wb = xlwt.Workbook()
-    ws = wb.add_sheet('1 sheet')
+    wbk = xlwt.Workbook()
+    ws = wbk.add_sheet('1 sheet')
     line = 0
     for vaule_i in Inyaml:
         package.read_yaml(vaule_i,ws,line)
         line = line + 1
     logging.info("------ test -----")
-    wb.save('1.xls')
+    wbk.save('1.xls')
 
 
 def oepkgs_apply_pro():
@@ -269,14 +268,14 @@ if __name__ == "__main__":
     elif args.script == "pr_bat":
         pr_bat()
     elif args.script == "upload_rpmcpde":
-        with open("yaml_sp3.json", "r") as fw:
-            file_data = json.load(fw)
+        with open("yaml_sp3.json", "r") as ff:
+            file_data = json.load(ff)
         upload_rpmcode(file_data)
     elif args.script == "yaml_part":
         package.getAllFilesInPath("./oepkgs-management/sig")
         # sp3_yaml.json是lib_data.py脚本生成的一个版本包的信息
-        with open("sp3_yaml.json", "r") as fw:
-            d = json.load(fw)
+        with open("sp3_yaml.json", "r") as fj:
+            d = json.load(fj)
         yaml_part(d)
         with open("yaml_sp3.json", "w") as fb:
             fb.write(json.dumps(d_oepkg))
@@ -288,20 +287,8 @@ if __name__ == "__main__":
     elif args.script == "excel_insert":
         excel_insert()
     elif args.script == "group":
-        a = 0
         # 创建pr
-        os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
-        package.getAllFilesInPath("./oepkgs-management/sig")
-        wb = xlwt.Workbook()
-        ws = wb.add_sheet('1 sheet')
-        line = 0
-        column = 0
-        num = 0
-        for yaml_element in Inyaml:
-            package.read_yaml(yaml_element)
-            line = line + 1
-        logging.info("------ test -----")
-        wb.save('1.xls')
+        group()
     elif args.script == "oepkgs_apply":
         package.openeuler(openeuler_version)
         package.oepkgs(oepkgs_version)
@@ -321,8 +308,8 @@ if __name__ == "__main__":
         # 遍历字典进行yaml创建
         package.source_code("module2.xml")
         for yaml_modify in d:
-            yaml_file = package.yamlName(yaml_modify)
-            package.data(yaml_modify, yaml_file)
+            yaml_name = package.yamlName(yaml_modify)
+            package.data(yaml_name, yaml_file)
         logging.info("------- 剩余 ------")
 
         for oepkg_keys in d_oepkg.keys():
