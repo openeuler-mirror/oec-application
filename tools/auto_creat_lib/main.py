@@ -259,7 +259,6 @@ def oepkgs_apply_pro():
 if __name__ == "__main__":
     import argparse
     par = argparse.ArgumentParser()
-
     par.add_argument("--script", help="obs standard project", required=True)
     par.add_argument("--version", help="obs standard project", required=False)
     args = par.parse_args()
@@ -311,7 +310,6 @@ if __name__ == "__main__":
             yaml_name = package.yamlName(yaml_modify)
             package.data_box(yaml_name, yaml_file)
         logging.info("------- 剩余 ------")
-
         for oepkg_keys in d_oepkg.keys():
             if not os.path.exists(real_path + "/oepkgs-management_1/sig/{}/sig-info.yaml".format(oepkg_keys)):
                 package.yaml_isexist(oepkg_keys)
