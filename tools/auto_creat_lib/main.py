@@ -1,0 +1,336 @@
+#!/usr/bin/env python
+# -*- coding=utf-8 -*-
+# EulerOS build main file
+# Author: yhon
+# Copyright Huawei Technologies Co., Ltd. 2010-2018. All rights reserved.
+"""
+make image
+"""
+import base64
+import sys
+import os
+import yaml
+import json
+import re
+import requests
+import time
+from collections import defaultdict
+from xml.etree.ElementTree import parse
+import copy
+import logging
+from lib import package
+from txdpy import get_Bletter,get_Sletter
+import xlwt
+import xlrd
+from openpyxl import load_workbook
+from xlutils.copy import copy
+from lxml import html
+
+
+srcOepkgsNum = 0
+allFileNum = 0
+allFileList = []  # 存放 当前路径 以及当前路径的子路径 下的所有文件
+sigInfolist = []
+allYamlList = []
+filter_char = []
+allYamldata = []
+src_code_up = []
+src_code_is = []
+yaml_error = []
+Inyaml = []
+dict_oepkgs = {}
+d = defaultdict(list)
+d_oepkg = defaultdict(list)
+dict_list = defaultdict(list)
+
+
+headers = {"Content-Type": "application/json;charset=UTF-8"}
+real_path = os.path.dirname(os.path.realpath(__file__)) + "/"
+closed_header = "curl -X PATCH --header 'Content-Type: application/json;charset=UTF-8'"
+rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
+api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
+openeuler_version = ["openEuler-20.03-LTS", "openEuler-20.03-LTS-SP1", "openEuler-20.03-LTS-SP2", "openEuler-20.03-LTS-SP3", "openEuler-20.09", "openEuler-21.03", "openEuler-21.09", "openEuler-22.03-LTS", "openEuler-22.03-LTS-SP1", "openEuler-22.09"]
+oepkgs_version = [ "openeuler-20.03-LTS-SP1", "openeuler-20.03-LTS-SP2", "openeuler-20.03-LTS-SP3","openeuler-22.03-LTS", "openeuler-22.03-LTS-SP1"]
+
+
+def lib_data(version):
+    if version == None:
+        sys.exit()
+    rpm_pkg_path = "/srv/rpm/testing/{}".format(version)
+    # 取rpm包总数和rpm文件绝对路径
+    package.getAllFilesInPath(rpm_pkg_path)
+    logging.info("当前路径下的总文件数 =", allFileNum)
+    for rpm_path in allFileList:
+        rpm_file = package.shell_cmd("Name", rpm_path)  # 获取rpm信息
+        d[rpm_file].append(rpm_path)
+    logging.info('--------rpm file-----------')
+    # 取一个版本的的所有包的信息以字典形式存入json文件
+    with open("sp3_yaml.json", "w") as fw:
+        fw.write(json.dumps(d))
+
+
+def pr_bat():
+    num = 0
+    # 创建pr
+    os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
+    package.getAllFilesInPath_1("./oepkgs-management_10/sig")
+    package.getAllFilesInPath_1("./oepkgs-management/sig")
+    for i, item in enumerate(allYamldata):
+        if len(get_Bletter(item.split("/")[-1][:-5])) != 0:
+            if item.split("/")[-1][:-5].lower() + ".yaml" in Inyaml:
+                continue
+        dest_path = real_path + "oepkgs-management" + "/" + "/".join(item.split("/")[-5:-1]) + "/"
+        if item.split("/")[-1] not in Inyaml and len(item.split("/")[-1][:-5]) > 1 and len(
+                item.split("/")[-1].split(".")) == 2:
+            num = num + 1
+            if not os.path.exists(dest_path):
+                os.system("mkdir -p {0};cp -rf {1} {0}".format(dest_path, item))
+            else:
+                os.system("cp -rf {1} {0}".format(dest_path, item))
+            if num >= 100:
+                os.system("cd {0};git add .;git commit -m '自动化仓库创建';git push".format("oepkgs-management"))
+                package.creat_pr()
+                time.sleep(500)
+                num = 0
+    logging.info("------- creat end -------")
+
+
+def upload_rpmcode(data):
+    for yaml_f in data:
+        module_name = data[yaml_f]
+        rpm_dict = {}
+        version_set = set()
+        for rpm_route in module_name:
+            rpm_version = package.shell_cmd("Version", rpm_route)
+            version_set.add(rpm_version)
+            rpm_dict[rpm_version] = rpm_route
+        version_list = list(version_set)
+        version_list.sort()
+        os.system("curl -X DELETE --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/setting?access_token={}'".format(yaml_f, sys.argv[1], api_token))
+        for rpm_version in version_list:
+            rpm_route = rpm_dict[rpm_version]
+            package.push_pkg(yaml_f,rpm_route,rpm_version)
+        os.system("curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/protection' -d '{{\"access_token\":\"{}\"}}'".format(yaml_f, sys.argv[1], api_token))
+        src_code_up.append(yaml_f)
+
+
+def yaml_part(data):
+    tag_num = 0
+    add_yaml = 0
+    for yaml_data in data:
+        tag_num = tag_num + 1
+        logging.info("------ branch {} 已添加 -----".format(tag_num))
+        yaml_file = package.yamlName(yaml_data)
+        package.judge_yaml(yaml_file)
+        package.judge_git(yaml_file)
+        os.chdir(os.getcwd() + "/" + yaml_file)
+        commit_id = os.popen("git tag").read().strip()
+        repo_branch = os.popen("git branch").read().strip()
+        package.judge_branch(repo_branch, yaml_file)
+        if commit_id == "":
+            add_yaml = package.judge_commitId(yaml_file, add_yaml, yaml_data,data)
+        else:
+            package.commitid_exist(yaml_file, commit_id, yaml_data, add_yaml)
+
+
+def rw_xsl():
+    xl = xlwt.Workbook(encoding='UTF-8')
+    sheet = xl.add_sheet('docker', cell_overwrite_ok=True)
+    row = 0
+    cloum = 0
+
+    # 取输入文件的每一行进行excel插入
+    with open("输入文件.txt", "r") as f:
+        for k, i in enumerate(f.readlines()):
+            a = os.popen("grep FROM {}".format(i)).read()
+            data = i.split("/")
+            for j in data:
+                sheet.write(row, cloum, j)
+                cloum = cloum + 1
+            sheet.write(row, cloum, a)
+            cloum = cloum + 1
+            with open("docker_link.txt", "r") as f1:
+                sheet.write(row, cloum, f1.readlines()[k])
+            row = row + 1
+            cloum = 0
+    #写入docker
+    xl.save("docker.xls")
+
+
+def count():
+    book = xlrd.open_workbook("oepkgs.xlsx")
+    # 获取第一张工作表
+    sh = book.sheet_by_index(3)
+    col_value = sh.col_values(0)
+    del col_value[0]
+    del col_value[1]
+    del col_value[2]
+    xls = xlrd.open_workbook("oepkgs.xlsx")
+    xls_file = copy(xls)
+    sheet = xls_file.get_sheet(3)
+    with open("test.json", "r", ) as f:
+        openeuler_data = json.loads(f.read())
+    with open("oepkgs.json", "r", ) as f1:
+        oepkgs_data = json.loads(f1.read())
+    oepkgs_list = []
+    oepkgs_list1 = []
+    a_list = []
+    c = []
+    for i in col_value:
+        a_list.append(i.lower())
+    name_list = ["oepkgs_data", "openeuler_data"]
+    for a in name_list:
+        for key in oepkgs_data.keys():
+            for j in oepkgs_data[key].keys():
+                oepkgs_list.append(j)
+    for i in oepkgs_list:
+        oepkgs_list1.append(i.lower())
+    for i in a_list:
+        if i not in oepkgs_list1:
+            c.append(i)
+
+
+def excel_insert():
+    suse_name = {}
+    book = xlrd.open_workbook("zyn1.xlsx")
+    # 获取第一张工作表
+    sh = book.sheet_by_index(0)
+    col_value = sh.col_values(0)
+    del col_value[0]
+    # 读取
+    wb = openpyxl.load_workbook("zyn1.xlsx")
+    sheet = wb['包清单']
+    a_list = []
+    # num为要写入的excel文件的行数+1
+    num = 124756
+    for key in suse_name:
+        if key.lower() not in col_value:
+            sheet["A{}".format(num)] = key.lower()
+            sheet["B{}".format(num)] = "SUSE"
+            sheet["C{}".format(num)] = "FALSE"
+            sheet["D{}".format(num)] = "FALSE"
+            sheet["E{}".format(num)] = "FALSE"
+            sheet["F{}".format(num)] = "FALSE"
+            sheet["G{}".format(num)] = "FALSE"
+            sheet["H{}".format(num)] = "FALSE"
+            sheet["I{}".format(num)] = "FALSE"
+            sheet["G{}".format(num)] = "FALSE"
+            sheet["K{}".format(num)] = "FALSE"
+            sheet["L{}".format(num)] = "FALSE"
+            sheet["M{}".format(num)] = "FALSE"
+            sheet["N{}".format(num)] = "FALSE"
+            sheet["O{}".format(num)] = "FALSE"
+            sheet["P{}".format(num)] = "FALSE"
+            sheet["Q{}".format(num)] = "FALSE"
+            sheet["R{}".format(num)] = "FALSE"
+            sheet["S{}".format(num)] = "FALSE"
+            sheet["T{}".format(num)] = "TRUE"
+            num = num + 1
+        else:
+            sheet["T{}".format(col_value.index(key.lower()) + 2)] = "TRUE"
+    wb.save("zyn2.xlsx")
+
+
+def group():
+    a = 0
+    # 创建pr
+    os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
+    package.getAllFilesInPath_1("./oepkgs-management/sig")
+    wb = xlwt.Workbook()
+    ws = wb.add_sheet('1 sheet')
+    line = 0
+    for i in Inyaml:
+        package.read_yaml(i,ws,line)
+        line = line + 1
+    logging.info("------ test -----")
+    wb.save('1.xls')
+
+
+def oepkgs_apply_pro():
+    oepkgs_list = []
+    col_value1, sheet1, xls_file1 = package.open_file()
+    for i in col_value1:
+        oepkgs_list.append(i.lower())
+    with open("test.json", "r", ) as f:
+        openeuler_data = json.loads(f.read())
+    with open("oepkgs.json", "r", ) as f1:
+        oepkgs_data = json.loads(f1.read())
+    col = 2
+    col = package.write(col, oepkgs_data, sheet1)
+    package.write(col, openeuler_data, sheet1)
+    xls_file1.save("euler_pkg.xls")
+
+
+if __name__ == "__main__":
+    import argparse
+    par = argparse.ArgumentParser()
+
+    par.add_argument("--script", help="obs standard project", required=True)
+    par.add_argument("--version", help="obs standard project", required=False)
+    args = par.parse_args()
+    if args.script == "lib_data":
+        lib_data(args.version)
+    elif args.script == "pr_bat":
+        pr_bat()
+    elif args.script == "upload_rpmcpde":
+        with open("yaml_sp3.json", "r") as fw:
+            file_data = json.load(fw)
+        upload_rpmcode(file_data)
+    elif args.script == "yaml_part":
+        package.getAllFilesInPath("./oepkgs-management/sig")
+        # sp3_yaml.json是lib_data.py脚本生成的一个版本包的信息
+        with open("sp3_yaml.json", "r") as fw:
+            d = json.load(fw)
+        yaml_part(d)
+        with open("yaml_sp3.json", "w") as fb:
+            fb.write(json.dumps(d_oepkg))
+        logging.info("--------- yaml list -----------")
+    elif args.script == "re_xls":
+        rw_xsl()
+    elif args.script == "count":
+        count()
+    elif args.script == "excel_insert":
+        excel_insert()
+    elif args.script == "group":
+        a = 0
+        # 创建pr
+        os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
+        package.getAllFilesInPath("./oepkgs-management/sig")
+        wb = xlwt.Workbook()
+        ws = wb.add_sheet('1 sheet')
+        line = 0
+        column = 0
+        num = 0
+        for i in Inyaml:
+            package.read_yaml(i)
+            line = line + 1
+        logging.info("------ test -----")
+        wb.save('1.xls')
+    elif args.script == "oepkgs_apply":
+        package.openeuler(openeuler_version)
+        package.oepkgs(oepkgs_version)
+    elif args.script == "oepkgs_apply_pro":
+        oepkgs_apply_pro()
+    elif args.script == "creat_file":
+        rpm_pkg_path = "/srv/rpm/pub/"
+        package.getAllFilesInPath(rpm_pkg_path)
+        package.insert_data()
+        # 获取src-oepkgs上已经存在的库，通过yaml文件获取
+        package.getAllFilesInPath("./oepkgs-management_1/sig")
+        # 判断取到的rpm文件是否在舱内已经存在，进行过滤)
+        d_list = copy.deepcopy(d)
+        for d_list_name in d_list:
+            if d_list_name in allYamlList or str.lower(d_list_name) in allYamlList:
+                d.pop(d_list_name)
+        # 遍历字典进行yaml创建
+        package.source_code("module2.xml")
+        for yaml_modify in d:
+            yaml_file = package.yamlName(yaml_modify)
+            package.data(yaml_modify, yaml_file)
+        logging.info("------- 剩余 ------")
+
+        for oepkg_keys in d_oepkg.keys():
+            if not os.path.exists(real_path + "/oepkgs-management_1/sig/{}/sig-info.yaml".format(oepkg_keys)):
+                package.yaml_isexist(oepkg_keys)
+            else:
+                package.yaml_not_exist(oepkg_keys)
