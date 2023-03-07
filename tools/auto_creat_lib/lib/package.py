@@ -403,9 +403,6 @@ def shell_cmd(rpm_key, path):
 
 
 def creat_pr():
-    api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
-    headers = {"Content-Type": "application/json;charset=UTF-8"}
-    closed_header = "curl -X PATCH --header 'Content-Type: application/json;charset=UTF-8'"
     data = {"access_token": api_token, "title": "自动化创建库", "head": "zhang-yn:master", "base": "master"}
     response = requests.post("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls", params=data,headers=headers)
     pr_num = json.loads(response.text)["number"]
