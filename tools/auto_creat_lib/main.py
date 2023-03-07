@@ -309,7 +309,7 @@ if __name__ == "__main__":
         package.source_code("module2.xml")
         for yaml_modify in d:
             yaml_name = package.yamlName(yaml_modify)
-            package.data(yaml_name, yaml_file)
+            package.data_box(yaml_name, yaml_file)
         logging.info("------- 剩余 ------")
 
         for oepkg_keys in d_oepkg.keys():
