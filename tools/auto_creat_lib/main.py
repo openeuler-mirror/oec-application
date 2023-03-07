@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
-# EulerOS build main file
-# Author: yhon
-# Copyright Huawei Technologies Co., Ltd. 2010-2018. All rights reserved.
-"""
-make image
-"""
+
+
 import base64
 import sys
 import os
@@ -56,7 +52,7 @@ oepkgs_version = [ "openeuler-20.03-LTS-SP1", "openeuler-20.03-LTS-SP2", "openeu
 def lib_data(version):
     if version == None:
         sys.exit()
-    rpm_pkg_path = "/srv/rpm/testing/{}".format(version)
+    rpm_pkg_path = "/srv/rpm/testing/{0}".format(version)
     # 取rpm包总数和rpm文件绝对路径
     package.getAllFilesInPath(rpm_pkg_path)
     logging.info("当前路径下的总文件数 =", allFileNum)
@@ -176,17 +172,17 @@ def count():
     oepkgs_list1 = []
     a_list = []
     c = []
-    for i in col_value:
-        a_list.append(i.lower())
+    for value_name in col_value:
+        a_list.append(value_name.lower())
     name_list = ["oepkgs_data", "openeuler_data"]
     for a in name_list:
         for key in oepkgs_data.keys():
             for j in oepkgs_data[key].keys():
                 oepkgs_list.append(j)
-    for i in oepkgs_list:
-        oepkgs_list1.append(i.lower())
-    for i in a_list:
-        if i not in oepkgs_list1:
+    for oepkg_value in oepkgs_list:
+        oepkgs_list1.append(oepkg_value.lower())
+    for value_a in a_list:
+        if value_a not in oepkgs_list1:
             c.append(i)
 
 
@@ -239,8 +235,8 @@ def group():
     wb = xlwt.Workbook()
     ws = wb.add_sheet('1 sheet')
     line = 0
-    for i in Inyaml:
-        package.read_yaml(i,ws,line)
+    for vaule_i in Inyaml:
+        package.read_yaml(vaule_i,ws,line)
         line = line + 1
     logging.info("------ test -----")
     wb.save('1.xls')
@@ -249,8 +245,8 @@ def group():
 def oepkgs_apply_pro():
     oepkgs_list = []
     col_value1, sheet1, xls_file1 = package.open_file()
-    for i in col_value1:
-        oepkgs_list.append(i.lower())
+    for value_element in col_value1:
+        oepkgs_list.append(value_element.lower())
     with open("test.json", "r", ) as f:
         openeuler_data = json.loads(f.read())
     with open("oepkgs.json", "r", ) as f1:
@@ -301,8 +297,8 @@ if __name__ == "__main__":
         line = 0
         column = 0
         num = 0
-        for i in Inyaml:
-            package.read_yaml(i)
+        for yaml_element in Inyaml:
+            package.read_yaml(yaml_element)
             line = line + 1
         logging.info("------ test -----")
         wb.save('1.xls')
