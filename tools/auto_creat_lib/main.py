@@ -105,7 +105,7 @@ def upload_rpmcode(data):
         os.system("curl -X DELETE --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/setting?access_token={}'".format(yaml_f, sys.argv[1], api_token))
         for rpm_version in version_list:
             rpm_route = rpm_dict[rpm_version]
-            package.push_pkg(yaml_f,rpm_route, rpm_version)
+            package.push_pkg(yaml_f, rpm_route, rpm_version)
         os.system("curl -X PUT --header 'Content-Type: application/json;charset=UTF-8' 'https://gitee.com/api/v5/repos/src-oepkgs/{}/branches/{}/protection' -d '{{\"access_token\":\"{}\"}}'".format(yaml_f, sys.argv[1], api_token))
         src_code_up.append(yaml_f)
 
@@ -235,7 +235,7 @@ def group():
     ws = wbk.add_sheet('1 sheet')
     line = 0
     for vaule_i in Inyaml:
-        package.read_yaml(vaule_i,  ws,line)
+        package.read_yaml(vaule_i, ws, line)
         line = line + 1
     logging.info("------ test -----")
     wbk.save('1.xls')
