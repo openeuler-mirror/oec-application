@@ -15,7 +15,7 @@ from xml.etree.ElementTree import parse
 import copy
 import logging
 from lib import package
-from txdpy import get_Bletter,get_Sletter
+from txdpy import get_Bletter, get_Sletter
 import xlwt
 import xlrd
 from openpyxl import load_workbook
@@ -46,7 +46,7 @@ closed_header = "curl -X PATCH --header 'Content-Type: application/json;charset=
 rq_header = "curl -X POST --header 'Content-Type: application/json;charset=UTF-8'"
 api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
 openeuler_version = ["openEuler-20.03-LTS", "openEuler-20.03-LTS-SP1", "openEuler-20.03-LTS-SP2", "openEuler-20.03-LTS-SP3", "openEuler-20.09", "openEuler-21.03", "openEuler-21.09", "openEuler-22.03-LTS", "openEuler-22.03-LTS-SP1", "openEuler-22.09"]
-oepkgs_version = [ "openeuler-20.03-LTS-SP1", "openeuler-20.03-LTS-SP2", "openeuler-20.03-LTS-SP3","openeuler-22.03-LTS", "openeuler-22.03-LTS-SP1"]
+oepkgs_version = ["openeuler-20.03-LTS-SP1", "openeuler-20.03-LTS-SP2", "openeuler-20.03-LTS-SP3","openeuler-22.03-LTS", "openeuler-22.03-LTS-SP1"]
 
 
 def lib_data(version):
