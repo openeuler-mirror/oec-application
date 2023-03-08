@@ -26,7 +26,7 @@ from xml.etree.ElementTree import parse
 import copy
 import logging
 from lib import package
-from txdpy import get_Bletter,get_Sletter
+from txdpy import get_Bletter, get_Sletter
 import xlwt
 import xlrd
 from openpyxl import load_workbook
@@ -375,7 +375,7 @@ def getAllFilesInPath_1(path):
         getAllFilesInPath_1(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
-def getAllFilesInPath_2(path,dict_value):
+def getAllFilesInPath_2(path, dict_value):
     global allFileNum
     curPathDirList = []  # 当前路径下的所有文件夹
     files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
@@ -390,9 +390,9 @@ def getAllFilesInPath_2(path,dict_value):
             if path.split("/")[-2] == "source" and f[-15:] == "-primary.xml.gz":
                 os.system("cp {0} -rf {1};gzip -d {2}".format(gz_file, script_toute, script_toute + "/"  + f))
                 oepkgs_link = "https://repo.oepkgs.net/openEuler/rpm/openEuler-" + gz_file.split("-", 1)[-1].split("repodata/")[0]
-                xml_file(path.split("/")[4],f[:-3],oepkgs_link,"oepkgs",dict_value)
+                xml_file(path.split("/")[4], f[:-3], oepkgs_link, "oepkgs", dict_value)
     for dl in curPathDirList:
-        getAllFilesInPath_2(path + "/" + dl,dict_value)  # 递归获取当前目录下的文件夹内的文件
+        getAllFilesInPath_2(path + "/" + dl, dict_value)  # 递归获取当前目录下的文件夹内的文件
 
 
 def shell_cmd(rpm_key, path):
@@ -405,11 +405,11 @@ def shell_cmd(rpm_key, path):
 
 def creat_pr():
     data = {"access_token": api_token, "title": "自动化创建库", "head": "zhang-yn:master", "base": "master"}
-    response = requests.post("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls", params=data,headers=headers)
+    response = requests.post("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls", params=data, headers=headers)
     pr_num = json.loads(response.text)["number"]
     logging.info("-------- waiting 10 minutes ---------")
     time.sleep(150)
-    response = requests.get("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls/{}/merge?access_token={}".format(pr_num,api_token),headers=headers)
+    response = requests.get("https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls/{}/merge?access_token={}".format(pr_num, api_token), headers=headers)
     response_dict = json.loads(response.text)
     if "message" in response_dict.keys():
         if response_dict['message'] == 'Pull Request已经合并':
@@ -429,7 +429,7 @@ def creat_pr():
 
 def listen_event(pr_num):
     response = requests.get(
-        "https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls/{}/merge?access_token={}".format(pr_num,api_token),headers=headers)
+        "https://gitee.com/api/v5/repos/oepkgs/oepkgs-management/pulls/{}/merge?access_token={}".format(pr_num, api_token), headers=headers)
     response_dict = json.loads(response.text)
     if not response_dict['message'] == 'Pull Request已经合并':
         time.sleep(300)
@@ -454,11 +454,11 @@ def push_pkg(yaml_file, rpm_path, rpm_version):
     if sys.argv[1] == "master":
         os.system(
             "{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
-                rq_header, yaml_file, api_token, commit_id, "20.03-LTS-SP1" + "-v" + rpm_version.replace("^",".").replace("~",".")))
+                rq_header, yaml_file, api_token, commit_id, "20.03-LTS-SP1" + "-v" + rpm_version.replace("^", ".").replace("~", ".")))
     else:
         os.system(
             "{} 'https://gitee.com/api/v5/repos/src-oepkgs/{}/tags' -d '{{\"access_token\":\"{}\",\"refs\":\"{}\",\"tag_name\":\"{}\"}}'".format(
-                rq_header, yaml_file, api_token, commit_id, sys.argv[1][10:] + "-v" + rpm_version.replace("^",".").replace("~",".")))
+                rq_header, yaml_file, api_token, commit_id, sys.argv[1][10:] + "-v" + rpm_version.replace("^", ".").replace("~", ".")))
     logging.info("------- 库名 ------")
 
 
@@ -509,16 +509,16 @@ def judge_branch(repo_branch, name):
         continue
 
 
-def judge_commitId(name,num,yaml_modify,data):
-    d_oepkg[name]=data[yaml_modify]
+def judge_commitId(name, num, yaml_modify, data):
+    d_oepkg[name] = data[yaml_modify]
     os.chdir(os.path.pardir)
     os.system("rm -rf {0}".format(name))
     num = num + 1
-    logging.info("------ {0} branch {1} 已添加 -----".format(name,num))
+    logging.info("------ {0} branch {1} 已添加 -----".format(name, num))
     return num
 
 
-def commitid_exist(name,commit,yaml_modify, add_yaml):
+def commitid_exist(name, commit, yaml_modify, add_yaml):
     tag_list = commit.split("\n")
     if "20.03-LTS-SP3" in [ i[:13] for i in tag_list]:
         logging.info("----- {} tag 已存在 -----".format(name))
@@ -527,26 +527,26 @@ def commitid_exist(name,commit,yaml_modify, add_yaml):
         os.system("rm -rf {0}".format(name))
         continue
     else:
-        d_oepkg[name]=d[yaml_modify]
+        d_oepkg[name] = d[yaml_modify]
         os.chdir(os.path.pardir)
         os.system("rm -rf {0}".format(name))
         add_yaml = add_yaml + 1
-        logging.info("------ {0} branch {1} 已添加 -----".format(name,add_yaml))
+        logging.info("------ {0} branch {1} 已添加 -----".format(name, add_yaml))
 
 
-def read_yaml(path,ws,line):
+def read_yaml(path, ws, line):
     with open(r"{}".format(path), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read(), Loader=yaml.FullLoader)
         if config.get("name").lower in name_list:
-            ws.write(line,0,config.get("name"))
-            ws.write(line,1,config.get("group"))
-            ws.write(line,2,config.get("description"))
-            ws.write(line,3,config.get("license"))
+            ws.write(line, 0, config.get("name"))
+            ws.write(line, 1, config.get("group"))
+            ws.write(line, 2, config.get("description"))
+            ws.write(line, 3, config.get("license"))
         else:
             else_list.append(i)
 
 
-def xml_file(version,xmlfile_path,link_str,signal,dict_value):
+def xml_file(version, xmlfile_path, link_str, signal, dict_value):
     Parse = parse(xmlfile_path)
     root = Parse.getroot()
     for child in root:
@@ -582,7 +582,7 @@ def openeuler(version):
         for j in navareas:
             if "-primary.xml.gz" in j:
                 os.system("wget https://repo.openeuler.org/{0}/source/repodata/{1};gzip -d {1}".format(i, j))
-                xml_file(i,j[:-3],openeuler_link,"openeuler",dict_list[i])
+                xml_file(i, j[:-3], openeuler_link, "openeuler", dict_list[i])
                 time.sleep(25)
     with open("test.json", "w", encoding="utf-8", ) as fw:
         fw.write(json.dumps(dict_list))
@@ -591,7 +591,7 @@ def openeuler(version):
 def oepkgs(version):
     for i in version:
         dict_oepkgs[i] = {}
-        getAllFilesInPath_2("/srv/rpm/pub/" + i,dict_oepkgs[i])
+        getAllFilesInPath_2("/srv/rpm/pub/" + i, dict_oepkgs[i])
         os.system("rm -rf *-primary.xml")
     logging.info("----------- xml end  -----------")
     with open("oepkgs.json", "w", encoding="utf-8", ) as fb:
@@ -609,7 +609,7 @@ def open_file():
     xls = xlrd.open_workbook("oepkgs.xlsx")
     xls_file = copy(xls)
     sheet = xls_file.get_sheet(3)
-    return col_value,sheet,xls_file
+    return col_value, sheet, xls_file
 
 
 def write(col, a, sheet):
@@ -620,7 +620,7 @@ def write(col, a, sheet):
         sheet.write(2, col + 2, "summary")
         sheet.write(2, col + 3, "lincense")
         sheet.write(2, col + 4, "link")
-        write_col(a,sheet,key,col)
+        write_col(a, sheet, key, col)
         col = col + 5
     return col
 
