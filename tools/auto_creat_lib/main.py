@@ -259,8 +259,8 @@ def oepkgs_apply_pro():
 if __name__ == "__main__":
     import argparse
     par = argparse.ArgumentParser()
-    par.add_argument("--script", help="obs standard project", required=True)
-    par.add_argument("--version", help="obs standard project", required=False)
+    par.add_argument("-s", --script", help="script name", required=True)
+    par.add_argument("-v", --version", help="rpm package version", required=False)
     args = par.parse_args()
     if args.script == "lib_data":
         lib_data(args.version)
