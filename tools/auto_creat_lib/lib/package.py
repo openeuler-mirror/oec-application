@@ -492,22 +492,6 @@ def judge_commitId(name, num, yaml_modify, data):
     return num
 
 
-def commitid_exist(name, commit, yaml_modify, add_yaml):
-    tag_list = commit.split("\n")
-    if "20.03-LTS-SP3" in [ i[:13] for i in tag_list]:
-        logging.info("----- {} tag 已存在 -----".format(name))
-        allYamldata_tag.append(name)
-        os.chdir(os.path.pardir)
-        os.system("rm -rf {0}".format(name))
-        continue
-    else:
-        d_oepkg[name] = d[yaml_modify]
-        os.chdir(os.path.pardir)
-        os.system("rm -rf {0}".format(name))
-        add_yaml = add_yaml + 1
-        logging.info("------ {0} branch {1} 已添加 -----".format(name, add_yaml))
-
-
 def read_yaml(path, ws, line):
     with open(r"{}".format(path), 'r', encoding='utf-8') as f:
         config = yaml.load(f.read(), Loader=yaml.FullLoader)
