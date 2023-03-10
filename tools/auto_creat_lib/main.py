@@ -120,7 +120,7 @@ def yaml_part(data):
         if name not in allYamlList:
             src_code_is.append(name)
             continue
-        os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(name)))
+        os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(name))
         if not os.path.exists(real_path + name):
             name = name.lower()
             os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(name))
