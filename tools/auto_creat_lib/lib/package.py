@@ -643,7 +643,7 @@ def source_code(xmlfile):
                 dict_list[a1].append(b + "-*-" + c + "-*-" + d1)
 
 
-def data(yaml_pre, yaml_now):
+def data_box(yaml_pre, yaml_now):
     if yaml_pre in dict_list.keys() and dict_list[yaml_pre][0].split("-*-")[1] in suse_group_info.keys():
         group_str = dict_list[yaml_pre][0].split("-*-")[1]
         logging.info("-----{0}-----*******{1}******".format(yaml_pre, group_str))
