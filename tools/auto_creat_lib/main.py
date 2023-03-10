@@ -310,7 +310,7 @@ if __name__ == "__main__":
         rpm_pkg_path = "/srv/rpm/pub/"
         package.getAllFilesInPath(rpm_pkg_path)
         for rpm_path in allFileList:
-            rpm_file = shell_cmd("Name", rpm_path)  # 获取rpm信息
+            rpm_file = package.shell_cmd("Name", rpm_path)  # 获取rpm信息
             d[rpm_file].append(rpm_path)
         os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management_1.git';")
         # 获取src-oepkgs上已经存在的库，通过yaml文件获取
