@@ -325,9 +325,9 @@ if __name__ == "__main__":
         for rpm_path in allFileList:
             rpm_file = package.shell_cmd("Name", rpm_path)  # 获取rpm信息
             d_dict[rpm_file].append(rpm_path)
-        os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management_1.git';")
+        os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
         # 获取src-oepkgs上已经存在的库，通过yaml文件获取
-        package.getAllFilesInPath("./oepkgs-management_1/sig")
+        package.getAllFilesInPath("./oepkgs-management/sig")
         # 判断取到的rpm文件是否在舱内已经存在，进行过滤)
         d_list = copy.deepcopy(d_dict)
         for d_list_name in d_list:
@@ -340,7 +340,7 @@ if __name__ == "__main__":
             package.data_box(yaml_modify,yaml_name)
         logging.info("------- 剩余 ------")
         for oepkg_keys in d_oepkg.keys():
-            if not os.path.exists(real_path + "/oepkgs-management_1/sig/{}/sig-info.yaml".format(oepkg_keys)):
+            if not os.path.exists(real_path + "/oepkgs-management/sig/{}/sig-info.yaml".format(oepkg_keys)):
                 package.yaml_isexist(oepkg_keys)
             else:
                 package.yaml_not_exist(oepkg_keys)
