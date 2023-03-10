@@ -12,7 +12,6 @@ import requests
 import time
 from collections import defaultdict
 from xml.etree.ElementTree import parse
-import copy
 import logging
 from lib import package
 from txdpy import get_Bletter, get_Sletter
@@ -20,6 +19,7 @@ import xlwt
 import xlrd
 from openpyxl import load_workbook
 from xlutils.copy import copy
+import copy
 from lxml import html
 
 
@@ -332,10 +332,10 @@ if __name__ == "__main__":
         d_list = copy.deepcopy(d_dict)
         for d_list_name in d_list:
             if d_list_name in allYamlList or str.lower(d_list_name) in allYamlList:
-                d.pop(d_list_name)
+                d_dict.pop(d_list_name)
         # 遍历字典进行yaml创建
         package.source_code("module2.xml")
-        for yaml_modify in d:
+        for yaml_modify in d_dict:
             yaml_name = package.yamlName(yaml_modify)
             package.data_box(yaml_modify,yaml_name)
         logging.info("------- 剩余 ------")
