@@ -643,10 +643,10 @@ def data_box(yaml_pre, yaml_now):
                 yaml_now + "-+-" + des_str + "-+-" + license_str + "-+-" + group_str + "-+-" +
                 suse_group_info[group_str].split("/", 1)[1])
     else:
-        group_str = shell_cmd("Group", d[yaml_pre][0])
-        license_str = shell_cmd("License", d[yaml_pre][0])
+        group_str = shell_cmd("Group", d_dict[yaml_pre][0])
+        license_str = shell_cmd("License", d_dict[yaml_pre][0])
         des_str = ""
-        rpm_str = shell_cmd("Summary", d[yaml_pre][0])
+        rpm_str = shell_cmd("Summary", d_dict[yaml_pre][0])
         for str_dig in rpm_str.split(" "):
             str_dig = "".join(filter(str.isalpha, str_dig.strip()))
             des_str = des_str + str_dig + " "
