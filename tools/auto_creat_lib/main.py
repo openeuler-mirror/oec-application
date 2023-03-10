@@ -66,8 +66,7 @@ def getAllFilesInPath(path):
                 allFileNum = allFileNum + 1
                 # 总文件数+1
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
-                yaml_name = f[:-5]
-                allYamlList.append(yaml_name)
+                allYamlList.append(f[:-5])
     for dl in curPathDirList:
         getAllFilesInPath(path + "/" + dl)
 
@@ -123,9 +122,9 @@ def lib_data(version):
     # 取rpm包总数和rpm文件绝对路径
     getAllFilesInPath(rpm_pkg_route)
     logging.info("当前路径下的总文件数 =", allFileNum)
-    for rpm_path in allFileList:
-        rpm_file = package.shell_cmd("Name", rpm_path)  # 获取rpm信息
-        d[rpm_file].append(rpm_path)
+    for rpm_pkg_path in allFileList:
+        rpm_file = package.shell_cmd("Name", rpm_pkg_path)  # 获取rpm信息
+        d[rpm_file].append(rpm_pkg_path)
     logging.info('--------rpm file-----------')
     # 取一个版本的的所有包的信息以字典形式存入json文件
     with open("sp3_yaml.json", "w") as fw:
