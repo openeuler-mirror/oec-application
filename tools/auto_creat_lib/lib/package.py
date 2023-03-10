@@ -51,7 +51,6 @@ yaml_liu = []
 Inyaml = []
 allYamldata_tag = []
 dict_oepkgs = {}
-d = defaultdict(list)
 d_oepkg = defaultdict(list)
 dict_list = defaultdict(list)
 api_token = "c4a7f2254bd58885a9c6fa80cbd0b7dc"
