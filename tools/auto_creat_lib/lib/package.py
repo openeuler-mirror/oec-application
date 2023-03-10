@@ -443,7 +443,8 @@ def push_pkg(yaml_file, rpm_path, rpm_version):
         os.system("git clone -b {1} 'https://gitee.com/src-oepkgs/{0}.git';".format(yaml_file,
                                                                                     sys.argv[1]))
     if not os.path.exists(real_path + yaml_file):
-        break
+        logging.info("------- download code error ------")
+        sys.exit()
     os.chdir(os.getcwd() + "/" + yaml_file)
     os.system(
         "rm -rf *;rpm2cpio {0} | cpio -div;git add .;git commit -m '{1}';git push".format(rpm_path,
@@ -480,15 +481,6 @@ def yamlName(yaml_modify):
         name = yaml_modify
     logging.info("*****{}****".format(yaml_modify))
     return name
-
-
-def judge_yaml(name):
-    if name not in allYamlList:
-        src_code_is.append(name)
-        logging.info("-------- out of yaml file --------")
-        logging.info(src_code_is)
-        continue
-    os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(name))
 
 
 def judge_git(name):
