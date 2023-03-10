@@ -648,13 +648,6 @@ def base64_encode(path, group_dir, yaml_str):
                 rq_header, group_dir, yaml_str.split("-+-")[0][0], yaml_str.split("-+-")[0], api_token, encode_str))
 
 
-def insert_data():
-    for rpm_path in allFileList:
-        rpm_file = shell_cmd("Name", rpm_path)  # 获取rpm信息
-        d[rpm_file].append(rpm_path)
-    os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management_1.git';")
-
-
 def source_code(xmlfile):
     Parse = parse(xmlfile)
     root = Parse.getroot()
