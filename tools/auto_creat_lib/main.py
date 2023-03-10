@@ -36,7 +36,7 @@ allYamldata_tag = []
 yaml_error = []
 Inyaml = []
 dict_oepkgs = {}
-d = defaultdict(list)
+d_dict = defaultdict(list)
 d_oepkg = defaultdict(list)
 dict_list = defaultdict(list)
 
@@ -324,12 +324,12 @@ if __name__ == "__main__":
         package.getAllFilesInPath(rpm_pkg_path)
         for rpm_path in allFileList:
             rpm_file = package.shell_cmd("Name", rpm_path)  # 获取rpm信息
-            d[rpm_file].append(rpm_path)
+            d_dict[rpm_file].append(rpm_path)
         os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management_1.git';")
         # 获取src-oepkgs上已经存在的库，通过yaml文件获取
         package.getAllFilesInPath("./oepkgs-management_1/sig")
         # 判断取到的rpm文件是否在舱内已经存在，进行过滤)
-        d_list = copy.deepcopy(d)
+        d_list = copy.deepcopy(d_dict)
         for d_list_name in d_list:
             if d_list_name in allYamlList or str.lower(d_list_name) in allYamlList:
                 d.pop(d_list_name)
