@@ -29,6 +29,7 @@ from lib import package
 from txdpy import get_Bletter, get_Sletter
 import xlwt
 import xlrd
+import openpyxl
 from openpyxl import load_workbook
 from xlutils.copy import copy
 from lxml import html
