@@ -50,12 +50,78 @@ openeuler_version = ["openEuler-20.03-LTS", "openEuler-20.03-LTS-SP1", "openEule
 oepkgs_version = ["openeuler-20.03-LTS-SP1", "openeuler-20.03-LTS-SP2", "openeuler-20.03-LTS-SP3", "openeuler-22.03-LTS", "openeuler-22.03-LTS-SP1"]
 
 
+def getAllFilesInPath(path):
+    global allFileNum
+    curPathDirList = []  # 当前路径下的所有文件夹
+    files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
+    for f in files:
+        if os.path.isdir(path + "/" + f):
+            if f[0] == ".":
+                pass  # 排除隐藏文件夹
+            else:
+                curPathDirList.append(f)  # 添加非隐藏文件夹
+        if os.path.isfile(path + "/" + f):
+            if f[-8:] == ".src.rpm":
+                allFileList.append(os.path.abspath(path + "/" + f))  # 添加文件
+                allFileNum = allFileNum + 1
+                # 总文件数+1
+            if f[-5:] == ".yaml" and f != "sig-info.yaml":
+                yaml_name = f[:-5]
+                allYamlList.append(yaml_name)
+    for dl in curPathDirList:
+        getAllFilesInPath(path + "/" + dl)
+
+
+def getAllFilesInPath_1(path):
+    global allFileNum
+    curPathDirList = []  # 当前路径下的所有文件夹
+    files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
+    for f in files:
+        if os.path.isdir(path + "/" + f):
+            if f[0] == ".":
+                pass  # 排除隐藏文件夹
+            else:
+                curPathDirList.append(f)  # 添加非隐藏文件夹
+        if os.path.isfile(path + "/" + f):
+            if f[-8:] == ".src.rpm":
+                allFileList.append(os.path.abspath(path + "/" + f))  # 添加文件
+                allFileNum = allFileNum + 1
+                # 总文件数+1
+            if f[-5:] == ".yaml" and f != "sig-info.yaml":
+                if path.split("/")[1] == "oepkgs-management_10":
+                    allYamldata.append(os.path.abspath(path + "/" + f))
+                elif path.split("/")[1] == "oepkgs-management":
+                    Inyaml.append(path + "/" + f)
+    for dl in curPathDirList:
+        getAllFilesInPath_1(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
+
+
+def getAllFilesInPath_2(path, dict_value):
+    global allFileNum
+    curPathDirList = []  # 当前路径下的所有文件夹
+    files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
+    for f in files:
+        if os.path.isdir(path + "/" + f):
+            if f[0] == ".":
+                pass  # 排除隐藏文件夹
+            else:
+                curPathDirList.append(f)  # 添加非隐藏文件夹
+        if os.path.isfile(path + "/" + f):
+            gz_file = path + "/" + f
+            if path.split("/")[-2] == "source" and f[-15:] == "-primary.xml.gz":
+                os.system("cp {0} -rf {1};gzip -d {2}".format(gz_file, script_toute, script_toute + "/"  + f))
+                oepkgs_link = "https://repo.oepkgs.net/openEuler/rpm/openEuler-" + gz_file.split("-", 1)[-1].split("repodata/")[0]
+                xml_file(path.split("/")[4], f[:-3], oepkgs_link, "oepkgs", dict_value)
+    for dl in curPathDirList:
+        getAllFilesInPath_2(path + "/" + dl, dict_value)  # 递归获取当前目录下的文件夹内的文件
+
+
 def lib_data(version):
     if version is None:
         sys.exit()
     rpm_pkg_route = "/srv/rpm/testing/{0}".format(version)
     # 取rpm包总数和rpm文件绝对路径
-    package.getAllFilesInPath(rpm_pkg_route)
+    getAllFilesInPath(rpm_pkg_route)
     logging.info("当前路径下的总文件数 =", allFileNum)
     for rpm_path in allFileList:
         rpm_file = package.shell_cmd("Name", rpm_path)  # 获取rpm信息
@@ -70,8 +136,8 @@ def pr_bat():
     num = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
-    package.getAllFilesInPath_1("./oepkgs-management_10/sig")
-    package.getAllFilesInPath_1("./oepkgs-management/sig")
+    getAllFilesInPath_1("./oepkgs-management_10/sig")
+    getAllFilesInPath_1("./oepkgs-management/sig")
     for i, item in enumerate(allYamldata):
         if len(get_Bletter(item.split("/")[-1][:-5])) != 0:
             if item.split("/")[-1][:-5].lower() + ".yaml" in Inyaml:
@@ -256,7 +322,7 @@ def excel_insert():
 def group():
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
-    package.getAllFilesInPath_1("./oepkgs-management/sig")
+    getAllFilesInPath_1("./oepkgs-management/sig")
     wbk = xlwt.Workbook()
     ws = wbk.add_sheet('1 sheet')
     line = 0
@@ -297,7 +363,7 @@ if __name__ == "__main__":
             file_data = json.load(ff)
         upload_rpmcode(file_data)
     elif args.script == "yaml_part":
-        package.getAllFilesInPath("./oepkgs-management/sig")
+        getAllFilesInPath("./oepkgs-management/sig")
         # sp3_yaml.json是lib_data.py脚本生成的一个版本包的信息
         with open("sp3_yaml.json", "r") as fj:
             d = json.load(fj)
@@ -321,13 +387,13 @@ if __name__ == "__main__":
         oepkgs_apply_pro()
     elif args.script == "creat_file":
         rpm_pkg_path = "/srv/rpm/pub/"
-        package.getAllFilesInPath(rpm_pkg_path)
+        getAllFilesInPath(rpm_pkg_path)
         for rpm_path in allFileList:
             rpm_file = package.shell_cmd("Name", rpm_path)  # 获取rpm信息
             d_dict[rpm_file].append(rpm_path)
         os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
         # 获取src-oepkgs上已经存在的库，通过yaml文件获取
-        package.getAllFilesInPath("./oepkgs-management/sig")
+        getAllFilesInPath("./oepkgs-management/sig")
         # 判断取到的rpm文件是否在舱内已经存在，进行过滤)
         d_list = copy.deepcopy(d_dict)
         for d_list_name in d_list:
