@@ -483,24 +483,6 @@ def yamlName(yaml_modify):
     return name
 
 
-def judge_git(name):
-    if not os.path.exists(real_path + name):
-        name = name.lower()
-        os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(name))
-        if not os.path.exists(real_path + name):
-            allYamldata.append(name)
-            logging.info("------ allYamldata {} 已添加 -----".format(name))
-            continue
-
-
-def judge_branch(repo_branch, name):
-    if repo_branch == "":
-        logging.info("----- {} branch 不存在 -----".format(name))
-        os.chdir(os.path.pardir)
-        os.system("rm -rf {0}".format(name))
-        continue
-
-
 def judge_commitId(name, num, yaml_modify, data):
     d_oepkg[name] = data[yaml_modify]
     os.chdir(os.path.pardir)
