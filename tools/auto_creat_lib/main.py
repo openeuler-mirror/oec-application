@@ -117,12 +117,25 @@ def yaml_part(data):
         tag_num = tag_num + 1
         logging.info("------ branch {} 已添加 -----".format(tag_num))
         yaml_file = package.yamlName(yaml_data)
-        package.judge_yaml(yaml_file)
-        package.judge_git(yaml_file)
+        if name not in allYamlList:
+            src_code_is.append(name)
+            continue
+        os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(name)))
+        if not os.path.exists(real_path + name):
+            name = name.lower()
+            os.system("git clone 'https://gitee.com/src-oepkgs/{0}.git';".format(name))
+            if not os.path.exists(real_path + name):
+                allYamldata.append(name)
+                logging.info("------ allYamldata {} 已添加 -----".format(name))
+                continue
         os.chdir(os.getcwd() + "/" + yaml_file)
         commit_id = os.popen("git tag").read().strip()
         repo_branch = os.popen("git branch").read().strip()
-        package.judge_branch(repo_branch, yaml_file)
+        if repo_branch == "":
+            logging.info("----- {} branch 不存在 -----".format(name))
+            os.chdir(os.path.pardir)
+            os.system("rm -rf {0}".format(name))
+            continue
         if commit_id == "":
             add_yaml = package.judge_commitId(yaml_file, add_yaml, yaml_data, data)
         else:
