@@ -32,6 +32,7 @@ filter_char = []
 allYamldata = []
 src_code_up = []
 src_code_is = []
+allYamldata_tag = []
 yaml_error = []
 Inyaml = []
 dict_oepkgs = {}
@@ -139,7 +140,19 @@ def yaml_part(data):
         if commit_id == "":
             add_yaml = package.judge_commitId(yaml_file, add_yaml, yaml_data, data)
         else:
-            package.commitid_exist(yaml_file, commit_id, yaml_data, add_yaml)
+            tag_list = commit_id.split("\n")
+            if "20.03-LTS-SP3" in [i[:13] for i in tag_list]:
+                logging.info("----- {} tag 已存在 -----".format(yaml_file))
+                allYamldata_tag.append(yaml_file)
+                os.chdir(os.path.pardir)
+                os.system("rm -rf {0}".format(yaml_file))
+                continue
+            else:
+                d_oepkg[yaml_file] = d[yaml_data]
+                os.chdir(os.path.pardir)
+                os.system("rm -rf {0}".format(yaml_file))
+                add_yaml = add_yaml + 1
+                logging.info("------ {0} branch {1} 已添加 -----".format(yaml_file, add_yaml))
 
 
 def rw_xsl():
