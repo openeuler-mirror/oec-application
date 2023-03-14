@@ -126,7 +126,7 @@ def lib_data(version):
         d[rpm_file].append(rpm_pkg_path)
     logging.info('--------rpm file-----------')
     # 取一个版本的的所有包的信息以字典形式存入json文件
-    with open("sp3_yaml.json", "w") as fw:
+    with open("sp3_yaml.json", "w", 00007) as fw:
         fw.write(json.dumps(d))
 
 
@@ -366,7 +366,7 @@ if __name__ == "__main__":
         with open("sp3_yaml.json", "r") as fj:
             d = json.load(fj)
         yaml_part(d)
-        with open("yaml_sp3.json", "w") as fb:
+        with open("yaml_sp3.json", "w", 00007) as fb:
             fb.write(json.dumps(d_oepkg))
         logging.info("--------- yaml list -----------")
     elif args.script == "re_xls":
