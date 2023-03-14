@@ -476,7 +476,7 @@ def openeuler(version):
                 os.system("wget https://repo.openeuler.org/{0}/source/repodata/{1};gzip -d {1}".format(i, j))
                 xml_file(i, j[:-3], openeuler_link, "openeuler", dict_list[i])
                 time.sleep(25)
-    with open("test.json", "w", encoding="utf-8", ) as fw:
+    with open("test.json", "w", encoding="utf-8", 00007) as fw:
         fw.write(json.dumps(dict_list))
 
 
@@ -486,7 +486,7 @@ def oepkgs(version):
         getAllFilesInPath_2("/srv/rpm/pub/" + i, dict_oepkgs[i])
         os.system("rm -rf *-primary.xml")
     logging.info("----------- xml end  -----------")
-    with open("oepkgs.json", "w", encoding="utf-8", ) as fb:
+    with open("oepkgs.json", "w", encoding="utf-8", 00007) as fb:
         fb.write(json.dumps(dict_oepkgs))
 
 
