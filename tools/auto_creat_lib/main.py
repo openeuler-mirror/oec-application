@@ -86,7 +86,7 @@ def getAllFilesInPath_1(path):
                 allFileList.append(os.path.abspath(path + "/" + f))  # 添加文件
                 allFileNum = allFileNum + 1
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
-                if path.split("/")[1] == "oepkgs-management_10":
+                if path.split("/")[1] == "oepkgs-management":
                     allYamldata.append(os.path.abspath(path + "/" + f))
                 elif path.split("/")[1] == "oepkgs-management":
                     Inyaml.append(path + "/" + f)
@@ -134,7 +134,7 @@ def pr_bat():
     num = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
-    getAllFilesInPath_1("./oepkgs-management_10/sig")
+    getAllFilesInPath_1("./oepkgs-management/sig")
     getAllFilesInPath_1("./oepkgs-management/sig")
     for i, item in enumerate(allYamldata):
         if len(get_Bletter(item.split("/")[-1][:-5])) != 0:
