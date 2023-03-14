@@ -85,7 +85,6 @@ def getAllFilesInPath_1(path):
             if f[-8:] == ".src.rpm":
                 allFileList.append(os.path.abspath(path + "/" + f))  # 添加文件
                 allFileNum = allFileNum + 1
-                # 总文件数+1
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
                 if path.split("/")[1] == "oepkgs-management_10":
                     allYamldata.append(os.path.abspath(path + "/" + f))
