@@ -385,8 +385,8 @@ if __name__ == "__main__":
     elif args.script == "oepkgs_apply_pro":
         oepkgs_apply_pro()
     elif args.script == "creat_file":
-        rpm_pkg_path = "/srv/rpm/pub/"
-        getAllFilesInPath(rpm_pkg_path)
+        rpm_package_route = "/srv/rpm/pub/"
+        getAllFilesInPath(rpm_package_route)
         for rpm_path in allFileList:
             rpm_file = package.shell_cmd("Name", rpm_path)  # 获取rpm信息
             d_dict[rpm_file].append(rpm_path)
