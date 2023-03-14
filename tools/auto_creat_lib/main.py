@@ -401,7 +401,7 @@ if __name__ == "__main__":
         package.source_code("module2.xml")
         for yaml_modify in d_dict:
             yaml_name = package.yamlName(yaml_modify)
-            package.data_box(yaml_modify,yaml_name)
+            package.data_box(yaml_modify, yaml_name)
         logging.info("------- 剩余 ------")
         for oepkg_keys in d_oepkg.keys():
             if not os.path.exists(real_path + "/oepkgs-management/sig/{}/sig-info.yaml".format(oepkg_keys)):
