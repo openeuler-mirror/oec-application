@@ -442,26 +442,26 @@ def xml_file(version, xmlfile_path, link_str, signal, dict_value):
     Parse = parse(xmlfile_path)
     root = Parse.getroot()
     for child in root:
-        a = ""
-        b = ""
-        c = ""
+        suse_name = ""
+        suse_license = ""
+        suse_group = ""
         for k in child:
             if k.tag[39:] == "summary":
-                d = k.text
+                suse_summary = k.text
             if k.tag[39:] == "name":
-                a = k.text
+                suse_name = k.text
             if k.tag[39:] == "location":
-                e = link_str + k.attrib["href"]
+                suse_link = link_str + k.attrib["href"]
             if k.tag[39:] == "format":
                 for j in k:
                     if j.tag[36:] == "license":
-                        b = j.text
+                        suse_license = j.text
                     if j.tag[36:] == "group":
-                        c = j.text
+                        suse_group = j.text
                 if signal == "openeuler":
-                    dict_list[version][a] = b + "-*-" + c + "-*-" + d + "-*-" + e
+                    dict_list[version][suse_name] = suse_license + "-*-" + suse_group + "-*-" + suse_summary + "-*-" + suse_link
                 else:
-                    dict_value[a] = b + "-*-" + c + "-*-" + d + "-*-" + e
+                    dict_value[suse_name] = suse_license + "-*-" + suse_group + "-*-" + suse_summary + "-*-" + suse_link
 
 
 def openeuler(version):
