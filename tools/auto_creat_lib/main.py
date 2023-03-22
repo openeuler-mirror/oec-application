@@ -64,34 +64,14 @@ def getAllFilesInPath(path):
             if f[-8:] == ".src.rpm":
                 allFileList.append(os.path.abspath(path + "/" + f))  # 添加文件
                 allFileNum = allFileNum + 1
-                # 总文件数+1
-            if f[-5:] == ".yaml" and f != "sig-info.yaml":
-                allYamlList.append(f[:-5])
-    for dl in curPathDirList:
-        getAllFilesInPath(path + "/" + dl)
-
-
-def getAllFilesInPath_1(path):
-    global allFileNum
-    curPathDirList = []  # 当前路径下的所有文件夹
-    files = os.listdir(path)  # 返回当前路径下的所有文件和文件夹
-    for f in files:
-        if os.path.isdir(path + "/" + f):
-            if f[0] == ".":
-                pass  # 排除隐藏文件夹
-            else:
-                curPathDirList.append(f)  # 添加非隐藏文件夹
-        if os.path.isfile(path + "/" + f):
-            if f[-8:] == ".src.rpm":
-                allFileList.append(os.path.abspath(path + "/" + f))  # 添加文件
-                allFileNum = allFileNum + 1
             if f[-5:] == ".yaml" and f != "sig-info.yaml":
                 if path.split("/")[1] == "oepkgs-management":
                     allYamldata.append(os.path.abspath(path + "/" + f))
                 elif path.split("/")[1] == "oepkgs-management":
                     Inyaml.append(path + "/" + f)
+                    allYamlList.append(f[:-5])
     for dl in curPathDirList:
-        getAllFilesInPath_1(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
+        getAllFilesInPath(path + "/" + dl)  # 递归获取当前目录下的文件夹内的文件
 
 
 def getAllFilesInPath_2(path, dict_value):
@@ -134,8 +114,8 @@ def pr_bat():
     num = 0
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
-    getAllFilesInPath_1("./oepkgs-management/sig")
-    getAllFilesInPath_1("./oepkgs-management/sig")
+    getAllFilesInPath("./oepkgs-management_10/sig")
+    getAllFilesInPath("./oepkgs-management/sig")
     for i, item in enumerate(allYamldata):
         if len(get_Bletter(item.split("/")[-1][:-5])) != 0:
             if item.split("/")[-1][:-5].lower() + ".yaml" in Inyaml:
@@ -320,7 +300,7 @@ def excel_insert():
 def group():
     # 创建pr
     os.system("git clone 'https://gitee.com/zhang-yn/oepkgs-management.git';")
-    getAllFilesInPath_1("./oepkgs-management/sig")
+    getAllFilesInPath("./oepkgs-management/sig")
     wbk = xlwt.Workbook()
     ws = wbk.add_sheet('1 sheet')
     line = 0
