@@ -593,7 +593,7 @@ def yaml_exist(d_oepkg_key,sig_yaml):
     code_str = base64.b64encode(
         yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
             'utf-8')).decode('utf-8')
-	if sig_yaml == "config/sig-info.yaml"
+	if sig_yaml == "config/sig-info.yaml":
 		os.system(
 			"{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
 				rq_header, d_oepkg_key, api_token, code_str))
