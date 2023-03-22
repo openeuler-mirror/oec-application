@@ -405,6 +405,7 @@ if __name__ == "__main__":
         logging.info("------- 剩余 ------")
         for oepkg_keys in d_oepkg.keys():
             if not os.path.exists(real_path + "/oepkgs-management/sig/{}/sig-info.yaml".format(oepkg_keys)):
-                package.yaml_isexist(oepkg_keys)
+                package.yaml_exist(oepkg_keys, "config/sig-info.yaml")
             else:
-                package.yaml_not_exist(oepkg_keys)
+                sig_info_yaml = "./oepkgs-management_1/sig/{}/sig-info.yaml".format(oepkg_keys)
+                package.yaml_exist(oepkg_keys, sig_info_yaml)
