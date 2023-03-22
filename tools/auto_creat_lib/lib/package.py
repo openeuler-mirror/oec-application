@@ -574,11 +574,11 @@ def data_box(yaml_pre, yaml_now):
             yaml_liu.append(yaml_pre)
 
 
-def yaml_isexist(d_oepkg_key):
+def yaml_exist(d_oepkg_key,sig_yaml):
     sig_code_str = {}
     for i, item in enumerate(d_oepkg[d_oepkg_key]):
         if i == 0:
-            sig_code_str = sig_info("config/sig-info.yaml", d_oepkg_key, item.split("-+-")[0], item.split("-+-")[4])
+            sig_code_str = sig_info(sig_yaml, d_oepkg_key, item.split("-+-")[0], item.split("-+-")[4])
             base64_encode("config/test.yaml", d_oepkg_key, item)
         else:
             type_str = [j for j, i in enumerate(sig_code_str['repositories']) if
@@ -593,32 +593,13 @@ def yaml_isexist(d_oepkg_key):
     code_str = base64.b64encode(
         yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
             'utf-8')).decode('utf-8')
-    os.system(
-        "{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
-            rq_header, d_oepkg_key, api_token, code_str))
+	if sig_yaml == "config/sig-info.yaml"
+		os.system(
+			"{} 'https://gitee.com/api/v5/repos/zhang-yn/oepkgs-management_1/contents/sig%2F{}%2Fsig-info.yaml' -d '{{\"access_token\":\"{}\",\"content\":\"{}\",\"message\":\"test\"}}'".format(
+				rq_header, d_oepkg_key, api_token, code_str))
+	else:
+	    sig_info_add(d_oepkg_key, code_str)
     logging.info("---------sig_code_str end----------")
-
-
-def yaml_not_exist(d_oepkg_key):
-    sig_code_str = {}
-    for j, items in enumerate(d_oepkg[d_oepkg_key]):
-        if j == 0:
-            sig_code_str = sig_info("./oepkgs-management_1/sig/{}/sig-info.yaml".format(d_oepkg_key), d_oepkg_key,
-                                    items.split("-+-")[0], items.split("-+-")[4])
-            base64_encode("config/test.yaml", d_oepkg_key, items)
-        else:
-            base64_encode("config/test.yaml", d_oepkg_key, items)
-            type_str = [j for j, i in enumerate(sig_code_str['repositories']) if
-                        i.get("type") == items.split("-+-")[4]]
-            if len(type_str) == 0:
-                sig_code_str['repositories'].append(
-                    {'repo': ['src-oepkgs/' + items.split("-+-")[0]], 'type': items.split("-+-")[4]})
-            else:
-                sig_code_str['repositories'][type_str[0]]['repo'].append("src-oepkgs/" + items.split("-+-")[0])
-    code_str = base64.b64encode(
-        yaml.dump(sig_code_str, allow_unicode=True, default_flow_style=False, sort_keys=False).encode(
-            'utf-8')).decode('utf-8')
-    sig_info_add(d_oepkg_key, code_str)
 
 
 def sig_info(yaml_module, sig_name, yaml_name, group_secdir):
