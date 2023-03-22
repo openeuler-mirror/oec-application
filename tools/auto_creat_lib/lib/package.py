@@ -574,7 +574,7 @@ def data_box(yaml_pre, yaml_now):
             yaml_liu.append(yaml_pre)
 
 
-def yaml_exist(d_oepkg_key,sig_yaml):
+def yaml_exist(d_oepkg_key, sig_yaml):
     sig_code_str = {}
     for i, item in enumerate(d_oepkg[d_oepkg_key]):
         if i == 0:
