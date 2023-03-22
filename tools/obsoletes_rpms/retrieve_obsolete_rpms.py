@@ -222,6 +222,7 @@ class RetrieveObsoleteRpms(object):
         try:
             response = request.urlopen(base_url)
             if response.getcode() == 200:
+                logger.info(f"download and prase {src_name} spec file")
                 Repo.clone_from(git_url, to_path=dir_path, branch=branch)
         except Exception:
             logger.debug(f"Clone {src_name} failed, maybe not exist branch-{branch}.")
@@ -240,7 +241,8 @@ class RetrieveObsoleteRpms(object):
         try:
             if src_rpm_full_name:
                 os.makedirs(download_dir)
-                src_path = wget.download(src_url, out=download_dir)
+                logger.info(f"download and prase {src_name} spec file")
+                src_path = wget.download(src_url, out=download_dir, bar=None)
                 os.chdir(download_dir)
                 self.perform_cpio(src_path)
                 os.chdir(os.getcwd())
@@ -282,7 +284,6 @@ class RetrieveObsoleteRpms(object):
         pool = Pool(cpu_count())
         try:
             for src_name, content in filter_result.items():
-                logger.info(f"download and prase {src_name} spec file, model: {model}")
                 if model == "repo":
                     pool.apply_async(self.check_gitee_spec_file, (download_dir, src_name, content, branch),
                                      callback=component_results.extend)
@@ -337,4 +338,8 @@ if __name__ == "__main__":
     if not args.prase_report[0].endswith(".csv"):
         logger.error(f"this is not a csv file, must input all-rpm-report.csv to prase.")
         sys.exit(1)
+    logger.info(f"OS Branch: {args.os_branch}")
+    logger.info(f"Work Directory: {args.work_dir}")
+    logger.info(f"Obsolete Model: {args.os_prase_type}")
+
     RetrieveObsoleteRpms(args.prase_report[0]).run_retrieve(args.os_branch, args.work_dir, args.os_prase_type)
