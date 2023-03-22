@@ -109,7 +109,7 @@ def getAllFilesInPath_2(path, dict_value):
             if path.split("/")[-2] == "source" and f[-15:] == "-primary.xml.gz":
                 os.system("cp {0} -rf {1};gzip -d {2}".format(gz_file, script_toute, script_toute + "/"  + f))
                 oepkgs_link = "https://repo.oepkgs.net/openEuler/rpm/openEuler-" + gz_file.split("-", 1)[-1].split("repodata/")[0]
-                xml_file(path.split("/")[4], f[:-3], oepkgs_link, "oepkgs", dict_value)
+                source_code(path.split("/")[4], f[:-3], oepkgs_link, "oepkgs", dict_value)
     for dl in curPathDirList:
         getAllFilesInPath_2(path + "/" + dl, dict_value)  # 递归获取当前目录下的文件夹内的文件
 
@@ -398,7 +398,7 @@ if __name__ == "__main__":
             if d_list_name in allYamlList or str.lower(d_list_name) in allYamlList:
                 d_dict.pop(d_list_name)
         # 遍历字典进行yaml创建
-        package.source_code("module2.xml")
+        package.source_code(None,"module2.xml",None,None,None)
         for yaml_modify in d_dict:
             yaml_name = package.yamlName(yaml_modify)
             package.data_box(yaml_modify, yaml_name)
