@@ -378,7 +378,7 @@ if __name__ == "__main__":
             if d_list_name in allYamlList or str.lower(d_list_name) in allYamlList:
                 d_dict.pop(d_list_name)
         # 遍历字典进行yaml创建
-        package.source_code(None,"module2.xml",None,None,None)
+        package.source_code(None, "module2.xml", None, None, None)
         for yaml_modify in d_dict:
             yaml_name = package.yamlName(yaml_modify)
             package.data_box(yaml_modify, yaml_name)
