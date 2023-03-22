@@ -31,7 +31,8 @@ import pandas as pd
 import wget
 from git import Repo
 
-from tools.obsoletes_rpms.tools.shell_cmd import shell_cmd
+from tools.logger import init_logger
+from tools.shell_cmd import shell_cmd
 
 logger = logging.getLogger('obsolete')
 
@@ -117,7 +118,7 @@ class RetrieveObsoleteRpms(object):
             else:
                 logger.debug(f"{spec_path} not found obsolete rpm.")
         else:
-            logger.debug(f"Prase spec Error: {spec_path}")
+            logger.warning(f"Prase spec Error: {spec_path}")
             with open(spec_path, "r") as s_f:
                 content = s_f.read()
             name_version_pat = r"(\S+)\s([><=]=?)\s(\S+)"
@@ -135,15 +136,15 @@ class RetrieveObsoleteRpms(object):
 
         return obsolete_rpms
 
-    def write_to_csv_report(self, results, branch, model):
+    @staticmethod
+    def write_to_csv_report(results, branch, model, work_dir):
         if not results:
             logger.info("component_results is empty, can't create obsoletes-rpms-report.")
             return None
 
-        report_dir = os.path.dirname(self.all_rpm_report)
         header = results[0].keys()
         report_name = f"obsoletes_report_{branch}_{model}.csv"
-        report_path = os.path.join(report_dir, report_name)
+        report_path = os.path.join(work_dir, report_name)
         with open(report_path, 'w', newline='', encoding='utf-8') as f:
             f_csv = csv.DictWriter(f, header)
             f_csv.writeheader()
@@ -151,7 +152,7 @@ class RetrieveObsoleteRpms(object):
 
         logger.info(f"Success create obsoletes-rpms-report at: {report_path}")
 
-    def acquire_detete_rpms(self, all_rpm_report):
+    def acquire_detete_rpms(self, all_rpm_report, branch):
         """
         Resolve rpm packages removed from older versions.
         @param all_rpm_report: oecp generated all-rpm-report.csv
@@ -161,6 +162,9 @@ class RetrieveObsoleteRpms(object):
         df = pd.read_csv(all_rpm_report)
         df.drop(df.index[0], inplace=True)
         header = df.columns.tolist()
+        if branch not in header[3]:
+            logger.error("please check input branch is diff from all-rpm-report second iso name.")
+            sys.exit(1)
         delete_rpms = df.loc[(df[header[4]] == '4') | (df[header[4]] == 4)]
         series_delete_src = delete_rpms.astype(str)[header[1]]
         all_new_src = df.loc[(df[header[3]].notnull())]
@@ -218,7 +222,6 @@ class RetrieveObsoleteRpms(object):
         try:
             response = request.urlopen(base_url)
             if response.getcode() == 200:
-                logger.debug(f"clone from {git_url}.")
                 Repo.clone_from(git_url, to_path=dir_path, branch=branch)
         except Exception:
             logger.debug(f"Clone {src_name} failed, maybe not exist branch-{branch}.")
@@ -236,7 +239,6 @@ class RetrieveObsoleteRpms(object):
         download_dir = os.path.join(work_dir, src_name)
         try:
             if src_rpm_full_name:
-                logger.debug(f"download {src_name} src rpm.")
                 os.makedirs(download_dir)
                 src_path = wget.download(src_url, out=download_dir)
                 os.chdir(download_dir)
@@ -280,12 +282,15 @@ class RetrieveObsoleteRpms(object):
         pool = Pool(cpu_count())
         try:
             for src_name, content in filter_result.items():
+                logger.info(f"download and prase {src_name} spec file, model: {model}")
                 if model == "repo":
                     pool.apply_async(self.check_gitee_spec_file, (download_dir, src_name, content, branch),
                                      callback=component_results.extend)
-                else:
+                elif model == "os":
                     pool.apply_async(self.wget_repo_src_rpms, (download_dir, content, branch),
                                      callback=component_results.extend)
+                else:
+                    logger.error(f"input model is error,please check it.")
         except KeyboardInterrupt:
             pool.terminate()
 
@@ -303,10 +308,10 @@ class RetrieveObsoleteRpms(object):
         @param work_dir: arg.work_dir
         @param model: os(everything in os) or repo(update rpms)
         """
-        filter_result = self.acquire_detete_rpms(self.all_rpm_report)
+        filter_result = self.acquire_detete_rpms(self.all_rpm_report, branch)
         component_results = self.obtain_final_result(filter_result, work_dir, branch, model)
         # craete obsoletes-rpms-report.csv
-        self.write_to_csv_report(component_results, branch, model)
+        self.write_to_csv_report(component_results, branch, model, work_dir)
 
 
 def init_args():
@@ -327,8 +332,9 @@ def init_args():
 
 
 if __name__ == "__main__":
+    init_logger()
     args = init_args()
-    if not args.prase_report.endswith(".csv"):
+    if not args.prase_report[0].endswith(".csv"):
         logger.error(f"this is not a csv file, must input all-rpm-report.csv to prase.")
         sys.exit(1)
-    RetrieveObsoleteRpms(args.prase_report).run_retrieve(args.os_branch, args.work_dir, args.os_prase_type)
+    RetrieveObsoleteRpms(args.prase_report[0]).run_retrieve(args.os_branch, args.work_dir, args.os_prase_type)
