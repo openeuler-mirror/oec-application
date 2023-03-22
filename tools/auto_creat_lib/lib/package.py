@@ -438,32 +438,6 @@ def read_yaml(path, ws, line):
             else_list.append(i)
 
 
-def xml_file(version, xmlfile_path, link_str, signal, dict_value):
-    Parse = parse(xmlfile_path)
-    root = Parse.getroot()
-    for child in root:
-        suse_name = ""
-        suse_license = ""
-        suse_group = ""
-        for k in child:
-            if k.tag[39:] == "summary":
-                suse_summary = k.text
-            if k.tag[39:] == "name":
-                suse_name = k.text
-            if k.tag[39:] == "location":
-                suse_link = link_str + k.attrib["href"]
-            if k.tag[39:] == "format":
-                for j in k:
-                    if j.tag[36:] == "license":
-                        suse_license = j.text
-                    if j.tag[36:] == "group":
-                        suse_group = j.text
-                if signal == "openeuler":
-                    dict_list[version][suse_name] = suse_license + "-*-" + suse_group + "-*-" + suse_summary + "-*-" + suse_link
-                else:
-                    dict_value[suse_name] = suse_license + "-*-" + suse_group + "-*-" + suse_summary + "-*-" + suse_link
-
-
 def openeuler(version):
     for i in version:
         dict_list[i] = {}
@@ -474,7 +448,7 @@ def openeuler(version):
         for j in navareas:
             if "-primary.xml.gz" in j:
                 os.system("wget https://repo.openeuler.org/{0}/source/repodata/{1};gzip -d {1}".format(i, j))
-                xml_file(i, j[:-3], openeuler_link, "openeuler", dict_list[i])
+                source_code(i, j[:-3], openeuler_link, "openeuler", dict_list[i])
                 time.sleep(25)
     with open("test.json", "w", encoding="utf-8", 00007) as fw:
         fw.write(json.dumps(dict_list))
@@ -540,25 +514,34 @@ def base64_encode(path, group_dir, yaml_str):
                 rq_header, group_dir, yaml_str.split("-+-")[0][0], yaml_str.split("-+-")[0], api_token, encode_str))
 
 
-def source_code(xmlfile):
-    Parse = parse(xmlfile)
+def source_code(version, xmlfile_path, link_str, signal, dict_value):
+    Parse = parse(xmlfile_path)
     root = Parse.getroot()
     for child in root:
-        a1 = ""
-        b = ""
-        c = ""
-        for i in child:
-            if i.tag[39:] == "summary":
-                d1 = i.text
-            if i.tag[39:] == "name":
-                a1 = i.text
-            if i.tag[39:] == "format":
-                for j in i:
+        suse_name = ""
+        suse_license = ""
+        suse_group = ""
+        for k in child:
+            if k.tag[39:] == "summary":
+                suse_summary = k.text
+            if k.tag[39:] == "name":
+                suse_name = k.text
+			if version != None:
+				if k.tag[39:] == "location":
+					suse_link = link_str + k.attrib["href"]
+            if k.tag[39:] == "format":
+                for j in k:
                     if j.tag[36:] == "license":
-                        b = j.text
+                        suse_license = j.text
                     if j.tag[36:] == "group":
-                        c = j.text
-                dict_list[a1].append(b + "-*-" + c + "-*-" + d1)
+                        suse_group = j.text
+				if version != None:
+					if signal == "openeuler":
+						dict_list[version][suse_name] = suse_license + "-*-" + suse_group + "-*-" + suse_summary + "-*-" + suse_link
+					else:
+						dict_value[suse_name] = suse_license + "-*-" + suse_group + "-*-" + suse_summary + "-*-" + suse_link
+				else:
+				    dict_list[suse_name].append(suse_license + "-*-" + suse_group + "-*-" + suse_summary)
 
 
 def data_box(yaml_pre, yaml_now):
