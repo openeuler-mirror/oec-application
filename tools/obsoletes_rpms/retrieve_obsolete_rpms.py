@@ -20,6 +20,7 @@ import csv
 import logging
 import re
 import shutil
+import stat
 import subprocess
 import sys
 from multiprocessing import Pool, cpu_count
@@ -138,15 +139,15 @@ class RetrieveObsoleteRpms(object):
 
     @staticmethod
     def write_to_csv_report(results, branch, model, work_dir):
-        if not results:
-            logger.info("component_results is empty, can't create obsoletes-rpms-report.")
-            return None
-
         header = results[0].keys()
         report_name = f"obsoletes_report_{branch}_{model}.csv"
         report_path = os.path.join(work_dir, report_name)
-        with open(report_path, 'w', newline='', encoding='utf-8') as f:
-            f_csv = csv.DictWriter(f, header)
+        # 创建并以读写方式打开一个新文件
+        flags = os.O_RDWR | os.O_CREAT
+        # owner有全部权限，其他用户有读权限
+        modes = stat.S_IROTH | stat.S_IRWXU
+        with os.fdopen(os.open(report_path, flags, modes), 'w', newline='', encoding='utf-8') as fd:
+            f_csv = csv.DictWriter(fd, header)
             f_csv.writeheader()
             f_csv.writerows(results)
 
@@ -164,7 +165,7 @@ class RetrieveObsoleteRpms(object):
         header = df.columns.tolist()
         if branch not in header[3]:
             logger.error("please check input branch is diff from all-rpm-report second iso name.")
-            sys.exit(1)
+            return results
         delete_rpms = df.loc[(df[header[4]] == '4') | (df[header[4]] == 4)]
         series_delete_src = delete_rpms.astype(str)[header[1]]
         all_new_src = df.loc[(df[header[3]].notnull())]
@@ -182,13 +183,13 @@ class RetrieveObsoleteRpms(object):
             })
             if delete_rpm not in set(all_new_src_name.keys()):
                 for rpm in bin_rpms['rpms']:
-                    self.combine_single_result(results[delete_rpm]["result"], src_full_name, rpm, 'src_detete')
+                    self.combine_single_result(results[delete_rpm].get("result"), src_full_name, rpm, 'src_detete')
             else:
                 for rpm in bin_rpms['rpms']:
                     if self.get_rpm_name(rpm) in all_new_bin_name:
-                        self.combine_single_result(results[delete_rpm]["result"], src_full_name, rpm, 'arch_change')
+                        self.combine_single_result(results[delete_rpm].get("result"), src_full_name, rpm, 'arch_change')
                     else:
-                        self.combine_single_result(results[delete_rpm]["result"], src_full_name, rpm, 'bin_rpm_detete')
+                        self.combine_single_result(results[delete_rpm].get("result"), src_full_name, rpm, 'bin_rpm_detete')
 
         logger.info(f"total retrieve deleted rpms belong to {len(results)} src rpm.")
 
@@ -311,8 +312,11 @@ class RetrieveObsoleteRpms(object):
         """
         filter_result = self.acquire_detete_rpms(self.all_rpm_report, branch)
         component_results = self.obtain_final_result(filter_result, work_dir, branch, model)
-        # craete obsoletes-rpms-report.csv
-        self.write_to_csv_report(component_results, branch, model, work_dir)
+        if not component_results:
+            logger.info("component_results is empty, can't create obsoletes-rpms-report.")
+        else:
+            # craete obsoletes-rpms-report.csv
+            self.write_to_csv_report(component_results, branch, model, work_dir)
 
 
 def init_args():
