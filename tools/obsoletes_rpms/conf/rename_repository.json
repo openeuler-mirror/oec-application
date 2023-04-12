@@ -1,0 +1,5 @@
+{
+  "scons": "python-scons",
+  "fonttools": "python-fonttools",
+  "pyyaml": "PyYAML"
+}
