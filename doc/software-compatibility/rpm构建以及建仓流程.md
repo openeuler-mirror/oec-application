@@ -8,6 +8,10 @@
 #### 一、基于PR，创建仓库
 在[oepkgs-management](https://gitee.com/oepkgs/oepkgs-management)仓库提PR(如何提PR，详见文档最后的[QA](##QA))，填写两个配置文件，PR合入之后，创仓机器人ci-robot会在[src-oepkgs](https://gitee.com/src-oepkgs)下面自动创建仓库。
 
+> **说明:**
+>  - oepkgs仓库将软件包按照领域、类别划分，不同领域及类别的软件包由**不同的sig组**进行维护
+
+
 oepkgs-management仓库中的两个配置文件(以nginx为例)：
 ```
 # 在oepkgs-management仓库sig目录下面创建虚拟化领域的sig组
@@ -29,19 +33,38 @@ maintainers:
 # 该sig组管理的仓库
 repositories:
 - repo: 
-  - src-oepkgs/nginx   
+  - src-oepkgs/nginx
+  committers:
+  - gitee_id: lipingEmmaSiguyi
+    name: Ping Li
+    email: liping136@huawei.com
 ```
+> **说明:**
+>  - 开源软件引入**oepkgs已有sig组**，提交申请创仓PR，可基于对应sig组的sig-info.yaml文件进行修改，不强制要求开源软件引入oepkgs仓，需要新建sig组
+
+
+sig-info.yaml 字段解释:
+
+| 字段 | 解释 | 是否必填 |
+|---|---|---|
+| name | sig组名称，一般跟软件包领域相关 | √ |
+| description | 对该sig的描述 | √ |
+| mailing_list | sig组的订阅邮箱地址 | × |
+| meeting_url | sig组会议链接 | × |
+| maintainers | sig组的管理者，负责该sig组下源码仓pr的检视与合入 | √ |
+| repositories | sig组下面的源码仓 | √ |
+| committers | sig组下面某些源码仓的committers，负责对应仓库PR的检视与合入 | √ |
 
 ```
 # 在oepkgs-management/sig/virtual下面创建src-oepkgs/仓库名称首字母/仓库名称.yaml
-# ci-rebot将依据这个文件进行自动建仓
-oepkgs-management/sig/virtual/src-oepkgs/q/nginx.yaml:
+# ci-robot将依据这个文件进行自动建仓
+oepkgs-management/sig/virtual/src-oepkgs/n/nginx.yaml:
 
 # 仓库名称
 name: nginx
 description: "nginx is a generic and open source processor emulator which achieves a good emulation speed by using dynamic translation"
-# 仓库地址
-upstream: https://gitee.com/src-oepkgs/nginx
+# 上游仓库地址
+upstream: https://github.com/nginx/nginx.git
 # 仓库分支
 branches:
 - name: master
@@ -54,6 +77,17 @@ branches:
   create_from: master
 type: public
 ```
+
+仓库配置文件字段解释：
+
+| 字段 | 解释 | 是否必填 |
+|---|---|---|
+| name | 包名（源码仓名） | √ |
+| description | 对软件包的描述 | √ |
+| upstream | 软件包上游仓库地址 | √ |
+| branches | 仓库分支，oepkgs镜像源分支管理详见：[oepkgs分支管理文档](./oepkgs分支管理.md) | √ |
+
+
 #### 二、补充源码文件
 完成步骤一之后，5分钟内会生成 https://gitee.com/src-oepkgs/nginx 仓库，通过PR往这个仓库中补充源码文件：
 
