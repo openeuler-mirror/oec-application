@@ -26,12 +26,12 @@ os.putenv("PYTHONPATH", cur_path)
 
 from scripts.oech_submit import OechSubmit
 from scripts.common import *
+from scripts.get_report import GetReport
 
 def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
     group_id = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     yaml_content = read_yaml(oech_yaml_path)
     card_info_hash = read_json(card_conf_path)
-    
     oech_submit = OechSubmit(card_info_hash, lab_path, yaml_content, group_id)
     card_ids_hash = oech_submit.deal_card_info(card_info_hash["card_info"])
 
@@ -39,6 +39,7 @@ def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
     box_board_hash = oech_submit.read_lab_board()
     card_with_box = oech_submit.choose_box(card_ids_hash, box_board_hash)
     oech_submit.oech_task(card_with_box, submit_args, submit_output)
+
 
 
 if __name__ == "__main__":
@@ -52,13 +53,22 @@ if __name__ == "__main__":
                         required=False, help='json file for all card conf')
     parser.add_argument('-o', '--submit_output', type=str, required=False,
                         help='submit job for get job yaml but not post to server')
+    parser.add_argument('-f', '--seek_id', type=str, required=False,
+                        help='Query test results based on seek_id')
     args = parser.parse_args()
 
-    # oec-hardware job yaml file
-    job_yaml = check_args('job_yaml', args.job_yaml)
-    # lab machine path
-    lab_path = check_args('lab_path', args.lab_path)
-    # test card config json file
-    card_conf = check_args('card_conf', args.card_conf)
+    # get test result
+    
+    if args.seek_id is not None:
+        seek_id = check_args('seek_id', args.seek_id)
+        report = GetReport(seek_id)
+        report.get_result_by_seek_id()
+    else:
+        # oec-hardware job yaml file
+        job_yaml = check_args('job_yaml', args.job_yaml)
+        # lab machine path
+        lab_path = check_args('lab_path', args.lab_path)
+        # test card config json file
+        card_conf = check_args('card_conf', args.card_conf)
 
-    main(job_yaml, lab_path, card_conf, args.submit_output)
+        main(job_yaml, lab_path, card_conf, args.submit_output)
