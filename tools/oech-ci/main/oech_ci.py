@@ -28,10 +28,12 @@ from scripts.oech_submit import OechSubmit
 from scripts.common import *
 from scripts.get_report import GetReport
 
+
 def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
     group_id = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     yaml_content = read_yaml(oech_yaml_path)
     card_info_hash = read_json(card_conf_path)
+    
     oech_submit = OechSubmit(card_info_hash, lab_path, yaml_content, group_id)
     card_ids_hash = oech_submit.deal_card_info(card_info_hash["card_info"])
 
@@ -39,7 +41,6 @@ def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
     box_board_hash = oech_submit.read_lab_board()
     card_with_box = oech_submit.choose_box(card_ids_hash, box_board_hash)
     oech_submit.oech_task(card_with_box, submit_args, submit_output)
-
 
 
 if __name__ == "__main__":
@@ -58,7 +59,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # get test result
-    
+
     if args.seek_id is not None:
         seek_id = check_args('seek_id', args.seek_id)
         report = GetReport(seek_id)
