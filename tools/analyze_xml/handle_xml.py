@@ -14,8 +14,8 @@ logger = Log()
 
 def create_csv(xml_file, all_rpm_name_file):
     # 使用minidom解析器打开 XML 文档
-    DOM_TREE = xml.dom.minidom.parse(xml_file)
-    collection = DOM_TREE.documentElement
+    dom_tree = xml.dom.minidom.parse(xml_file)
+    collection = dom_tree.documentElement
     if collection.hasAttribute("shelf"):
         logger.info("Root element : %s" % collection.getAttribute("shelf"))
 
@@ -61,11 +61,11 @@ def create_csv(xml_file, all_rpm_name_file):
 
 
 def analyza_csv(xml_file, all_rpm_name_file):
-    CSV_FILE = create_csv(xml_file, all_rpm_name_file)
+    csv_file = create_csv(xml_file, all_rpm_name_file)
     # 加载数据
     # 将此路径替换为你的csv文件的路径
-    FILE_PATH = CSV_FILE
-    data = pd.read_csv(FILE_PATH)
+    file_path = csv_file
+    data = pd.read_csv(file_path)
 
     # 检查数据是否包含NaN值
     missing_values = data.isnull().sum()
@@ -80,14 +80,14 @@ def analyza_csv(xml_file, all_rpm_name_file):
         model = make_pipeline(CountVectorizer(), MultinomialNB())
 
         # 使用列a和c作为特征，列b作为目标变量来训练模型
-        X_TRAIN = train_data['name'] + ' ' + train_data['summary'] + train_data['description']
+        x_train = train_data['name'] + ' ' + train_data['summary'] + train_data['description']
         y_train = train_data['group']
-        model.fit(X_TRAIN, y_train)
+        model.fit(x_train, y_train)
 
         # 预测未分类的软件包的类别
-        X_UNCLASSIFIED = unclassified_data['name'] + ' ' + unclassified_data['summary'] + unclassified_data[
+        x_unclassified = unclassified_data['name'] + ' ' + unclassified_data['summary'] + unclassified_data[
             'description']
-        predicted_categories = model.predict(X_UNCLASSIFIED)
+        predicted_categories = model.predict(x_unclassified)
         # 将预测的类别添加到表格
         data.loc[data['group'].isna(), 'group'] = predicted_categories
 
