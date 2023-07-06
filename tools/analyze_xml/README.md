@@ -3,5 +3,14 @@
 ### 使用环境
 python3.10
 ### 使用方法
-需要准备xml文件，并且将生成的xlsx文件另存为csv文件，将字符设置为utf-8
+python handle_xml.py -x xml_file_name -r rpm_file_name
 
+xml_file_name 为repodata下xml文件
+rpm_file_name 为所需要的rpm包名
+例如：
+0ad
+0ad-data
+2048-cli
+2ping
+389-ds
+3omns
