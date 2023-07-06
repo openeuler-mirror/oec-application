@@ -68,7 +68,6 @@ def analyza_csv(xml_file, all_rpm_name_file):
 
     # 检查数据是否包含NaN值
     missing_values = data.isnull().sum()
-    # unspecified_counts = data.apply(lambda x: x.str.count("Unspecified")).sum()
 
     # 如果有未分类的软件包 (NaN在'b'列,一下abc列皆为表头)
     if missing_values['group'] > 0:
@@ -88,9 +87,7 @@ def analyza_csv(xml_file, all_rpm_name_file):
         X_unclassified = unclassified_data['name'] + ' ' + unclassified_data['summary'] + unclassified_data[
             'description']
         predicted_categories = model.predict(X_unclassified)
-        # print(X_unclassified)
-        #
-        #     # 将预测的类别添加到表格
+        # 将预测的类别添加到表格
         data.loc[data['group'].isna(), 'group'] = predicted_categories
 
         # 保存更新后的表格到新的csv文件
