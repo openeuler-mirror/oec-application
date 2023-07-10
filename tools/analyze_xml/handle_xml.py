@@ -24,7 +24,7 @@ def create_csv(xml_file, all_rpm_name_file):
     ws = wb.active
 
     # 写入表头
-    ws.append(['name', 'group', 'summary', 'description'])
+    ws.append(['name', 'group-new', 'group-old', 'summary', 'description'])
 
     # 在集合中获取所有rpm包
     packages = collection.getElementsByTagName("package")
@@ -44,7 +44,7 @@ def create_csv(xml_file, all_rpm_name_file):
                     description = package.getElementsByTagName('description')[0]
                     group = package.getElementsByTagName('rpm:group')[0]
                     summary = package.getElementsByTagName('summary')[0]
-                    ws.append([rpm_name, group.childNodes[0].data, summary.childNodes[0].data,
+                    ws.append([rpm_name, group.childNodes[0].data, group.childNodes[0].data, summary.childNodes[0].data,
                                description.childNodes[0].data.replace('\n', '')])
 
     for cell in ws['B']:
@@ -71,17 +71,17 @@ def analyza_csv(xml_file, all_rpm_name_file):
     missing_values = data.isnull().sum()
 
     # 如果有未分类的软件包 (NaN在'b'列,一下abc列皆为表头)
-    if missing_values['group'] > 0:
+    if missing_values['group-new'] > 0:
         # 分割数据为训练集和未分类集
-        train_data = data[data['group'].notna()]
-        unclassified_data = data[data['group'].isna()]
+        train_data = data[data['group-new'].notna()]
+        unclassified_data = data[data['group-new'].isna()]
 
         # 创建一个模型来预测类别
         model = make_pipeline(CountVectorizer(), MultinomialNB())
 
         # 使用列a和c作为特征，列b作为目标变量来训练模型
         x_train = train_data['name'] + ' ' + train_data['summary'] + train_data['description']
-        y_train = train_data['group']
+        y_train = train_data['group-new']
         model.fit(x_train, y_train)
 
         # 预测未分类的软件包的类别
@@ -89,7 +89,7 @@ def analyza_csv(xml_file, all_rpm_name_file):
             'description']
         predicted_categories = model.predict(x_unclassified)
         # 将预测的类别添加到表格
-        data.loc[data['group'].isna(), 'group'] = predicted_categories
+        data.loc[data['group-new'].isna(), 'group-new'] = predicted_categories
 
         # 保存更新后的表格到新的csv文件
         data.to_csv('updated_file1.csv', index=False)
