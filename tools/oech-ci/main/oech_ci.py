@@ -26,6 +26,8 @@ os.putenv("PYTHONPATH", cur_path)
 
 from scripts.oech_submit import OechSubmit
 from scripts.common import *
+from scripts.get_report import GetReport
+
 
 def main(oech_yaml_path, lab_path, card_conf_path, submit_output=False):
     group_id = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
@@ -52,13 +54,22 @@ if __name__ == "__main__":
                         required=False, help='json file for all card conf')
     parser.add_argument('-o', '--submit_output', type=str, required=False,
                         help='submit job for get job yaml but not post to server')
+    parser.add_argument('-f', '--seek_id', type=str, required=False,
+                        help='Query test results based on seek_id')
     args = parser.parse_args()
 
-    # oec-hardware job yaml file
-    job_yaml = check_args('job_yaml', args.job_yaml)
-    # lab machine path
-    lab_path = check_args('lab_path', args.lab_path)
-    # test card config json file
-    card_conf = check_args('card_conf', args.card_conf)
+    # get test result
 
-    main(job_yaml, lab_path, card_conf, args.submit_output)
+    if args.seek_id is not None:
+        seek_id = check_args('seek_id', args.seek_id)
+        report = GetReport(seek_id)
+        report.get_result_by_seek_id()
+    else:
+        # oec-hardware job yaml file
+        job_yaml = check_args('job_yaml', args.job_yaml)
+        # lab machine path
+        lab_path = check_args('lab_path', args.lab_path)
+        # test card config json file
+        card_conf = check_args('card_conf', args.card_conf)
+
+        main(job_yaml, lab_path, card_conf, args.submit_output)
