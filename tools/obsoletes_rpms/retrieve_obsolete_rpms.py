@@ -221,7 +221,7 @@ class RetrieveObsoleteRpms(object):
         git_url = urljoin(self.src_openeuler, git_src)
         dir_path = os.path.join(work_dir, src_name)
         try:
-            response = request.urlopen(base_url)
+            response = request.urlopen(base_url, timeout=5)
             if response.getcode() == 200:
                 logger.info(f"download and prase {src_name} spec file")
                 Repo.clone_from(git_url, to_path=dir_path, branch=branch)
