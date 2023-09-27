@@ -97,7 +97,10 @@ $ conda env remove -p  /your_path/env_name
 
 ```shell
 # 拉取仓库
-$ git clone https://gitee.com/openeuler/oec-application/tools/oepkgs-talk-robot
+$ git clone https://gitee.com/openeuler/oec-application
+
+# 进入目录
+$ cd oec-application/tools/oepkgs-talk-robot
 
 # 安装依赖
 $ pip install -r requirements.txt
