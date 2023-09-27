@@ -109,6 +109,38 @@ $ pip install -r requirements.txt
 
 在开始执行 Web UI 或命令行交互前，请先检查 [configs/model_config.py](../../tools/oepkgs-talk-robot/configs/model_config.py) 中的各项模型参数设计是否符合需求。
 
+```
+# supported LLM models
+llm_model_dict = {
+    "chatyuan": "ClueAI/ChatYuan-large-v2",
+    "chatglm-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
+    "chatglm-6b-int4": "THUDM/chatglm-6b-int4",
+    "chatglm-6b-int8": "THUDM/chatglm-6b-int8",
+    "chatglm-6b": "THUDM/chatglm-6b",
+}
+
+# LLM model name
+LLM_MODEL = "chatglm-6b"
+
+```
+
+当前模型支持chatglm系列模型，LLM_MODEL为当前使用的大模型，在llm_model_dict中列出使用模型的相对位置，在上述从本地加载模型chatglm-6b后，可以将模型路径更改为本地路径，例如将chatglm-6b放在/root/model/chatglm-6b时，可更改为下面的形式。
+
+```
+# supported LLM models
+llm_model_dict = {
+    "chatyuan": "ClueAI/ChatYuan-large-v2",
+    "chatglm-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
+    "chatglm-6b-int4": "THUDM/chatglm-6b-int4",
+    "chatglm-6b-int8": "THUDM/chatglm-6b-int8",
+    "chatglm-6b": "/root/model/chatglm-6b",
+}
+
+# LLM model name
+LLM_MODEL = "chatglm-6b"
+
+```
+
 ### 3. 执行脚本体验 Web UI 或命令行交互
 
 > 注：鉴于环境部署过程中可能遇到问题，建议首先测试命令行脚本。建议命令行脚本测试可正常运行后再运行 Web UI。
