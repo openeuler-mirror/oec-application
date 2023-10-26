@@ -62,7 +62,10 @@ for filename in os.listdir(val_folder):
             total_count += 1
 
 # 计算正确率
-accuracy = correct_count / (total_count + 1e-6)
+if total_count == 0:
+    accuracy = 0  # 如果分母为0，将正确率设置为0
+else:
+    accuracy = correct_count / total_count
 print(f"正确识别人脸数: {correct_count}")
 print(f"总人脸数: {total_count}")
 print(f"识别准确率: {accuracy * 100:.2f}%")

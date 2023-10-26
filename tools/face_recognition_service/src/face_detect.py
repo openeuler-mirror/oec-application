@@ -73,7 +73,12 @@ class FaceRecognitionDatabase:
         query_vector_norm = np.linalg.norm(query_vector)
         feature_vector_norm = np.linalg.norm(self.feature_matrix[indices[0][0]])
 
-        cosine_similarity = np.dot(query_vector, self.feature_matrix[indices[0][0]]) / (query_vector_norm * feature_vector_norm + 1e-6)
+        # 添加除零保护
+        if query_vector_norm * feature_vector_norm == 0:
+            cosine_similarity = 0  # 如果分母为0，将余弦相似度设置为0
+        else:
+            cosine_similarity = np.dot(query_vector, self.feature_matrix[indices[0][0]]) / (
+                        query_vector_norm * feature_vector_norm)
 
         if cosine_similarity < cosine_similarity_threshold:
             return None

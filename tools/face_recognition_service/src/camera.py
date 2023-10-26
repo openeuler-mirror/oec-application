@@ -15,6 +15,7 @@ import warnings
 # 关闭控制台所有的警告输出
 warnings.filterwarnings("ignore")
 
+
 def use_camera():
     """
     调用摄像头，并使用接口进行人脸检测
@@ -59,16 +60,15 @@ def use_camera():
                     except Exception as err:
                         continue
                     name: str  # 明确指定name的类型为字符串
-                    result = None
                     if emb1 is not None:
                         # 使用数据库中的相似度查找函数
-                        result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
-                    if result is not None:
-                        name, _, similarity = result
-                        print(f"检测到人脸，人脸名称为:{name}，概率为:{similarity:.2f}")
-                    else:
-                        name = 'None'
-                        print("未检测到人脸")
+                        db_result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
+                        if db_result is not None:
+                            name, _, similarity = db_result
+                            print(f"检测到人脸，人脸名称为:{name}，概率为:{similarity:.2f}")
+                        else:
+                            name = 'None'
+                            print("未检测到人脸")
                     # 如果检测到人脸以及相应的位置，就在结果图上画框并显示出来
                     draw_detection_boxes(inference_ret, frame, name)
 
@@ -79,6 +79,7 @@ def use_camera():
             break
     cap.release()
     cv2.destroyAllWindows()
+
 
 def no_camera(image_path):
     INFERENCE_TYPE = "face_detection"
@@ -113,16 +114,15 @@ def no_camera(image_path):
         except Exception as err:
             print(err)
         name: str  # 明确指定name的类型为字符串
-        result = None
         if emb1 is not None:
             # 使用数据库中的相似度查找函数
-            result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
-        if result is not None:
-            name, _, _ = result
-        else:
-            name = 'None'
+            db_result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
+            if db_result is not None:
+                name, _, _ = db_result
+            else:
+                name = 'None'
+            print(name)
 
-        print(name)
     except Exception as err:
         print(err)
 
