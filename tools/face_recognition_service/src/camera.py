@@ -59,7 +59,6 @@ def use_camera():
                         emb1 = res[0].embedding
                     except Exception as err:
                         continue
-                    name: str  # 明确指定name的类型为字符串
                     if emb1 is not None:
                         # 使用数据库中的相似度查找函数
                         db_result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
@@ -113,7 +112,6 @@ def no_camera(image_path):
             emb1 = res[0].embedding
         except Exception as err:
             print(err)
-        name: str  # 明确指定name的类型为字符串
         if emb1 is not None:
             # 使用数据库中的相似度查找函数
             db_result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
