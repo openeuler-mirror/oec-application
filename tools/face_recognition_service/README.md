@@ -66,4 +66,4 @@ python main.py --add /path/to/new/face/image.jpg --save_dir /path/to/database/da
 
 ## 许可证
 
-此项目根据 MulanPSL-2.0 许可。
+此项目采用 [MulanPSL-2.0](http://license.coscl.org.cn/MulanPSL2) 许可。
