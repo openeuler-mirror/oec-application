@@ -1,54 +1,53 @@
 # -*- coding: utf-8 -*-
-import base64
 import json
+import logging
 from urllib import parse
-import insightface
-import cv2
-import requests
-import numpy as np
-import faiss
 
+import faiss
+import numpy as np
+import requests
 
 
 def get_access_toke_from_client_infos(client_id, client_secret):
     try:
         headers = {
-        "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/x-www-form-urlencoded"
         }
         send_data = {"grant_type": 'client_credentials',
-        "client_id": client_id,
-        "client_secret": client_secret}
+                     "client_id": client_id,
+                     "client_secret": client_secret}
         resp = requests.post(url="https://studio.e.huawei.com/baas/auth/v1.0/oauth2/token",
-        headers=headers,
-        data=parse.urlencode(send_data),
-        verify=False)
+                             headers=headers,
+                             data=parse.urlencode(send_data),
+                             verify=False)
         return resp.json()
     except requests.exceptions.RequestException as err:
-        print(err)
-    return {}
+        logging.error(f"Exception occurred in face_detection: {err}")
+        return {}
 
 
 def face_detection(inference_type, access_token, image_base64):
     # 请求body体
     send_data = {
-    "name": inference_type,
-    "dataInputs": {"images": [{"image": image_base64.decode(), "type": "base64"}]}
+        "name": inference_type,
+        "dataInputs": {"images": [{"image": image_base64.decode(), "type": "base64"}]}
     }
 
     # 请求header
     headers = {
-    "access-Token": access_token,
-    "Content-Type": "application/json"
+        "access-Token": access_token,
+        "Content-Type": "application/json"
     }
     try:
         resp = requests.post(url="https://studio.e.huawei.com/ai-enable/v1.0/services/invoke",
-        headers=headers,
-        data=json.dumps(send_data),
-        verify=False)
+                             headers=headers,
+                             data=json.dumps(send_data),
+                             verify=False)
         return resp.json()
     except Exception as err:
-        print(err)
+        logging.error(f"Exception occurred in face_detection: {err}")
         return {}
+
 
 class FaceRecognitionDatabase:
     def __init__(self):
@@ -61,7 +60,6 @@ class FaceRecognitionDatabase:
             d = self.feature_matrix.shape[1]
             self.faiss_index = faiss.IndexFlatIP(d)
             self.faiss_index.add(self.feature_matrix)
-
 
     def search_similar_faces(self, query_vector, cosine_similarity_threshold):
         if self.faiss_index is None:
@@ -81,14 +79,18 @@ class FaceRecognitionDatabase:
             cosine_similarity = np.dot(query_vector, self.feature_matrix[indices[0][0]]) / q_f_norm
 
         if cosine_similarity < cosine_similarity_threshold:
-            return None
+            logging.info(f"相似度低于阈值，相似度为{cosine_similarity:.2f}")
+            flag = None
+            return flag
         else:
             similar_name = self.face_names[indices[0][0]]
             similar_vector = self.feature_matrix[indices[0][0]]
             return similar_name, similar_vector, cosine_similarity
 
     def add_to_database(self, new_feature_vector, face_name):
-        assert new_feature_vector.shape[0] == self.feature_matrix.shape[1], "维度不匹配"
+        # assert new_feature_vector.shape[0] == self.feature_matrix.shape[1], "维度不匹配"
+        if self.feature_matrix.shape[0] != self.feature_matrix.shape[1]:
+            raise ValueError("维度不匹配")
         self.feature_matrix = np.vstack([self.feature_matrix, new_feature_vector])
         self.face_names.append(face_name)
         if self.faiss_index is None:

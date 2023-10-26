@@ -1,13 +1,8 @@
-import os
-import cv2
-import numpy as np
-from src.face_detect import FaceRecognitionDatabase
-import faiss
-import insightface
+import argparse
+import warnings
+
 from src.add_data import add_database
 from src.build_Database import build_database
-import warnings
-import argparse
 from src.camera import use_camera, no_camera
 
 # 关闭控制台所有的警告输出
@@ -20,7 +15,6 @@ parser.add_argument("--build", action="store_true", help="建立database")
 parser.add_argument("--img_fold", default="./Database/train", help="build所使用的图像文件夹地址")
 parser.add_argument("--save_dir", default="./Database/database.npz", help="数据库保存地址")
 parser.add_argument("--add", help="添加人脸数据，输入图像路径")
-
 
 args = parser.parse_args()
 

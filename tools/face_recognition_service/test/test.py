@@ -1,16 +1,17 @@
+import logging
 import os
-import cv2
-import numpy as np
-from src.face_detect import FaceRecognitionDatabase
-import faiss
-import insightface
-from src.build_Database import build_database
 import warnings
+
+import cv2
+import insightface
+
+from src.build_Database import build_database
+from src.face_detect import FaceRecognitionDatabase
 
 # 关闭控制台所有的警告输出
 warnings.filterwarnings("ignore")
 
-#建立数据库database
+# 建立数据库database
 build_database("../Database/train", "../Database/database.npz")
 
 # 指定验证数据集的文件夹路径
@@ -43,7 +44,7 @@ for filename in os.listdir(val_folder):
     try:
         emb1 = res[0].embedding
     except Exception as err:
-        print(res)
+        logging.error(err)
         continue
 
     if emb1 is not None:
@@ -66,6 +67,6 @@ if total_count == 0:
     accuracy = 0  # 如果分母为0，将正确率设置为0
 else:
     accuracy = correct_count / total_count
-print(f"正确识别人脸数: {correct_count}")
-print(f"总人脸数: {total_count}")
-print(f"识别准确率: {accuracy * 100:.2f}%")
+logging.info(f"正确识别人脸数: {correct_count}")
+logging.info(f"总人脸数: {total_count}")
+logging.info(f"识别准确率: {accuracy * 100:.2f}%")

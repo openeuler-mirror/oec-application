@@ -1,12 +1,14 @@
-import os
-import numpy as np
-import cv2
-import faiss
-import insightface
-from src.face_detect import get_access_toke_from_client_infos, FaceRecognitionDatabase, face_detection
 import base64
-from src.utils import crop_and_expand
+import logging
+import os
+
+import cv2
+import insightface
+
 from src.cfg import cfg
+from src.face_detect import get_access_toke_from_client_infos, FaceRecognitionDatabase, face_detection
+from src.utils import crop_and_expand
+
 
 # 先剪裁出人脸位置，再提特征，最后保存到数据库中
 
@@ -33,8 +35,12 @@ def build_database(image_folder_path, save_dir):
 
         # 利用获取的access_token调用推理接口
         if token_info:
-            inference_ret = face_detection("face_detection", token_info["access_token"], image_base64)
-            image = crop_and_expand(image, inference_ret)
+            access_token = token_info.get("access_token", None)
+            if access_token:
+                inference_ret = face_detection("face_detection", access_token, image_base64)
+                image = crop_and_expand(image, inference_ret)
+            else:
+                logging.error("Failed to get access token")
 
         # 利用FaceAnalysis模型提取特征
         face_result = model.get(image)
@@ -49,9 +55,9 @@ def build_database(image_folder_path, save_dir):
             # 将特征向量和名称添加到数据库中
             database.add_to_database(feature_vector, name)
         else:
-            print(f'{name}未检测到人脸或有多张人脸，请重新拍照')
+            logging.warning(f'{name}未检测到人脸或有多张人脸，请重新拍照')
 
     # 保存数据库
     database.save_database(save_dir)
 
-    print("数据库建立完成")
+    logging.info("数据库建立完成")

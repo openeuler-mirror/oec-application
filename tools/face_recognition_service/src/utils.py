@@ -1,6 +1,6 @@
-import numpy as np
 import cv2
-from PIL import Image, ImageDraw
+import numpy as np
+
 
 def cosine_similarity(vector_a, vector_b):
     # 计算向量的余弦相似度
@@ -15,8 +15,8 @@ def cosine_similarity(vector_a, vector_b):
         similarity = dot_product / norm_c  # 计算余弦相似度
     return similarity
 
-def draw_detection_boxes(inference_ret, frame, name):
 
+def draw_detection_boxes(inference_ret, frame, name):
     # 如果检测到人脸以及相应的位置，就在结果图上画框并显示出来
     if len(inference_ret["result"]) > 0:
         for i in range(len(inference_ret["result"])):
@@ -41,6 +41,7 @@ def draw_detection_boxes(inference_ret, frame, name):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
+
 def crop_and_expand(image, detection_result):
     # 检查检测是否成功以及是否检测到任何人脸
     if "resCode" in detection_result and detection_result["resCode"] == "0" and "result" in detection_result:
@@ -64,7 +65,8 @@ def crop_and_expand(image, detection_result):
             expanded_bottom_right_y = min(top_left_y + height + expand_height, image.shape[0])
 
             # 裁剪扩展区域
-            cropped_image = image[expanded_top_left_y:expanded_bottom_right_y, expanded_top_left_x:expanded_bottom_right_x]
+            cropped_image = image[expanded_top_left_y:expanded_bottom_right_y,
+                            expanded_top_left_x:expanded_bottom_right_x]
 
             return cropped_image
 

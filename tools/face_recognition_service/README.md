@@ -6,10 +6,10 @@
 
 在运行该应用程序之前，请确保已安装以下依赖项：
 
-- OpenCV 
+- OpenCV
 - NumPy
-- Faiss 
-- InsightFace 
+- Faiss
+- InsightFace
 
 您可以使用以下命令来安装这些依赖项：
 
@@ -52,9 +52,6 @@ python main.py --build --img_fold /path/to/database/images --save_dir /path/to/d
 
 ```
 python main.py --add /path/to/new/face/image.jpg --save_dir /path/to/database/database.npz
-```
-```shell
-python main.py --add "F:\1.jpg"
 ```
 
 ## 注意事项

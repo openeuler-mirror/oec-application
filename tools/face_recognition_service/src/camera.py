@@ -1,16 +1,13 @@
 import base64
-import json
-from urllib import parse
+import logging
+import warnings
 
-import insightface
-import requests
-from PIL import Image, ImageDraw
 import cv2
-import numpy as np
+import insightface
+
+from .cfg import cfg
 from .face_detect import FaceRecognitionDatabase, get_access_toke_from_client_infos, face_detection
 from .utils import crop_and_expand, draw_detection_boxes
-from .cfg import cfg
-import warnings
 
 # 关闭控制台所有的警告输出
 warnings.filterwarnings("ignore")
@@ -49,26 +46,31 @@ def use_camera():
                 token_info = get_access_toke_from_client_infos(cfg.CLIENT_ID, cfg.CLIENT_SECRET)
                 # 利用获取的access_token调用推理接口
                 if token_info:
-                    inference_ret = face_detection("face_detection", token_info["access_token"], image_base64)
-                    image = crop_and_expand(frame, inference_ret)
+                    access_token = token_info.get("access_token", None)
+                    if access_token:
+                        inference_ret = face_detection("face_detection", access_token, image_base64)
+                        image = crop_and_expand(image, inference_ret)
+                    else:
+                        logging.error("Failed to get access token")
                 try:
-                    print(f"Inference result is: {inference_ret}")
+                    logging.info(f"Inference result is: {inference_ret}")
                     # 提取特征
                     res = model.get(image)
                     try:
                         emb1 = res[0].embedding
                     except Exception as err:
+                        logging.error(err)
                         continue
                     if emb1 is not None:
                         # 使用数据库中的相似度查找函数
                         db_result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
                         if db_result is not None:
                             name, _, similarity = db_result
-                            print(f"检测到人脸，人脸名称为:{name}，概率为:{similarity:.2f}")
+                            logging.info(f"检测到人脸，人脸名称为:{name}, 相似度为:{similarity}")
                             flag = True
                         else:
                             flag = False
-                            print("未检测到人脸")
+                            logging.info("未检测到人脸")
                     # 如果检测到人脸以及相应的位置，就在结果图上画框并显示出来
                     if flag:
                         draw_detection_boxes(inference_ret, frame, name)
@@ -76,7 +78,7 @@ def use_camera():
                         draw_detection_boxes(inference_ret, frame, "None")
 
                 except Exception as err:
-                    print(err)
+                    logging.error(err)
                     break
         else:
             break
@@ -106,16 +108,20 @@ def no_camera(image_path):
     token_info = get_access_toke_from_client_infos(cfg.CLIENT_ID, cfg.CLIENT_SECRET)
     # 利用获取的access_token调用推理接口
     if token_info:
-        inference_ret = face_detection(INFERENCE_TYPE, token_info["access_token"], image_base64)
-        image = crop_and_expand(image, inference_ret)
+        access_token = token_info.get("access_token", None)
+        if access_token:
+            inference_ret = face_detection("face_detection", access_token, image_base64)
+            image = crop_and_expand(image, inference_ret)
+        else:
+            logging.error("Failed to get access token")
     try:
-        print(f"Inference result is: {inference_ret}")
+        logging.info(f"Inference result is: {inference_ret}")
         # 提取特征
         res = model.get(image)
         try:
             emb1 = res[0].embedding
         except Exception as err:
-            print(err)
+            logging.error(err)
         if emb1 is not None:
             # 使用数据库中的相似度查找函数
             db_result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
@@ -125,12 +131,12 @@ def no_camera(image_path):
             else:
                 flag = False
             if flag:
-                print(f"检测到人脸，人脸名称为:{name}")
+                logging.info(f"检测到人脸，人脸名称为:{name}")
             else:
-                print("未检测到人脸")
+                logging.info("未检测到人脸")
 
     except Exception as err:
-        print(err)
+        logging.error(err)
 
 
 if __name__ == "__main__":
