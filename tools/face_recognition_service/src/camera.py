@@ -51,7 +51,7 @@ def use_camera():
                         inference_ret = face_detection("face_detection", access_token, image_base64)
                         image = crop_and_expand(image, inference_ret)
                     else:
-                        logging.error("Failed to get access token")
+                        logging.error("Failed to obtain access")
                 try:
                     logging.info(f"Inference result is: {inference_ret}")
                     # 提取特征
@@ -87,8 +87,6 @@ def use_camera():
 
 
 def no_camera(image_path):
-    INFERENCE_TYPE = "face_detection"
-
     # 准备模型
     model = insightface.app.FaceAnalysis()
     model.prepare(ctx_id=0, det_thresh=0.3)
@@ -113,7 +111,7 @@ def no_camera(image_path):
             inference_ret = face_detection("face_detection", access_token, image_base64)
             image = crop_and_expand(image, inference_ret)
         else:
-            logging.error("Failed to get access token")
+            logging.error("Failed to obtain access")
     try:
         logging.info(f"Inference result is: {inference_ret}")
         # 提取特征

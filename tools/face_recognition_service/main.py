@@ -2,7 +2,7 @@ import argparse
 import warnings
 
 from src.add_data import add_database
-from src.build_Database import build_database
+from src.build_database import build_database
 from src.camera import use_camera, no_camera
 
 # 关闭控制台所有的警告输出

@@ -38,7 +38,7 @@ def add_database(image_path, save_dir):
             inference_ret = face_detection("face_detection", access_token, image_base64)
             image = crop_and_expand(image, inference_ret)
         else:
-            logging.error("Failed to get access token")
+            logging.error("Failed to obtain access")
 
     # 利用FaceAnalysis模型提取特征
     face_result = model.get(image)
