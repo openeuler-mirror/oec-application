@@ -65,11 +65,15 @@ def use_camera():
                         if db_result is not None:
                             name, _, similarity = db_result
                             print(f"检测到人脸，人脸名称为:{name}，概率为:{similarity:.2f}")
+                            flag = True
                         else:
-                            name = 'None'
+                            flag = False
                             print("未检测到人脸")
                     # 如果检测到人脸以及相应的位置，就在结果图上画框并显示出来
-                    draw_detection_boxes(inference_ret, frame, name)
+                    if flag:
+                        draw_detection_boxes(inference_ret, frame, name)
+                    else:
+                        draw_detection_boxes(inference_ret, frame, "None")
 
                 except Exception as err:
                     print(err)
@@ -117,9 +121,13 @@ def no_camera(image_path):
             db_result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
             if db_result is not None:
                 name, _, _ = db_result
+                flag = True
             else:
-                name = 'None'
-            print(name)
+                flag = False
+            if flag:
+                print(f"检测到人脸，人脸名称为:{name}")
+            else:
+                print("未检测到人脸")
 
     except Exception as err:
         print(err)
