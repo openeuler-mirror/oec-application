@@ -42,7 +42,7 @@ for filename in os.listdir(val_folder):
     res = model.get(image)
     try:
         emb1 = res[0].embedding
-    except:
+    except Exception as err:
         print(res)
         continue
 
@@ -62,7 +62,7 @@ for filename in os.listdir(val_folder):
             total_count += 1
 
 # 计算正确率
-accuracy = correct_count / total_count if total_count > 0 else 0
+accuracy = correct_count / (total_count + 1e-6)
 print(f"正确识别人脸数: {correct_count}")
 print(f"总人脸数: {total_count}")
 print(f"识别准确率: {accuracy * 100:.2f}%")

@@ -1,13 +1,15 @@
 import base64
 import json
 from urllib import parse
+
+import insightface
 import requests
 from PIL import Image, ImageDraw
 import cv2
 import numpy as np
-from face_detect import *
-from utils import crop_and_expand, draw_detection_boxes
-from cfg import cfg
+from .face_detect import FaceRecognitionDatabase, get_access_toke_from_client_infos, face_detection
+from .utils import crop_and_expand, draw_detection_boxes
+from .cfg import cfg
 import warnings
 
 # 关闭控制台所有的警告输出
@@ -18,7 +20,7 @@ def use_camera():
     调用摄像头，并使用接口进行人脸检测
     :return:
     """
-    INFERENCE_TYPE = "face_detection"
+    # INFERENCE_TYPE = "face_detection"
 
     # 准备模型
     model = insightface.app.FaceAnalysis()
@@ -26,7 +28,7 @@ def use_camera():
 
     # 创建FaceRecognitionDatabase实例并加载数据库
     database = FaceRecognitionDatabase()
-    database.load_database("../Database/database.npz")
+    database.load_database("./Database/database.npz")
 
     cap = cv2.VideoCapture(0)
     frame_count = 0  # 计数器，用于控制每10帧进行一次推理
@@ -46,7 +48,7 @@ def use_camera():
                 token_info = get_access_toke_from_client_infos(cfg.CLIENT_ID, cfg.CLIENT_SECRET)
                 # 利用获取的access_token调用推理接口
                 if token_info:
-                    inference_ret = face_detection(INFERENCE_TYPE, token_info["access_token"], image_base64)
+                    inference_ret = face_detection("face_detection", token_info["access_token"], image_base64)
                     image = crop_and_expand(frame, inference_ret)
                 try:
                     print(f"Inference result is: {inference_ret}")
@@ -54,17 +56,19 @@ def use_camera():
                     res = model.get(image)
                     try:
                         emb1 = res[0].embedding
-                    except:
+                    except Exception as err:
                         continue
-
+                    name: str  # 明确指定name的类型为字符串
                     result = None
                     if emb1 is not None:
                         # 使用数据库中的相似度查找函数
                         result = database.search_similar_faces(emb1, cfg.cosine_similarity_threshold)
                     if result is not None:
-                        name, _, _ = result
+                        name, _, similarity = result
+                        print(f"检测到人脸，人脸名称为:{name}，概率为:{similarity:.2f}")
                     else:
                         name = 'None'
+                        print("未检测到人脸")
                     # 如果检测到人脸以及相应的位置，就在结果图上画框并显示出来
                     draw_detection_boxes(inference_ret, frame, name)
 
@@ -73,7 +77,6 @@ def use_camera():
                     break
         else:
             break
-
     cap.release()
     cv2.destroyAllWindows()
 
@@ -91,8 +94,8 @@ def no_camera(image_path):
     # 读取验证图像
     image = cv2.imread(image_path)
 
-    f = open(image_path, 'rb')
-    image_data = f.read()
+    with open(image_path, 'rb') as f:
+        image_data = f.read()
     image_base64 = base64.b64encode(image_data)
 
     # 获取access_token
@@ -109,7 +112,7 @@ def no_camera(image_path):
             emb1 = res[0].embedding
         except Exception as err:
             print(err)
-
+        name: str  # 明确指定name的类型为字符串
         result = None
         if emb1 is not None:
             # 使用数据库中的相似度查找函数

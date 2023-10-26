@@ -53,6 +53,9 @@ python main.py --build --img_fold /path/to/database/images --save_dir /path/to/d
 ```
 python main.py --add /path/to/new/face/image.jpg --save_dir /path/to/database/database.npz
 ```
+```shell
+python main.py --add "F:\1.jpg"
+```
 
 ## 注意事项
 

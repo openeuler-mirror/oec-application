@@ -7,7 +7,7 @@ def cosine_similarity(vector_a, vector_b):
     dot_product = np.dot(vector_a, vector_b)  # 计算点积
     norm_a = np.linalg.norm(vector_a)  # 计算向量A的模长
     norm_b = np.linalg.norm(vector_b)  # 计算向量B的模长
-    similarity = dot_product / (norm_a * norm_b)  # 计算余弦相似度
+    similarity = dot_product / (norm_a * norm_b + 1e-6)  # 计算余弦相似度
     return similarity
 
 def draw_detection_boxes(inference_ret, frame, name):

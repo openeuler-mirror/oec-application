@@ -3,9 +3,10 @@ import numpy as np
 import cv2
 import faiss
 import insightface
-from face_detect import *
-from utils import crop_and_expand
-from cfg import cfg
+from src.face_detect import get_access_toke_from_client_infos, FaceRecognitionDatabase, face_detection
+import base64
+from src.utils import crop_and_expand
+from src.cfg import cfg
 
 # 先剪裁出人脸位置，再提特征，最后保存到数据库中
 
@@ -26,13 +27,13 @@ def build_database(image_folder_path, save_dir):
         image_path = os.path.join(image_folder_path, filename)
         image = cv2.imread(image_path)
 
-        f = open(image_path, 'rb')
-        image_data = f.read()
+        with open(image_path, 'rb') as f:
+            image_data = f.read()
         image_base64 = base64.b64encode(image_data)
 
         # 利用获取的access_token调用推理接口
         if token_info:
-            inference_ret = face_detection(INFERENCE_TYPE, token_info["access_token"], image_base64)
+            inference_ret = face_detection("face_detection", token_info["access_token"], image_base64)
             image = crop_and_expand(image, inference_ret)
 
         # 利用FaceAnalysis模型提取特征
