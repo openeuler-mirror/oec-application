@@ -1,0 +1,17 @@
+# markdownlint 配置：先放宽适配存量文档，后续按需收紧
+default: true
+MD001: false   # 标题层级跳跃（存量文档普遍；清理 PR 统一层级后可恢复）
+MD013: false   # 行长度（中文文档长行普遍，最长单行 1457 字符；清理 PR 换行后可按 line_length 恢复）
+MD033: false   # inline HTML
+MD041: false   # 首行必须是一级标题
+MD024: false   # 重复标题
+MD040: false   # 代码块缺语言标签（存量文档常见且不可自动修复；清理 PR 补语言后再收紧）
+MD025: false   # 多顶级标题
+MD028: false   # blockquote 内空行
+MD036: false   # 斜体代替标题
+MD042: false   # 空链接
+MD045: false   # 图片缺 alt 文本
+MD046: false   # 代码块风格不一致（缩进/围栏混用）
+MD051: false   # 链接片段应有效
+MD060: false   # 表格列风格（存量 CJK 表格噪音大，--fix 后仍残留 432 处；清理 PR 后再收紧）
+# 按基线预检结果补充豁免；真实格式问题进清理 PR
