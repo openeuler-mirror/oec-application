@@ -1,0 +1,4 @@
+[codespell]
+skip = .git,*.lock,node_modules,.next,coverage,build,dist,vendor,third_party,target,logs,json_tmp,nltk_data,*/txt/llm/*,*.jar,*.class,*.docx,*.ttf,*.pickle,*.png,*.jpg,*.jpeg,*.pdf,*.xlsx,*.doc
+# 项目术语/专有名词加入忽略列表（业务术语集中维护在此文件；留空会报参数错误，不填就删除该行）
+ignore-words-list = ans
