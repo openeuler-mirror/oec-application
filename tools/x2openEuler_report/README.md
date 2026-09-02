@@ -1,4 +1,6 @@
-## x2openEuler报告批量分析
+# x2openEuler报告批量分析
+
+简体中文 | [English](./README_EN.md)
 
 本脚本用于将多份x2openEuler html报告转换为一份csv（excel）格式报告，用于信息汇总、全局分析及筛选。
 

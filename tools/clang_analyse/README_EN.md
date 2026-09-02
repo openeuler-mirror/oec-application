@@ -1,5 +1,7 @@
 # Tool Function
 
+English | [简体中文](./README.md)
+
 Use Clang to extract function interfaces from the source code directory and save them to a JSON file.
 
 ## Dependencies

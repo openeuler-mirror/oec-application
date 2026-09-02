@@ -1,5 +1,7 @@
 # File Description
 
+English | [简体中文](./README.md)
+
 ## find_symbolic_links.py
 
 It stores the soft links of all `.so` files in the current system and their mappings to the **symbolic-links.json** file in the current execution path.

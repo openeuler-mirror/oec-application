@@ -1,5 +1,7 @@
 # oech-ci工具
 
+简体中文 | [English](./README_EN.md)
+
 ## 工具介绍
 
 本工具将南向兼容性测试工具 oec-hardware 集成到 compass-ci ，通过指定板卡配置文件，实现自动在 compass-ci 的测试机环境中获取存在测试板卡的机器，自动生成需要提交的 job yaml 文件，自动提交任务，实现oec-hardware硬件自动化测试。

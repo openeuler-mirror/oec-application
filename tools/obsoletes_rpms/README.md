@@ -1,16 +1,20 @@
 # 工具作用
+
+简体中文 | [English](./README_EN.md)
+
 获取版本间删除软件包可能引起的兼容性问题
 
+## 依赖环境安装与部署
 
-# 依赖环境安装与部署
+```sh
 install rpm-build:
 '''
 yum install -y rpm-build &&
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirement
 '''
+```
 
-
-# 使用说明
+## 使用说明
 
 `python3 retrieve_obsolete_rpms.py [-b OS_BRANCH] [-om OBSOLETES_MODEL] [-w WORK_DIR]  all-rpm-report.csv`
 

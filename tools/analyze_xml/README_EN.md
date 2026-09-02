@@ -1,5 +1,7 @@
 # Tool Function
 
+English | [简体中文](./README.md)
+
 It parses the **primary.xml** file in repodata of the RPM source package, finds the software packages that are not classified under the group node, and predicts the categories of the unclassified software packages.
 
 ## Operating Environment

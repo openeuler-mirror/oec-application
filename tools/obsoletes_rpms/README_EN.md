@@ -1,5 +1,7 @@
 # Tool Function
 
+English | [简体中文](./README.md)
+
 Obtain the compatibility issues that may be caused by software package deletion between versions.
 
 # Dependency Installation
