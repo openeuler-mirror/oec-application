@@ -1,4 +1,5 @@
 # oec-application
+简体中文 | [English](./README_EN.md)
 
 #### 介绍
 Use for check application compatibility with openEuler
