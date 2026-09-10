@@ -1,5 +1,7 @@
 # oech-ci
 
+English | [简体中文](./README.md)
+
 ## Tool Introduction
 
 This tool integrates the southbound compatibility test tool oec-hardware into compass-ci. By specifying the board configuration file, the tool automatically obtains the machine with the test board from the compass-ci test machine environment, generates the job YAML file to be submitted, and submits the task, implementing automatic oec-hardware tests.

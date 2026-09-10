@@ -1,5 +1,7 @@
 # Tool Function
 
+English | [简体中文](./README.md)
+
 It scans RPM packages that depend on Spring Framework in batches, check whether these packages are affected by **JAR files in the spring-beans-\*.jar** format, checks whether the JAR packages in the RPM packages are affected by the **CachedIntrospectionResuLts.class** file, and outputs the affected RPM packages.
 
 ## Operating Environment

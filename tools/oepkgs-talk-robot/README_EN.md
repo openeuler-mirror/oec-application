@@ -1,5 +1,7 @@
 # openEuler Intelligent Q&A System
 
+English | [简体中文](./README.md)
+
 ## System Introduction
 
 It provides a text chatbot service based on the openEuler platform. This service uses the LLM and Chatbot technologies to collect key information during dialogs and answer questions based on the existing knowledge base. For questions that require high accuracy, this service integrates the dialog and information retrieval technologies.

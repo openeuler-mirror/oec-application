@@ -1,5 +1,7 @@
 # File Description
 
+English | [简体中文](./README.md)
+
 ## Description
 
 Query the board in the compatibility list. If it is not in the **pci.ids** file, insert its information in a certain format.

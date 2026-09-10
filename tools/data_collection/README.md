@@ -1,5 +1,7 @@
 # 文件说明
 
+简体中文 | [English](./README_EN.md)
+
 ## find_symbolic_links.py
 
 将当前系统中所有so文件的软链接及其对应关系存储到当前执行路径下的'symbolic-links.json'文件中.

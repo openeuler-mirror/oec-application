@@ -1,5 +1,7 @@
 # Batch Analysis of x2openEuler Reports
 
+English | [简体中文](./README.md)
+ 
 This script is used to convert multiple x2openEuler HTML reports into one CSV (Excel) report for information summary, global analysis, and filtering.
 
 The version v1.0 corresponds to x2openEuler 1.0, and so on.
